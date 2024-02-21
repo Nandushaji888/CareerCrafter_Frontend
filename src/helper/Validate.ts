@@ -60,6 +60,29 @@ export const signinValidation = async (values: Values) => {
   return error;
 };
 
+export const emailValidation = async (values: Values) => {
+  let error: Errors = {};
+ 
+  emailVerify(error, values),
+
+  console.log("error", error);
+  return error;
+};
+
+
+
+export const passwordVerification = async(values:Values)=> {
+  let error: Errors = {};
+  console.log(values);
+  if(values.password !== values.confirm_pwd){
+    error.password = toast.error("Password and Confirm Password should be same...!");
+  }
+  
+  passwordVerify(error, values),
+
+  console.log("error", error);
+  return error;
+}
 /****************************************************** */
 
 const nameVerify = (error: Errors = {}, values: Values) => {

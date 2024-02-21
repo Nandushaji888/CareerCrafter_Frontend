@@ -9,28 +9,18 @@ import axios from 'axios';
 
 const Login = () => {
 
-    const baseurl = "http://localhost:4000/api/auth/recruiter";
+    const baseurl = "http://localhost:4000/api/auth/admin";
 
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     const jwtToken = localStorage.getItem('recruiter-jwtToken');
-    //     if (jwtToken) {
-    //         // console.log('find token',jwtToken);
+    useEffect(() => {
+        const jwtToken = localStorage.getItem('admin-jwtToken');
+        if (jwtToken) {
+            // console.log('find token',jwtToken);
             
-    //         navigate('/recruiter/home');
-    //     }
-    // }, [navigate]);
-    // useEffect(() => {
-    //     const accessToken = document.cookie.replace(
-    //       /(?:(?:^|.*;\s*)user_accessToken\s*\=\s*([^;]*).*$)|^.*$/,
-    //       "$1"
-    //     );
-    //     if (accessToken) {
-    //       // Redirect to home page if access token exists
-    //       navigate('/recruiter/home');
-    //     }
-    //   }, [navigate]);
+            navigate('/admin/home');
+        }
+    }, [navigate]);
 
     const formik = useFormik({
         initialValues: {
@@ -49,10 +39,10 @@ const Login = () => {
                     .then((res) => {
                         if (res.data.status) {
                             console.log(res.data);
-                            localStorage.setItem('recruiter-jwtToken', res.data.accessToken);
+                            localStorage.setItem('admin-jwtToken', res.data.accessToken);
                             // console.log('created token');
                             
-                            navigate('/recruiter/home');
+                            navigate('/admin/home');
                         } else {
                             toast.error(res?.data?.message);
                         }
@@ -71,14 +61,14 @@ const Login = () => {
         <Toaster position='top-center' reverseOrder={false}></Toaster>
 
         <div className="flex justify-center items-center h-screen">
-            <div className=" bg-slate-100 pt-14 pb-10  px-10 rounded-3xl h-[700px]">
+            <div className=" bg-slate-100 pt-14 pb-10  px-10 rounded-3xl h-[600px] w-3/12">
                 <div className="title flex flex-col items-center">
                         <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
-                        <h6 className="text-2xl pb-3 font-bold  text-gray-600">Recruiter Login</h6>
+                        <h6 className="text-2xl pb-3 font-bold  text-gray-600">Admin Login</h6>
 
-                        <span className="pt-4 pb-4 text-xl w-full text-center text-gray-500">
+                        {/* <span className="pt-4 pb-4 text-xl w-full text-center text-gray-500">
                             Explore more by connecting with us
-                        </span>
+                        </span> */}
                     </div>
                     <form className="py-2" onSubmit={formik.handleSubmit}>
                         <div className="profile flex justify-center py-2 pb-6">
@@ -106,14 +96,7 @@ const Login = () => {
                                 Let's Go
                             </button>
                         </div>
-                        <div className="text-center py-4">
-                            <span>
-                                Not a Member{' '}
-                                <Link to="/recruiter/register" className="text-blue-600 hover:text-blue-400 ">
-                                    Register now
-                                </Link>{' '}
-                            </span>
-                        </div>
+                        
                     </form>
                 </div>
             </div>

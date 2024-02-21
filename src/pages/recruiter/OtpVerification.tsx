@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
@@ -8,6 +8,16 @@ const OtpVerification = () => {
     const [otp, setOtp] = useState('')
     const baseurl = "http://localhost:4000/api/auth/recruiter";
     const navigate = useNavigate()
+
+    
+    useEffect(() => {
+        const jwtToken = localStorage.getItem('recruiter-jwtToken');
+        if (jwtToken) {
+            // console.log('find token',jwtToken);
+            
+            navigate('/recruiter/home');
+        }
+    }, [navigate]);
 
     const submitHandler = async (e: any) => {
         e.preventDefault()
@@ -22,6 +32,8 @@ const OtpVerification = () => {
                 .then((res)=> {
                     console.log(res.data);
                     if(res.status){
+                        localStorage.setItem('recruiter-jwtToken', res.data.accessToken);
+
                         navigate('/recruiter/home')
                     }
                 })

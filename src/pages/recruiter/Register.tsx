@@ -59,70 +59,67 @@ const Register = () => {
     )
     return (
         <div className="container mx-auto">
-            <Toaster position='top-center' reverseOrder={false}></Toaster>
-            <div className="flex justify-center items-center h-screen">
-                <div className="glass bg-slate-100 py-10 px-10 rounded-3xl w-1/3">
-                    <div className="title flex flex-col items-center">
-                        <h3 className="text-5xl pb-4 font-bold text-blue-800">CareerCrafter</h3>
-                        <h6 className="text-2xl pb-4 font-bold underline text-gray-600">Recruiter signup</h6>
+        <Toaster position='top-center' reverseOrder={false}></Toaster>
 
-                        <span className="pt-4 pb-8 text-xl w-5/6 text-center text-gray-500">
+        <div className="flex justify-center items-center h-screen">
+            <div className=" bg-slate-100 pt-10 pb-10  px-10 rounded-3xl h-[700px]">
+                <div className="title flex flex-col items-center">
+                        <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
+                        <h6 className="text-2xl pb-3 font-bold  text-gray-600">Recruiter Signup</h6>
+
+                        <span className="pt-4 pb-4 text-xl w-full text-center text-gray-500">
                             Explore more by connecting with us
                         </span>
                     </div>
                     <form className="py-2" onSubmit={formik.handleSubmit}>
-
+                        
                         <div className="textbox flex flex-col items-center gap-6">
                             <input
                                 {...formik.getFieldProps('name')}
                                 type="text"
                                 placeholder="Name"
-                                className="border-0 px-5 py-4 rounded-xl w-11/12 max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
                             <input
                                 {...formik.getFieldProps('email')}
                                 type="text"
                                 placeholder="Email"
-                                className="border-0 px-5 py-4 rounded-xl w-11/12 max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
                             <input
                                 {...formik.getFieldProps('phone')}
                                 type="text"
                                 placeholder="Phone Number"
-                                className="border-0 px-5 py-4 rounded-xl w-11/12 max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
-                                 <input
+                            <input
                                 {...formik.getFieldProps('worksAt')}
                                 type="text"
-                                placeholder="Company name or freelancer"
-                                className="border-0 px-5 py-4 rounded-xl w-11/12 max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                placeholder="Company Name or Freelancer"
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
                             <input
                                 {...formik.getFieldProps('password')}
-                                type="password"
+                                type="text"
                                 placeholder="Password"
-                                className="border-0 px-5 py-4 rounded-xl w-11/12 max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
-                            {/* <input
-                                {...formik.getFieldProps('confirm_pwd')}
-                                type="password"
-                                placeholder="Confirm password"
-                                className="border-0 px-5 py-4 rounded-xl w-11/12 max-w-md shadow-sm text-lg focus:outline-none bg-white "
-                            /> */}
-                            <button type="submit" className="btn bg-blue-600 hover:bg-blue-800 py-3 px-5 rounded-2xl w-11/12 max-w-md text-white" style={{ position: 'relative', minHeight: '50px' }}>
+
+                            {/* <button type="submit" className="btn bg-blue-600 hover:bg-blue-800  my-5 py-3 px-5 rounded-2xl w-full max-w-md text-white">
+                                Let's Go
+                            </button> */}
+                            <button type="submit" className="btn bg-blue-600 hover:bg-blue-800  py-3 px-5 rounded-2xl w-full max-w-md text-white" style={{ position: 'relative', minHeight: '50px' }}>
                                 {loading ?
                                     <img src={Loading} alt="loading" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '30px', height: '30px' }} />
                                     : 'Sign up'
                                 }
                             </button>
-
-
                         </div>
                         <div className="text-center py-4">
                             <span>
-                                Already Registered{' '}
-                                <Link to="/recruiter/login" className="text-blue-600 hover:text-blue-400 ">
-                                    Sign in now
+                                Already a Member{' '}
+                                <Link to="/recruiter/login" className="text-blue-600 hover:text-blue-400  ">
+                                    Login now
                                 </Link>{' '}
                             </span>
                         </div>

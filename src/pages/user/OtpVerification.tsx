@@ -1,32 +1,89 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
+import Loading from '../../assets/ZKZg.gif';
+
 
 
 const OtpVerification = () => {
     const [otp, setOtp] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const [time, setTime] = useState(10)
     const baseurl = "http://localhost:4000/api/auth/user";
+
     const navigate = useNavigate()
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (time > 0) {
+                setTime(prevTime => prevTime - 1);
+            } else {
+                clearInterval(interval);
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [time]);
+
+
     const submitHandler = async (e: any) => {
-        e.preventDefault()
+        e.preventDefault();
+        console.log('otp is ', otp);
+
         if (otp === "") {
             toast.error('OTP cannot be empty...')
         } else if (otp.length !== 6) {
             toast.error('OTP Should have 6 characters')
 
         } else {
-            axios
-                .post(`${baseurl}/verify-otp`, { otp }, { withCredentials: true })
-                .then((res)=> {
-                    console.log(res.data);
-                    if(res.status){
-                        navigate('/home')
+            axios.post(`${baseurl}/verify-otp`, { otp }, { withCredentials: true })
+                .then((res) => {
+                    console.log('res.status',res.status);
+                    
+                    if (res.status === 201 && res.data.status) {
+                        localStorage.setItem('user-jwtToken', res.data.accessToken);
+                        navigate('/home');}
+                    // } else if (res.status === 401 && res.data.status1) {
+                    //     toast.error('Incorrect OTP provided11');
+                    // } else if (res.status === 401) {
+                    //     toast.error(res.data.message);
+                    // } 
+                    else {
+                        toast.error('An error occurred while verifying OTP');
                     }
                 })
-        }
+                .catch(error => {
+                    console.error(error);
+                    toast.error(error?.response?.data?.message);
+                });
 
+        }
+    }
+
+    const resetOTPhandler = async (e: any) => {
+        e.preventDefault();
+        setLoading(true);
+
+        axios
+            .get(`${baseurl}/resend-otp`, { withCredentials: true })
+            .then((res) => {
+                setLoading(false)
+                console.log(res.data);
+                if (res.data.status) {
+                    toast.success("OTP sent successfully");
+                    setTime(10);
+                } else {
+                    toast.error(res.data.message || "Failed to resend OTP");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                toast.error('An error occurred while resending OTP');
+            });
     }
 
     return (
@@ -38,27 +95,39 @@ const OtpVerification = () => {
                     <div className="title flex flex-col items-center">
                         <h3 className="text-4xl pb-4 font-bold text-blue-800">CareerCrafter</h3>
                         <span className="py-4 text-xl w-4/6 text-center text-gray-500">
-                            OTP has been send to your email...
+                            OTP has been sent to your email...
                         </span>
                     </div>
-                    <form className="py-2" onSubmit={submitHandler}>
-
+                    <form className="py-2">
                         <div className="textbox flex flex-col items-center gap-6">
                             <input
                                 type="text"
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
-                                placeholder="enter otp here"
+                                placeholder="Enter OTP here"
                                 className="border-0 px-5 py-4 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
+                            <div className='flex w-full items-center justify-between '>
+                                <p>Resend OTP in:{" "}  
+                                    <span className='font-bold text-green-600'>
+                                        {time < 10 ? `00:0${time}` : `00:${time}`}
+                                    </span>
+                                </p>
+                                <button onClick={resetOTPhandler}
+                                    hidden={time > 0}
+                                    className='text-blue-900 font-semibold'
+                                >
+                                    {loading ?
+                                        <img src={Loading} alt="loading" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '30px', height: '30px' }} />
+                                        : 'Resend OTP'
+                                    }
 
+                                </button>
+                            </div>
 
-                            <button type="submit" className="btn bg-blue-600 hover:bg-blue-800 py-3 px-5 rounded-2xl w-full max-w-md text-white">
+                            <button onClick={submitHandler} type="submit" className="btn bg-blue-600 hover:bg-blue-800 py-3 px-5 rounded-2xl w-full max-w-md text-white">
                                 Submit
                             </button>
-                        </div>
-                        <div className="text-center pt-4">
-
                         </div>
                     </form>
                 </div>
@@ -67,4 +136,4 @@ const OtpVerification = () => {
     );
 }
 
-export default OtpVerification
+export default OtpVerification;
