@@ -1,0 +1,142 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import SideBar from './SideBar';
+import Header from '../../components/Header';
+import { IUser } from '../../utils/interface/interface';
+import DataTable, { TableColumn } from 'react-data-table-component';
+import { Link } from 'react-router-dom';
+
+const UserList: React.FC = () => {
+    const [users, setUsers] = useState<IUser[]>([]);
+    // const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+
+
+
+
+    const columns: TableColumn<IUser>[] = [
+        {
+            name: 'Name',
+            selector: row => row.name,
+            sortable: true,
+            style: {
+                fontWeight: 'bold'
+            }
+        },
+        {
+            name: 'Email',
+            selector: row => row.email,
+            sortable: true,
+        },
+        {
+            name: 'Phone',
+            selector: row => row.phone,
+        },
+        {
+            name: 'Status',
+            cell: (row: IUser) => (
+                row.status ? (
+                    <button className='px-4 bg-red-800 text-white rounded-3xl py-1 hover:bg-red-400 font-semibold' onClick={(e: any) => blockUser(row._id, e)}>Block</button>
+                ) : (
+                    <button className='px-4 bg-blue-800 text-white rounded-3xl py-1 hover:bg-blue-400 font-semibold' onClick={(e: any) => unblockUser(row._id, e)}>Unblock</button>
+                )
+            ),
+        },
+        {
+            name: 'User Details',
+            cell: (row: IUser) => (
+                <Link className='px-4 bg-blue-800 text-white rounded-2xl py-1 hover:bg-blue-400 font-semibold' to={`/admin/user/${row._id}`}>Details</Link>
+            ),
+        },
+    ];
+
+
+
+    const baseUrl = 'http://localhost:4002/api/admin';
+    // const authUrl ='http://localhost:4000/api/auth/user'
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get(`${baseUrl}/get-all-users`, { withCredentials: true });
+                setUsers(response?.data?.users);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+
+    const changeStatus = (id: string | undefined, status: string) => {
+        const formData = {
+            id,
+            status
+        }
+        axios.post(`${baseUrl}/change-user-status`, { formData }, { withCredentials: true })
+            .then((res) => {
+                console.log(res.data);
+
+            })
+
+
+    }
+    const unblockUser = (id: string | undefined, e: any) => {
+        e.preventDefault()
+        const status = "Active"
+        changeStatus(id, status)
+
+    }
+    const blockUser = (id: string | undefined, e: any) => {
+        e.preventDefault()
+        const status = "InActive"
+        changeStatus(id, status)
+
+    }
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+
+
+    return (
+        <div className='flex flex-row'>
+            <div className='w-80'>
+                <SideBar />
+            </div>
+            <div className='flex flex-col flex-grow'>
+                <div className=''>
+
+                    <Header category="Page" title="Users" />
+                </div>
+                <div className='m-2 p-2 bg-gray-100 h-screen '>
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        className="ml-2 px-7 py-2 border mb-5 border-gray-300 rounded-3xl focus:outline-none focus:border-blue-500 w-[300px] text-sm font-thin"
+                        onChange={handleSearch}
+                    />
+
+                    <DataTable
+                        columns={columns}
+                        data={filteredUsers}
+                        selectableRows
+                        fixedHeader
+                        pagination
+                    />
+                </div>
+            </div>
+        </div>
+
+
+
+    );
+};
+
+export default UserList;

@@ -10,9 +10,9 @@
 
 body {
     background: #dcdce6;
-    background-image: url('./assets/top-view-desk-concept-with-gray-background.jpg');
+    /* background-image: url('./assets/top-view-desk-concept-with-gray-background.jpg'); */
     background-size: cover; 
-}
+} 
 
 
     

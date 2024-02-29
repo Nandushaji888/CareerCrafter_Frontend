@@ -5,6 +5,9 @@ import OtpVerification from '../pages/user/OtpVerification'
 import UserHome from '../pages/user/UserHome'
 import ForgotPassword from '../pages/user/ForgotPassword'
 import NewPassword from '../pages/user/NewPassword'
+import UpdateUser from '../pages/user/UpdateUser'
+import JobList from '../pages/user/JobList'
+import JobDetails from '../pages/user/JobDetails'
 
 const UserRouter = () => {
   return (
@@ -15,6 +18,9 @@ const UserRouter = () => {
     <Route path='/home' element={<UserHome/>} />
     <Route path='/forgot-password' element={<ForgotPassword/>} />
     <Route path='/new-password' element={<NewPassword/>} />
+    <Route path='/user-profile' element={<UpdateUser/>} />
+    <Route path='/list-jobs' element={<JobList/>} />
+    <Route path='/job-details' element={<JobDetails/>} />
 
 </Routes>
   )

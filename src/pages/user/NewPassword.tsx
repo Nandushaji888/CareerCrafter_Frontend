@@ -5,6 +5,8 @@ import { useFormik } from 'formik'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { passwordVerification } from '../../helper/Validate'
+import '../../assets/css/Auth.css'
+
 
 
 
@@ -60,7 +62,7 @@ const NewPassword = () => {
         }
     })
     return (
-        <div className='container mx-auto'>
+        <div className='bg-container container mx-auto'>
             <Toaster position='top-center' reverseOrder={false}></Toaster>
 
             <div className='flex justify-center items-center h-screen'>

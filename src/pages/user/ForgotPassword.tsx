@@ -6,6 +6,8 @@ import { useFormik } from 'formik'
 import { emailValidation } from '../../helper/Validate'
 import axios from 'axios';
 import { useEffect } from 'react';
+import '../../assets/css/Auth.css'
+
 // import Loading from '../../assets/ZKZg.gif';
 
 
@@ -138,7 +140,7 @@ const Login = () => {
     }
 
     return (
-        <div className="container mx-auto">
+        <div className="bg-container container mx-auto">
             <Toaster position='top-center' reverseOrder={false}></Toaster>
 
             <div className="flex justify-center items-center h-screen">

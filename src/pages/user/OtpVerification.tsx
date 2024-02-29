@@ -3,11 +3,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 import Loading from '../../assets/ZKZg.gif';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../utils/redux/slices/userSlice';
+import '../../assets/css/Auth.css'
+import { IUser } from '../../utils/interface/interface';
+
 
 
 
 const OtpVerification = () => {
     const [otp, setOtp] = useState('')
+    const dispatch = useDispatch()
+
     const [loading, setLoading] = useState(false)
 
     const [time, setTime] = useState(10)
@@ -42,11 +49,36 @@ const OtpVerification = () => {
         } else {
             axios.post(`${baseurl}/verify-otp`, { otp }, { withCredentials: true })
                 .then((res) => {
-                    console.log('res.status',res.status);
+                    console.log('res.status',res.data);
                     
                     if (res.status === 201 && res.data.status) {
+
+                        const data :IUser={
+                            _id:res?.data?.user?._id ||"",
+                            name: res?.data?.user?.name||"" ,
+                            email: res?.data?.user?.email||"",
+                            phone:res?.data?.user?.phone||"",
+                            isGoogle:res?.data?.user?.isGoogle?true:false,
+                            type:res?.data?.user?.type||"",
+                            status:res?.data?.user?.status||"",
+                            aboutYou:res?.data?.user?.aboutYou||"",
+                            dateOfBirth:res?.data?.user?.dateOfBirth ||"",
+                            appliedJobs:res?.data?.user?.appliedJobs||[],
+                            savedJobs:res?.data?.user?.savedJobs||[],
+                            createdOn:res?.data?.user?.createdOn||Date.now(),
+                            editedOn:res?.data?.user?.createdOn||Date.now(),
+                            resume:res?.data?.user?.resume||"",
+                            qualification:res?.data?.user?.qualification||"",
+                            skills:res?.data?.user?.skills||"",
+                            profilePic:res?.data?.user?.profilePic||"User-Profile-PNG-Download-Image.png"
+                        }
+                        console.log('data');
+                        console.log(data);
+                        
+                        dispatch(addUser(data))
+
                         localStorage.setItem('user-jwtToken', res.data.accessToken);
-                        navigate('/home');}
+                        navigate('/user-profile');}
                     // } else if (res.status === 401 && res.data.status1) {
                     //     toast.error('Incorrect OTP provided11');
                     // } else if (res.status === 401) {
@@ -87,7 +119,7 @@ const OtpVerification = () => {
     }
 
     return (
-        <div className="container mx-auto">
+        <div className="bg-container container mx-auto">
             <Toaster position='top-center' reverseOrder={false}></Toaster>
 
             <div className="flex justify-center items-center h-screen">

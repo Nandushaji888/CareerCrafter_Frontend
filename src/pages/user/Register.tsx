@@ -5,6 +5,8 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { registerValidation } from '../../helper/Validate'
 import axios from 'axios'
+import '../../assets/css/Auth.css'
+
 
 
 
@@ -57,7 +59,7 @@ const Register = () => {
     }
     )
     return (
-        <div className="container mx-auto">
+        <div className="bg-container container mx-auto">
         <Toaster position='top-center' reverseOrder={false}></Toaster>
 
         <div className="flex justify-center items-center h-screen">
@@ -109,6 +111,7 @@ const Register = () => {
                                 }
                             </button>
                         </div>
+                        
                         <div className="text-center py-4">
                             <span>
                                 Already a Member{' '}

@@ -8,11 +8,16 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import  {auth} from '../../utils/firebase/config'
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../utils/redux/slices/userSlice';
+import '../../assets/css/Auth.css'
+import { IUser } from '../../utils/interface/interface';
 
 const Login = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    const [user,setUser] = useState('')
+    // const [user,setUser] = useState('')
     useEffect(() => {
 
         const jwtToken = localStorage.getItem('user-jwtToken');
@@ -56,7 +61,28 @@ const Login = () => {
                 .post(`${baseurl}/login`, { values }, { withCredentials: true })
                 .then((res) => {
                     if (res.data.status) {
+                        console.log('res.data');
                         console.log(res.data);
+                        const data :IUser={
+                            _id:res?.data?.user?._id ||"",
+                            name: res?.data?.user?.name||"" ,
+                            email: res?.data?.user?.email||"",
+                            phone:res?.data?.user?.phone||"",
+                            isGoogle:res?.data?.user?.isGoogle?true:false,
+                            type:res?.data?.user?.type||"",
+                            status:res?.data?.user?.status||"",
+                            aboutYou:res?.data?.user?.aboutYou||"",
+                            dateOfBirth:res?.data?.user?.dateOfBirth ||"",
+                            appliedJobs:res?.data?.user?.appliedJobs||[],
+                            savedJobs:res?.data?.user?.savedJobs||[],
+                            createdOn:res?.data?.user?.createdOn||Date.now(),
+                            editedOn:res?.data?.user?.createdOn||Date.now(),
+                            resume:res?.data?.user?.resume||"",
+                            qualification:res?.data?.user?.qualification||[],
+                            skills:res?.data?.user?.skills||[],
+                            profilePic:res?.data?.user?.profilePic||"User-Profile-PNG-Download-Image.png"
+                        }
+                        dispatch(addUser(data))
                         localStorage.setItem('user-jwtToken', res.data.accessToken);
 
                         navigate('/home');
@@ -104,15 +130,26 @@ const Login = () => {
             name: data.user.displayName,
             isGoogle: true,           
           };
+          dispatch(addUser(userData))
           console.log(userData);
           axios
           .post(`${baseurl}/google-auth`, { userData }, { withCredentials: true })
           .then((res) => {
+              
               if (res.data.status) {
+;
+                  console.log('res.data');
                   console.log(res.data);
                   localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
+                  if(res?.data?.googleSignup){
+                    console.log('to user-profile');
+                    
+                    navigate('/user-profile')
+                  }else{
 
-                  navigate('/home');
+                      navigate('/home');
+                  }
+
               } 
           })
           .catch((error) => {
@@ -134,7 +171,7 @@ const Login = () => {
 
 
     return (
-        <div className="container mx-auto">
+        <div className="bg-container container mx-auto">
             <Toaster position='top-center' reverseOrder={false}></Toaster>
 
             <div className="flex justify-center items-center h-screen">
