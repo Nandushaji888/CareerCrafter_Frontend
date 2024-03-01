@@ -7,6 +7,7 @@ import Navbar from '../../components/NavBar';
 import avatar from '../../../public/userProfilePic/User-Profile-PNG-Download-Image.png'
 import { useParams } from 'react-router-dom'
 import { IUser } from '../../utils/interface/interface';
+import SideBar from './SideBar';
 
 
 const UserDetails: React.FC = () => {
@@ -40,6 +41,10 @@ const UserDetails: React.FC = () => {
     return (
         <>
             {/* <Navbar /> */}
+            <div className='flex flex-row'>
+                <div className='w-80'>
+                    <SideBar />
+                </div>
             
             <div className="max-w-4xl mx-auto py-8">
                 <Toaster position='top-center' reverseOrder={false}></Toaster>
@@ -191,6 +196,7 @@ const UserDetails: React.FC = () => {
 
                 </form>
 
+            </div>
             </div>
         </>
     );

@@ -1,67 +1,92 @@
 import React, { useEffect, useState } from 'react';
-// import { faSearch } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/NavBar';
-import { IPost, IUser } from '../../utils/interface/interface';
-
+import { IPost } from '../../utils/interface/interface';
 
 const JobList: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [location, setLocation] = useState('');
-    const [filteredJobs, setFilteredJobs] = useState([]);
-    const [jobList, setJobList] = useState<IPost[]>([])
-    const baseUrl = 'http://localhost:4002/api/post';
+    const [jobList, setJobList] = useState<IPost[]>([]);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5); // Adjust limit as needed
+    const [totalPages, setTotalPages] = useState(0);
     const postUrl = 'http://localhost:4001/api/post';
 
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
-    console.log('hereee');
-
-
-    // if(!searchQuery && !location && !filteredJobs){
     useEffect(() => {
-        axios.get(`${baseUrl}/list-jobs`, { withCredentials: true })
-            .then((res) => {
-                console.log(res.data.postDatas);
-                setJobList(res?.data?.postDatas)
-                // console.log('jobList');
-                // console.log(jobList);
+        fetchJobs();
+    }, [page]); // Fetch jobs when the page changes
+    // Fetch jobs on initial load and when searchQuery or location changes
 
-            })
-    }, [])
-    // }
-
-
-    const handleSearch = () => {
-    };
-
-    const handleFilterSort = () => {
-    };
-
-    const handleJobDetails=(id:string | undefined,e:React.MouseEvent<HTMLDivElement, MouseEvent>)=> {
-        e.preventDefault()
-        
-        if(id){
-            console.log(id);
-            
-            axios.get(`${postUrl}/job-details/${id}`,{withCredentials:true})
-            .then((res:any)=> {
-                console.log(res.data);
-                if(res?.data?.status){
-                    const dataToSend ={data:res?.data?.jobData}
-                    navigate('/job-details', { state: { data: dataToSend } });
-
-
-                    // navigate(`job-details/${encodeURIComponent(JSON.stringify(dataToSend))}`,)
-                }
-                
-            })
-
+    const fetchJobs = async () => {
+        try {
+            const response = await axios.get(`${postUrl}/list-jobs`, {
+                params: {
+                    search: searchQuery,
+                    location: location,
+                    page: page,
+                    limit: limit
+                },
+                withCredentials: true
+            });
+            setJobList(response.data.postDatas);
+            setTotalPages(Math.ceil(response.data.totalJobs / limit));
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
         }
+    };
 
-    }
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        setPage(1); // Reset to the first page on new search
+        fetchJobs();
+    };
+
+    const handleFilterSort = (e: React.FormEvent) => {
+        e.preventDefault();
+        setPage(1); // Reset to the first page on new filter/sort
+        fetchJobs();
+    };
+
+    const handleJobDetails = (id: string | undefined, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault();
+        if (id) {
+            axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+                .then((res) => {
+                    if (res?.data?.status) {
+                        const dataToSend = { data: res?.data?.jobData };
+                        navigate('/job-details', { state: { data: dataToSend } });
+                    }
+                });
+        }
+    };
+
+    // Pagination controls
+    const handlePrevPage = () => {
+        if (page > 1) {
+            setPage(prevPage => prevPage - 1);
+            navigate(`?page=${page - 1}&limit=${limit}&search=${encodeURIComponent(searchQuery)}`); // Update URL to reflect the new page
+        }
+    };
+    
+    const handleNextPage = () => {
+        
+        if (page < totalPages) {
+            setPage(prevPage => prevPage + 1); // Increment the page by 1
+            console.log(page);
+            
+            navigate(`?page=${page + 1}&limit=${limit}&search=${encodeURIComponent(searchQuery)}`); // Update URL to reflect the new page
+        }
+    };
+    
+// useEffect(() => {
+//     console.log('page updated', page);
+//     navigate(`./${page}`); // Update URL to reflect the new page
+// }, [page]); // This effect will run whenever `page` changes
+
+
 
     return (
         <>
@@ -92,16 +117,16 @@ const JobList: React.FC = () => {
                         Search
                     </button>
                 </div>
-                <div className='flex flex-row mx-auto justify-between mt-10 w-10/12  items-center bg-white  px-14 rounded-2xl'>
-                    <div className='w-7/12 border border-none my-7  '>
+                <div className='flex flex-row mx-auto justify-between mt-10 w-10/12 items-start bg-white px-14 rounded-2xl'>
+                    <div className='w-7/12 border border-none my-7  mt-4'>
                         {jobList.map((job, index) => (
-                            <div key={index} onClick={(e)=>handleJobDetails(job?._id,e)} className="cursor-pointer flex flex-row justify-between px-8  bg-white p-4 border my-6 rounded-xl  ">
+                            <div key={index} onClick={(e) => handleJobDetails(job?._id, e)} className="cursor-pointer flex flex-row justify-between px-8  bg-white p-4 border my-6 rounded-xl  ">
                                 <div className='h-3/6'>
-                                    <p className="text-gray-600 mb-2">{job?.company}</p>
-                                    <h2 className="text-lg font-semibold mb-2">{job?.postName}</h2>
+                                    <p className="text-gray-600 mb-2 ">{job?.company}</p>
+                                    <h2 className="text-lg font-semibold mb-2 max-w-sm">{job?.postName}</h2>
                                     <p className="text-gray-700 font-bold">{job?.recruitingPlace}</p>
                                 </div>
-                                <div className='px-5'>
+                                <div className=''>
                                     <p className="text-gray-600">{job?.employmentType}</p>
                                     <p className="text-gray-600">{job?.createdAt?.slice(0, 10)}</p>
                                 </div>
@@ -109,7 +134,7 @@ const JobList: React.FC = () => {
                         ))}
 
                     </div>
-                    <div className='bg-slate-100 rounded-2xl border border-gray-300  w-4/12  h-[460px]'>
+                    <div className='bg-slate-100 rounded-2xl border mt-16 border-gray-300 w-4/12 h-[460px]'>
                         <form >
 
                             <div className='flex flex-col justify-center items-center text-center gap-4  py-6 '>
@@ -122,7 +147,7 @@ const JobList: React.FC = () => {
                                     </select>
                                 </div>
                                 <div className='w-[300px]'>
-                                <h3 className='font-semibold'>Employment Type</h3>
+                                    <h3 className='font-semibold'>Employment Type</h3>
                                     <select name="employmentType" className="w-3/4 my-3 border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
                                         <option value="fulltime">Full-Time</option>
                                         <option value="parttime">Part-Time</option>
@@ -130,9 +155,9 @@ const JobList: React.FC = () => {
                                     </select>
                                 </div>
                                 <div className='w-[300px]'>
-                                <h3 className='font-semibold mb-2'>Preferences</h3>
-                                <input type="text" name="skills" placeholder='skills' className="w-3/4 border border-gray-300 rounded-lg py-2 px-4 my-2 focus:outline-none focus:border-blue-400" required />
-                                <input type="text" name="qualification" placeholder='qualification' className="w-3/4 border border-gray-300 rounded-lg py-2 my-2 px-4 focus:outline-none focus:border-blue-400" required />
+                                    <h3 className='font-semibold mb-2'>Preferences</h3>
+                                    <input type="text" name="skills" placeholder='skills' className="w-3/4 border border-gray-300 rounded-lg py-2 px-4 my-2 focus:outline-none focus:border-blue-400" required />
+                                    <input type="text" name="qualification" placeholder='qualification' className="w-3/4 border border-gray-300 rounded-lg py-2 my-2 px-4 focus:outline-none focus:border-blue-400" required />
 
                                 </div>
                                 <button
@@ -147,6 +172,15 @@ const JobList: React.FC = () => {
 
 
                     </div>
+                </div>
+                <div className="flex justify-center mt-4">
+                    <button onClick={handlePrevPage} disabled={page === 1}>Previous</button>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button key={index} onClick={() => setPage(index + 1)} className={page === index + 1 ? 'bg-blue-500' : ''}>
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button onClick={handleNextPage} disabled={page === totalPages}>Next</button>
                 </div>
 
             </div>

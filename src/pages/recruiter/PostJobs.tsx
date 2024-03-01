@@ -30,6 +30,7 @@ const JobPostForm = () => {
     closingDate: '',
     workArrangementType: WorkArrangementType.Office,
     employmentType: employmentType.Fulltime,
+    _id:''
     // isPremium: false,
     // isListed: true,
     // createdAt: new Date().toISOString().slice(0, 10),

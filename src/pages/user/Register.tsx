@@ -17,10 +17,10 @@ const Register = () => {
     const navigate = useNavigate()
     const formik = useFormik({
         initialValues: {
-            name: 'rigguu',
-            email: 'admin@gmail.com',
-            phone: '9898745112',  
-            password: '1234',
+            name: '',
+            email: '',
+            phone: '',  
+            password: '',
             // confirm_pwd: ''
         },
         validate: registerValidation,
@@ -96,7 +96,7 @@ const Register = () => {
                            
                             <input
                                 {...formik.getFieldProps('password')}
-                                type="text"
+                                type="password"
                                 placeholder="Password"
                                 className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />

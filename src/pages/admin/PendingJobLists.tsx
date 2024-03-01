@@ -18,37 +18,58 @@ const PendingJobLists = () => {
 
     const columns: TableColumn<IPost>[] = [
         {
-            name: 'PostName',
+            name: 'Post Name',
             selector: row => row.postName,
             sortable: true,
+            width: '200px',
             style: {
                 fontWeight: 'bold',
-                 paddingLeft: '20px'
+                paddingLeft: '20px',
+                textAlign: 'left'
             }
         },
         {
             name: 'Company',
             selector: row => row.company,
             sortable: true,
+            width: '150px',
+            style: {
+                textAlign: 'left'
+            }
         },
         {
             name: 'Company Place',
             selector: row => row.recruitingPlace,
+            width: '150px',
+            style: {
+                textAlign: 'left'
+            }
         },
         {
             name: 'Recruiter Email',
             selector: row => row.recruiterEmail,
+            width: '200px',
+            style: {
+                textAlign: 'left'
+            }
         },
         {
-            name: 'Closing date',
-            selector: row => (row.closingDate.slice(0,10)),
+            name: 'Closing Date',
+            selector: row => row.closingDate.slice(0, 10),
+            width: '150px',
+            style: {
+                textAlign: 'left'
+            }
         },
-       
         {
             name: 'Post Details',
             cell: (row: IPost) => (
                 <Link className='px-4 bg-blue-800 text-white rounded-2xl py-1 hover:bg-blue-400 font-semibold' to={`/admin/job-details/${row._id}`}>Details</Link>
             ),
+            width: '150px',
+            style: {
+                textAlign: 'center'
+            }
         },
     ];
 

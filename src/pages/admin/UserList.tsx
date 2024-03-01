@@ -36,9 +36,9 @@ const UserList: React.FC = () => {
             name: 'Status',
             cell: (row: IUser) => (
                 row.status ? (
-                    <button className='px-4 bg-red-800 text-white rounded-3xl py-1 hover:bg-red-400 font-semibold' onClick={(e: any) => blockUser(row._id, e)}>Block</button>
+                    <button className='px-4 bg-red-800 text-white rounded-3xl py-1 hover:bg-red-400 font-semibold' onClick={(e: React.FormEvent) => blockUser(row._id, e)}>Block</button>
                 ) : (
-                    <button className='px-4 bg-blue-800 text-white rounded-3xl py-1 hover:bg-blue-400 font-semibold' onClick={(e: any) => unblockUser(row._id, e)}>Unblock</button>
+                    <button className='px-4 bg-blue-800 text-white rounded-3xl py-1 hover:bg-blue-400 font-semibold' onClick={(e: React.FormEvent) => unblockUser(row._id, e)}>Unblock</button>
                 )
             ),
         },

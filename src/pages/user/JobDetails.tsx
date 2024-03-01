@@ -54,7 +54,7 @@ const JobDetails = () => {
         <>
             <Navbar />
             <div className='container mx-auto p-10   h-screen'>
-                <div className='flex flex-col mx-10 my-5 rounded-3xl pt-10 h-screen bg-white'>
+                <div className='flex flex-col mx-10 my-5 rounded-3xl pt-10 min-h-screen bg-white'>
                     <div className='heading ps-16 ms-2 mb-10 '>
                         <h2 className='text-3xl font-semibold'>{data?.postName}</h2>
                         <h4 className='text-lg ps-10 pt-3 font-semibold'>{data?.company}</h4>
@@ -63,7 +63,7 @@ const JobDetails = () => {
 
                     <div className='flex flex-row w-full mx-auto px-20 justify-between'>
 
-                        <div className='w-3/5 border border-gray-300 p-5 rounded-lg bg-slate-100'>
+                        <div className='w-3/5 border border-gray-300 p-5 rounded-lg bg-slate-100 mb-10'>
 
                             <div className='ps-2 w-5/6'>
                                 <h4 className='text-lg pt-3 mb-3 font-semibold'>Job Description</h4>

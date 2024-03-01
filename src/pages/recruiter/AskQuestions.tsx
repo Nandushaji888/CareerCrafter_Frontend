@@ -83,7 +83,6 @@ const AddQuestionForm = () => {
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
                         className="w-full border border-gray-300 rounded-lg py-6 px-4 focus:outline-none focus:border-blue-400"
-                        required
                     />
                 </div>
 

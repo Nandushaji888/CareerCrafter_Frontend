@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom'
 import { IPost, } from '../../utils/interface/interface';
 import SideBar from './SideBar';
+import PostQuestionsModal from '../../components/PostQuestionsModal';
 
 
 const AdminJobDetails: React.FC = () => {
     const [jobDetails, setjobDetails] = useState<IPost>()
-
+    const [showModal, setShowModal] = useState(false)
 
 
     const baseUrl = 'http://localhost:4001/api/post/admin';
@@ -31,16 +32,56 @@ const AdminJobDetails: React.FC = () => {
             })
     }, [])
 
+    const jobStatusHandler = (id: string, status: string) => {
+        const formData = {
+            id,
+            status
+        }
+        axios.post(`${baseUrl}/job-post-status-change`, { formData }, { withCredentials: true })
+            .then((res) => {
+                console.log(res.data);
+                if (res?.data?.status) {
+                    setjobDetails(res?.data?.postdata)
+                    if (res?.data?.message) {
+
+                        toast.error(res?.data?.message)
+                    }
+                } else {
+
+                    toast.error(res?.data?.message)
+
+                }
+
+            })
+    }
+
+
+    const jobAcceptHandler = (id: string, e: React.FormEvent) => {
+        e.preventDefault()
+        const status = "List"
+        jobStatusHandler(id, status)
+
+    }
+    const jobRejecthandeler = (id: string, e: React.FormEvent) => {
+        e.preventDefault()
+        const status = "NotList"
+        jobStatusHandler(id, status)
+
+    }
+
+
 
 
 
     return (
         <>
             <div className='flex flex-row'>
+                <Toaster position='top-center' reverseOrder={false}></Toaster>
+
                 <div className='w-80'>
                     <SideBar />
                 </div>
-                <div className='container mx-auto p-10 flex flex-col bg-white h-screen'>
+                <div className='container mx-auto p-10 flex flex-col bg-white min-h-min'>
                     <div className='heading ps-16 ms-2 mb-10 '>
                         <h2 className='text-3xl font-semibold'>{jobDetails?.postName}</h2>
                         <h4 className='text-lg ps-10 pt-3 font-semibold'>{jobDetails?.company}</h4>
@@ -76,28 +117,37 @@ const AdminJobDetails: React.FC = () => {
 
                                 {
                                     jobDetails?.questions && jobDetails.questions.length > 0 &&
-                                    <button className='bg-black text-white py-2 mb-5 mt-3 rounded-3xl px-5'>See Questions</button>
+                                    <button onClick={() => setShowModal(true)} className='bg-black text-white py-2 mb-5 mt-3 rounded-3xl px-5'>See Questions</button>
                                 }
 
 
                             </div>
                             {
-                            !jobDetails?.isListed &&
-                            <div className='ms-6 mt-16 flex '>
-                                <button className='bg-green-800 text-white py-2 mb-5 mx-5 mt-3 rounded-3xl px-5'>Accept post</button>
-                                <button className='bg-red-700 text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Reject post</button>
+                                !jobDetails?.isListed ?
+                                    (
+                                        <div className='ms-6 mt-16 flex '>
+                                            <button onClick={(e: React.FormEvent) => jobDetails?._id && jobAcceptHandler(jobDetails?._id, e)} className='bg-green-800 text-white py-2 mb-5 mx-5 mt-3 rounded-3xl px-5'>Accept post</button>
+                                            <button onClick={(e: React.FormEvent) => jobDetails?._id && jobRejecthandeler(jobDetails?._id, e)} className='bg-red-700 text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Reject post</button>
 
-                            </div>
-                        }
+                                        </div>
+                                    ) :
+                                    (<div className='ms-6 mt-16 flex '>
+                                        <button className='bg-gray-900-700 text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Delete post</button>
+
+                                    </div>)
+                            }
                         </div>
-                       
+
 
                     </div>
-               
+                    {
+                        showModal &&
+                        <PostQuestionsModal onClose={() => setShowModal(false)} questions={(jobDetails?.questions || [])} />
+                    }
+
 
                 </div>
             </div>
-            
         </>
     )
 }

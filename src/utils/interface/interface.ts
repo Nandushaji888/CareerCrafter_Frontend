@@ -24,7 +24,7 @@ export interface IUser {
 
 
 export interface IPost {
-    _id?:string,
+    _id:string,
     postName: string;
     company: string;
     responsibilities?:string,
@@ -33,17 +33,22 @@ export interface IPost {
     qualification?:string,
     salary?:string,
     category?:ObjectId,
-    questions?:string[],
+    questions?:Question[],
     skills?:string,
     recruiterEmail:string,
     recruitingPlace:string,
     closingDate :string,
     workArrangementType?:WorkArrangementType,
     employmentType?:employmentType,  
-    createdAt:string;
-    isListed:boolean;
-    isPremium:boolean
+    createdAt?:string;
+    isListed?:boolean;
+    isPremium?:boolean
 }
+
+interface Question {
+    question: string;
+    answer: string;
+  }
 
 
 
