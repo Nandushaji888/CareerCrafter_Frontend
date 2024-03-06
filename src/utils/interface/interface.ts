@@ -50,6 +50,9 @@ interface Question {
     answer: string;
   }
 
+  export interface NavbarProps {
+    url: string;
+  }
 
 
 

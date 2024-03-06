@@ -6,7 +6,7 @@ import { useFormik } from 'formik'
 import { signinValidation } from '../../helper/Validate'
 import axios from 'axios';
 import { useEffect } from 'react';
-import  {auth} from '../../utils/firebase/config'
+import { auth } from '../../utils/firebase/config'
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../utils/redux/slices/userSlice';
@@ -63,24 +63,24 @@ const Login = () => {
                     if (res.data.status) {
                         console.log('res.data');
                         console.log(res.data);
-                        const data :IUser={
-                            _id:res?.data?.user?._id ||"",
-                            name: res?.data?.user?.name||"" ,
-                            email: res?.data?.user?.email||"",
-                            phone:res?.data?.user?.phone||"",
-                            isGoogle:res?.data?.user?.isGoogle?true:false,
-                            type:res?.data?.user?.type||"",
-                            status:res?.data?.user?.status||"",
-                            aboutYou:res?.data?.user?.aboutYou||"",
-                            dateOfBirth:res?.data?.user?.dateOfBirth ||"",
-                            appliedJobs:res?.data?.user?.appliedJobs||[],
-                            savedJobs:res?.data?.user?.savedJobs||[],
-                            createdOn:res?.data?.user?.createdOn||Date.now(),
-                            editedOn:res?.data?.user?.createdOn||Date.now(),
-                            resume:res?.data?.user?.resume||"",
-                            qualification:res?.data?.user?.qualification||[],
-                            skills:res?.data?.user?.skills||[],
-                            profilePic:res?.data?.user?.profilePic||"User-Profile-PNG-Download-Image.png"
+                        const data: IUser = {
+                            _id: res?.data?.user?._id || "",
+                            name: res?.data?.user?.name || "",
+                            email: res?.data?.user?.email || "",
+                            phone: res?.data?.user?.phone || "",
+                            isGoogle: res?.data?.user?.isGoogle ? true : false,
+                            type: res?.data?.user?.type || "",
+                            status: res?.data?.user?.status || "",
+                            aboutYou: res?.data?.user?.aboutYou || "",
+                            dateOfBirth: res?.data?.user?.dateOfBirth || "",
+                            appliedJobs: res?.data?.user?.appliedJobs || [],
+                            savedJobs: res?.data?.user?.savedJobs || [],
+                            createdOn: res?.data?.user?.createdOn || Date.now(),
+                            editedOn: res?.data?.user?.createdOn || Date.now(),
+                            resume: res?.data?.user?.resume || "",
+                            qualification: res?.data?.user?.qualification || [],
+                            skills: res?.data?.user?.skills || [],
+                            profilePic: res?.data?.user?.profilePic || "User-Profile-PNG-Download-Image.png"
                         }
                         dispatch(addUser(data))
                         localStorage.setItem('user-jwtToken', res.data.accessToken);
@@ -105,7 +105,7 @@ const Login = () => {
     //         setUser(data.user);
     //     });
     // };
-    
+
     // // useEffect to log `user` whenever it changes
     // useEffect(() => {
     //     console.log(user);
@@ -113,53 +113,53 @@ const Login = () => {
 
     const GoogleAuth = async () => {
         try {
-          const provider =  new GoogleAuthProvider();
-          const googleAuth = signInWithPopup(auth, provider);
-          return googleAuth;
+            const provider = new GoogleAuthProvider();
+            const googleAuth = signInWithPopup(auth, provider);
+            return googleAuth;
         } catch (error) {
-          console.log("Error in the the gogle auth firebase", error);
+            console.log("Error in the the gogle auth firebase", error);
         }
-      };
+    };
 
 
-     const googleAuthhandler =async (e: any) => {
+    const googleAuthhandler = async (e: any) => {
         e.preventDefault();
         await GoogleAuth().then(async (data: any) => {
-          const userData = {
-            email: data.user.email,
-            name: data.user.displayName,
-            isGoogle: true,           
-          };
-          dispatch(addUser(userData))
-          console.log(userData);
-          axios
-          .post(`${baseurl}/google-auth`, { userData }, { withCredentials: true })
-          .then((res) => {
-              
-              if (res.data.status) {
-;
-                  console.log('res.data');
-                  console.log(res.data);
-                  localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
-                  if(res?.data?.googleSignup){
-                    console.log('to user-profile');
-                    
-                    navigate('/user-profile')
-                  }else{
+            const userData = {
+                email: data.user.email,
+                name: data.user.displayName,
+                isGoogle: true,
+            };
+            dispatch(addUser(userData))
+            console.log(userData);
+            axios
+                .post(`${baseurl}/google-auth`, { userData }, { withCredentials: true })
+                .then((res) => {
 
-                      navigate('/home');
-                  }
+                    if (res.data.status) {
+                        ;
+                        console.log('res.data');
+                        console.log(res.data);
+                        localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
+                        if (res?.data?.googleSignup) {
+                            console.log('to user-profile');
 
-              } 
-          })
-          .catch((error) => {
-              console.error('Error:', error);
-              toast.error(error.response?.data?.message);
-          })
+                            navigate('/user-profile')
+                        } else {
 
-      
+                            navigate('/home');
+                        }
+
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    toast.error(error.response?.data?.message);
+                })
+
+
         })
-      };
+    };
 
 
 
@@ -187,7 +187,7 @@ const Login = () => {
                     <form className="py-2" onSubmit={formik.handleSubmit}>
                         <div className="profile flex justify-center py-2 pb-6">
                             <img
-                                src={Avatar}
+                                src='profile.png'
                                 alt="avatar"
                                 className="profile_img border-4 border-gray-100 w-32 rounded-full shadow-lg  hover:border-gray-200"
                             />
@@ -218,23 +218,23 @@ const Login = () => {
                             <button type="submit" className="btn bg-blue-600 hover:bg-blue-800   py-3 px-5 rounded-2xl w-full max-w-md text-white">
                                 Let's Go
                             </button>
-                            
-                        </div>
-                            </form>
-                            <button onClick={googleAuthhandler} className="btn bg-blue-600 hover:bg-blue-800 py-2 px-5 mt-1  rounded-2xl w-full max-w-md text-white flex items-center justify-center">
-                                <img className='rounded-3xl mr-2' src='google image.png' alt="Google Logo" width={30} />
-                                Sign in With Google
-                            </button>
 
-                        <div className="text-center py-2 mt-3">
-                            <span>
-                                Not a Member{' '}
-                                <Link to="/register" className="text-blue-600 hover:text-blue-400 ">
-                                    Register now
-                                </Link>{' '}
-                            </span>
                         </div>
-                  
+                    </form>
+                    <button onClick={googleAuthhandler} className="btn bg-blue-600 hover:bg-blue-800 py-2 px-5 mt-1  rounded-2xl w-full max-w-md text-white flex items-center justify-center">
+                        <img className='rounded-3xl mr-2' src='google image.png' alt="Google Logo" width={30} />
+                        Sign in With Google
+                    </button>
+
+                    <div className="text-center py-2 mt-3">
+                        <span>
+                            Not a Member{' '}
+                            <Link to="/register" className="text-blue-600 hover:text-blue-400 ">
+                                Register now
+                            </Link>{' '}
+                        </span>
+                    </div>
+
                 </div>
             </div>
         </div>

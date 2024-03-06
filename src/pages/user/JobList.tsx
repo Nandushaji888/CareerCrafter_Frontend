@@ -9,7 +9,7 @@ const JobList: React.FC = () => {
     const [location, setLocation] = useState('');
     const [jobList, setJobList] = useState<IPost[]>([]);
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5); // Adjust limit as needed
+    const [limit, setLimit] = useState(3); // Adjust limit as needed
     const [totalPages, setTotalPages] = useState(0);
     const postUrl = 'http://localhost:4001/api/post';
 
@@ -25,18 +25,20 @@ const JobList: React.FC = () => {
             const response = await axios.get(`${postUrl}/list-jobs`, {
                 params: {
                     search: searchQuery,
-                    location: location,
                     page: page,
                     limit: limit
                 },
                 withCredentials: true
             });
+            console.log(response.data);
+
             setJobList(response.data.postDatas);
-            setTotalPages(Math.ceil(response.data.totalJobs / limit));
+            setTotalPages(response.data.totalPages);
         } catch (error) {
             console.error("Error fetching jobs:", error);
         }
     };
+
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,29 +64,24 @@ const JobList: React.FC = () => {
                 });
         }
     };
+    const handleNextPage = () => {
+        if (page < totalPages) {
+            console.log(page);
 
-    // Pagination controls
+            setPage(prevPage => prevPage + 1);
+        }
+    };
+
     const handlePrevPage = () => {
         if (page > 1) {
             setPage(prevPage => prevPage - 1);
-            navigate(`?page=${page - 1}&limit=${limit}&search=${encodeURIComponent(searchQuery)}`); // Update URL to reflect the new page
         }
     };
-    
-    const handleNextPage = () => {
-        
-        if (page < totalPages) {
-            setPage(prevPage => prevPage + 1); // Increment the page by 1
-            console.log(page);
-            
-            navigate(`?page=${page + 1}&limit=${limit}&search=${encodeURIComponent(searchQuery)}`); // Update URL to reflect the new page
-        }
-    };
-    
-// useEffect(() => {
-//     console.log('page updated', page);
-//     navigate(`./${page}`); // Update URL to reflect the new page
-// }, [page]); // This effect will run whenever `page` changes
+
+    // useEffect(() => {
+    //     console.log('page updated', page);
+    //     navigate(`./${page}`); // Update URL to reflect the new page
+    // }, [page]); // This effect will run whenever `page` changes
 
 
 
@@ -111,16 +108,17 @@ const JobList: React.FC = () => {
                         onChange={(e) => setLocation(e.target.value)}
                     />
                     <button
-                        className="ml-2 px-4 py-2 bg-blue-800 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                        className="ml-2 px-4 py-2 bg-black text-white rounded-full hover:bg-gray-700  focus:outline-none  "
                         onClick={handleSearch}
                     >
                         Search
                     </button>
                 </div>
-                <div className='flex flex-row mx-auto justify-between mt-10 w-10/12 items-start bg-white px-14 rounded-2xl'>
+                <div className='mx-auto justify-between mt-10 w-10/12 items-start bg-white px-14 rounded-2xl shadow-lg pt-6'>
+                <div className='flex flex-row px-14 gap-14'>
                     <div className='w-7/12 border border-none my-7  mt-4'>
                         {jobList.map((job, index) => (
-                            <div key={index} onClick={(e) => handleJobDetails(job?._id, e)} className="cursor-pointer flex flex-row justify-between px-8  bg-white p-4 border my-6 rounded-xl  ">
+                            <div key={index} onClick={(e) => handleJobDetails(job?._id, e)} className="cursor-pointer flex flex-row justify-between px-8 min-h-40  bg-white shadow-lg  border-gray-300 p-4 border my-6 rounded-xl  ">
                                 <div className='h-3/6'>
                                     <p className="text-gray-600 mb-2 ">{job?.company}</p>
                                     <h2 className="text-lg font-semibold mb-2 max-w-sm">{job?.postName}</h2>
@@ -134,10 +132,10 @@ const JobList: React.FC = () => {
                         ))}
 
                     </div>
-                    <div className='bg-slate-100 rounded-2xl border mt-16 border-gray-300 w-4/12 h-[460px]'>
+                    <div className='bg-slate-100 rounded-2xl border mt-16 mb-10 border-gray-300 w-4/12 h-[460px]'>
                         <form >
 
-                            <div className='flex flex-col justify-center items-center text-center gap-4  py-6 '>
+                            <div className='flex flex-col justify-center items-center text-center gap-4   py-6 '>
                                 <div className='w-[300px]'>
                                     <h3 className='font-semibold'>Job Preferences</h3>
                                     <select name="workArrangementType" className="w-3/4 my-3 border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
@@ -161,7 +159,7 @@ const JobList: React.FC = () => {
 
                                 </div>
                                 <button
-                                    className="px-4 py-2 mb-2  bg-gray-900 text-white rounded-lg hover:bg-gray-400 focus:outline-none focus:bg-gray-400"
+                                    className="px-4 py-2 mb-2  bg-black text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-400"
                                     onClick={handleFilterSort}
                                 >
                                     Filter & Sort
@@ -181,6 +179,7 @@ const JobList: React.FC = () => {
                         </button>
                     ))}
                     <button onClick={handleNextPage} disabled={page === totalPages}>Next</button>
+                </div>
                 </div>
 
             </div>

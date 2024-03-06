@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/NavBar';
-import avatar from '../../../public/userProfilePic/User-Profile-PNG-Download-Image.png'
+// import avatar from '../../../public/userProfilePic/User-Profile-PNG-Download-Image.png'
 import { useParams } from 'react-router-dom'
 import { IUser } from '../../utils/interface/interface';
 import SideBar from './SideBar';
@@ -57,7 +57,7 @@ const UserDetails: React.FC = () => {
                                 {/* Show original image if available */}
                                 {/* {userData.profilePic && ( */}
                                 <img
-                                    src={avatar}
+                                    src='profile.png'
                                     // src={`userProfilePic/User-Profile-PNG-Download-Image.png`}
                                     alt="avatar"
                                     width="200px"

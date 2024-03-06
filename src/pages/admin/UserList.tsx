@@ -5,6 +5,11 @@ import Header from '../../components/Header';
 import { IUser } from '../../utils/interface/interface';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+
 
 const UserList: React.FC = () => {
     const [users, setUsers] = useState<IUser[]>([]);
@@ -21,16 +26,20 @@ const UserList: React.FC = () => {
             sortable: true,
             style: {
                 fontWeight: 'bold'
-            }
+            },
+            width:'250px'
+            
         },
         {
             name: 'Email',
             selector: row => row.email,
             sortable: true,
+            width:'250px'
         },
         {
             name: 'Phone',
             selector: row => row.phone,
+            width:'200px'
         },
         {
             name: 'Status',
@@ -41,6 +50,7 @@ const UserList: React.FC = () => {
                     <button className='px-4 bg-blue-800 text-white rounded-3xl py-1 hover:bg-blue-400 font-semibold' onClick={(e: React.FormEvent) => unblockUser(row._id, e)}>Unblock</button>
                 )
             ),
+            width:'200px'
         },
         {
             name: 'User Details',
@@ -53,7 +63,6 @@ const UserList: React.FC = () => {
 
 
     const baseUrl = 'http://localhost:4002/api/admin';
-    // const authUrl ='http://localhost:4000/api/auth/user'
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -74,24 +83,61 @@ const UserList: React.FC = () => {
             id,
             status
         }
-        axios.post(`${baseUrl}/change-user-status`, { formData }, { withCredentials: true })
+        console.log('change status');
+        console.log(formData);
+
+        axios.post(`${baseUrl}/user/change-user-status`, { formData }, { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
+                if(res?.data?.status){
 
+                    setUsers(res?.data?.users)
+                    toast?.success(res?.data?.message)
+                }
+
+            })
+            .catch((err:any)=> {
+                toast.error(err?.respose?.data?.message)
             })
 
 
     }
     const unblockUser = (id: string | undefined, e: any) => {
         e.preventDefault()
-        const status = "Active"
-        changeStatus(id, status)
+        const status = "InActive"
+        confirmAlert({
+            title: 'Confirm',
+            message: 'Do you want to change the user\'s status?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => changeStatus(id, status)
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
 
     }
     const blockUser = (id: string | undefined, e: any) => {
         e.preventDefault()
-        const status = "InActive"
-        changeStatus(id, status)
+        const status = "Active"
+        confirmAlert({
+            title: 'Confirm',
+            message: 'Do you want to change the user\'s status?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => changeStatus(id, status)
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
 
     }
 
@@ -107,6 +153,9 @@ const UserList: React.FC = () => {
 
     return (
         <div className='flex flex-row'>
+            <Toaster position='top-center' reverseOrder={false}></Toaster>
+
+
             <div className='w-80'>
                 <SideBar />
             </div>
@@ -124,6 +173,7 @@ const UserList: React.FC = () => {
                     />
 
                     <DataTable
+                        
                         columns={columns}
                         data={filteredUsers}
                         selectableRows
@@ -132,6 +182,7 @@ const UserList: React.FC = () => {
                     />
                 </div>
             </div>
+            
         </div>
 
 
