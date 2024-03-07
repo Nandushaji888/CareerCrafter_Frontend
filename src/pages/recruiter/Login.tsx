@@ -5,6 +5,9 @@ import { Toaster,toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import {signinValidation} from '../../helper/Validate'
 import axios from 'axios';
+import { IRecruiter } from '../../utils/interface/interface';
+import { useDispatch } from 'react-redux';
+import { addRecruiter } from '../../utils/redux/slices/recruiterSlice';
 
 
 const Login = () => {
@@ -12,6 +15,7 @@ const Login = () => {
     const baseurl = "http://localhost:4000/api/auth/recruiter";
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     // useEffect(() => {
     //     const jwtToken = localStorage.getItem('recruiter-jwtToken');
@@ -48,8 +52,22 @@ const Login = () => {
                     .post(`${baseurl}/login`, { values }, { withCredentials: true })
                     .then((res) => {
                         if (res.data.status) {
+                            console.log('res.data');
                             console.log(res.data);
+                            const data:IRecruiter ={
+                                _id:res?.data?.recruiter?._id || '',
+                                name:res?.data?.recruiter?.name || '',
+                                email:res?.data?.recruiter?.email || '',
+                                phone:res?.data?.recruiter?.phone || '',
+                                status:res?.data?.recruiter?.status || '',
+                                worksAt:res?.data?.recruiter?.worksAt || '',
+                                profilePic:res?.data?.recruiter?.profilePic || '',
+                                createdOn:res?.data?.recruiter?.createdOn || Date.now(),
+                                isPremium:res?.data?.recruiter?.isPremium||'',
+                            } 
+                            
                             localStorage.setItem('recruiter-jwtToken', res.data.accessToken);
+                            dispatch(addRecruiter(data))
                             // console.log('created token');
                             
                             navigate('/recruiter/home');
@@ -70,7 +88,7 @@ const Login = () => {
         <div className="container mx-auto">
         <Toaster position='top-center' reverseOrder={false}></Toaster>
 
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex  justify-center items-center h-screen ">
             <div className=" bg-slate-100 pt-14 pb-10  px-10 rounded-3xl h-[700px]">
                 <div className="title flex flex-col items-center">
                         <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>

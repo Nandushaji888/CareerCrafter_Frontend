@@ -13,47 +13,51 @@ const AdminJobDetails: React.FC = () => {
     const [showModal, setShowModal] = useState(false)
 
 
+
     const baseUrl = 'http://localhost:4001/api/post/admin';
 
 
-
-    const { id } = useParams();
-    useEffect(() => {
-        console.log(id);
-
+    const fetchPostDetails = (id: string | undefined) => {
         axios.get(`${baseUrl}/job-details/${id}`, { withCredentials: true })
             .then((res: any) => {
-                // console.log('res.jobDetails');
-                console.log(res?.data?.jobData);
                 setjobDetails(res?.data?.jobData)
-                // if(res?.data?.jobData?.questions?.length>0){
-
-                // }
             })
+            .catch((err: any) => {
+                console.log(err?.response?.data?.message);
+
+                toast.error(err?.response?.data?.message)
+            })
+    }
+    const { id } = useParams();
+    useEffect(() => {
+        fetchPostDetails(id)
     }, [])
 
     const jobStatusHandler = (id: string, status: string) => {
+
         const formData = {
             id,
             status
         }
         axios.post(`${baseUrl}/job-post-status-change`, { formData }, { withCredentials: true })
             .then((res) => {
-                console.log(res.data);
-                if (res?.data?.status) {
-                    setjobDetails(res?.data?.postdata)
-                    if (res?.data?.message) {
-
-                        toast.error(res?.data?.message)
+                if (res.data.status) {
+                    if (res.data.message) {
+                        toast.success(res.data.message)
                     }
+                    // Fetch updated job details separately
+
+
+                    fetchPostDetails(id)
                 } else {
-
-                    toast.error(res?.data?.message)
-
+                    toast.error(res.data.message)
                 }
-
             })
+            .catch((err: any) => {
+                toast.error(err.response?.data?.message)
+            });
     }
+
 
 
     const jobAcceptHandler = (id: string, e: React.FormEvent) => {
@@ -81,7 +85,8 @@ const AdminJobDetails: React.FC = () => {
                 <div className='w-80'>
                     <SideBar />
                 </div>
-                <div className='container mx-auto p-10 flex flex-col bg-white min-h-min'>
+                
+                <div className='container mx-auto p-10 flex flex-col bg-white min-h-screen'>
                     <div className='heading ps-16 ms-2 mb-10 '>
                         <h2 className='text-3xl font-semibold'>{jobDetails?.postName}</h2>
                         <h4 className='text-lg ps-10 pt-3 font-semibold'>{jobDetails?.company}</h4>
@@ -122,20 +127,19 @@ const AdminJobDetails: React.FC = () => {
 
 
                             </div>
-                            {
-                                !jobDetails?.isListed ?
-                                    (
-                                        <div className='ms-6 mt-16 flex '>
+                            {jobDetails && !jobDetails?.isRejected && (
+                                <div className='ms-6 mt-16 flex '>{jobDetails?.isListed}
+                                    {!jobDetails?.isListed ? (
+                                        <>
                                             <button onClick={(e: React.FormEvent) => jobDetails?._id && jobAcceptHandler(jobDetails?._id, e)} className='bg-green-800 text-white py-2 mb-5 mx-5 mt-3 rounded-3xl px-5'>Accept post</button>
                                             <button onClick={(e: React.FormEvent) => jobDetails?._id && jobRejecthandeler(jobDetails?._id, e)} className='bg-red-700 text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Reject post</button>
+                                        </>
+                                    ) : (
+                                        <button className='bg-black  text-white py-2 mb-5 ms-24 mt-3 rounded-3xl px-5'>Disable post</button>
+                                    )}
+                                </div>
+                            )}
 
-                                        </div>
-                                    ) :
-                                    (<div className='ms-6 mt-16 flex '>
-                                        <button className='bg-gray-900-700 text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Delete post</button>
-
-                                    </div>)
-                            }
                         </div>
 
 

@@ -20,7 +20,7 @@ const UserRouter = () => {
     <Route path='/new-password' element={<NewPassword/>} />
     <Route path='/user-profile' element={<UpdateUser/>} />
     <Route path='/list-jobs' element={<JobList/>} />
-    <Route path='/job-details' element={<JobDetails/>} />
+    <Route path='/job-details/:id' element={<JobDetails/>} />
 
 </Routes>
   )

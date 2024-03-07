@@ -4,6 +4,10 @@ import { useLocation, useParams } from 'react-router-dom';
 import Navbar from '../../components/NavBar';
 import axios from 'axios';
 import { addUser } from '../../utils/redux/slices/userSlice';
+import toast, { Toaster } from 'react-hot-toast';
+import ApplicationAnswerModal from '../../components/ApplicationAnswerModal';
+import { IApplication } from '../../utils/interface/interface';
+// import JobDetailsComponent from '../../components/JobDetailsComponent';
 
 const JobDetails = () => {
     const location = useLocation();
@@ -11,15 +15,15 @@ const JobDetails = () => {
     const [data, setData] = useState(receivedData?.data)
     const [resume, setResume] = useState('');
     const baseUrl = 'http://localhost:4002/api/user';
+    const applicationUrl = 'http://localhost:4004/api/application';
     const dispatch = useDispatch()
+    const [showModal, setShowModal] = useState(false)
+    const [applicationData, setApplicationData] = useState<IApplication>()
+
+
 
     const userData = useSelector((state: any) => state.persisted.user.userData);
 
-    console.log('userData');
-    console.log(userData);
-
-    // console.log('receivedData');
-    // console.log(receivedData);
 
     useEffect(() => {
         if (!userData.resume) {
@@ -33,13 +37,10 @@ const JobDetails = () => {
     const fetchResume = async () => {
         try {
 
-            await axios.get(`${baseUrl}/${userData?._id}`)
+            await axios.get(`${baseUrl}/${userData?._id}`, { withCredentials: true })
                 .then((res: any) => {
                     if (res?.data?.status) {
                         const resume = res?.data?.user?.resume
-                        // console.log('resume');
-                        // console.log(resume);
-
                         setResume(resume)
                         dispatch(addUser(res?.data?.user))
 
@@ -50,9 +51,40 @@ const JobDetails = () => {
         }
     };
 
+    const handleAppliation = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+
+        e.preventDefault()
+
+        const formData = {
+            userId: userData?._id,
+            jobPostId: data?._id,
+            name: userData?.name,
+            email: userData?.email,
+            phone: userData?.phone,
+            resume: resume
+        }
+        setApplicationData(formData)
+        if (!data?.questions?.length) {
+            try {
+                await axios.post(`${applicationUrl}/create-application`, formData, { withCredentials: true })
+                    .then((res) => {
+                        toast.success(res?.data?.message)
+                    })
+            } catch (error) {
+
+            }
+        } else {
+            setShowModal(true)
+
+        }
+    }
+
     return (
         <>
             <Navbar />
+            <Toaster position='top-center' reverseOrder={false}></Toaster>
+
+            {/* <JobDetailsComponent data={data} /> */}
             <div className='container mx-auto p-10   h-screen'>
                 <div className='flex flex-col mx-10 my-5 rounded-3xl pt-10 min-h-screen bg-white'>
                     <div className='heading ps-16 ms-2 mb-10 '>
@@ -80,7 +112,7 @@ const JobDetails = () => {
 
                         <div className='px-6 w-2/5 '>
                             <div className='flex flex-col w-4/5 justify-center items-center ms-10 px-10 border border-gray-300 bg-stone-200 rounded-lg'>
-                                {data?.salary && <h4>Salary: {data.salary}</h4>}
+                                {data?.salary && <h4 className='pt-5'>Salary: {data.salary}</h4>}
                                 <p className='pt-5 font-semibold'>Contact Email</p>
                                 <p>{data?.recruiterEmail}</p>
                                 <p className='pt-5 font-semibold'>Application Closing date</p>
@@ -100,14 +132,19 @@ const JobDetails = () => {
                                     </div>
                                 }
 
-                                <button className='bg-black text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Apply</button>
+                                <button onClick={handleAppliation} className='bg-black text-white py-2 mb-5 mt-3 rounded-3xl px-5'>Apply</button>
                             </div>
                         </div>
 
                     </div>
-
+                    {
+                        showModal && applicationData &&
+                        <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} />
+                    }
 
                 </div>
+
+
 
             </div>
         </>

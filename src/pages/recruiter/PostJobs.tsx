@@ -4,12 +4,14 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import { validate } from '../../helper/jobPostValidation'
 import { WorkArrangementType, employmentType } from '../../utils/interface/interface';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import  { jobPost } from '../../utils/redux/slices/jobPostSlice';
 
 
 const JobPostForm = () => {
   const baseurl = "http://localhost:4001/api/post/recruiter";
+  const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
@@ -55,11 +57,14 @@ const JobPostForm = () => {
       toast.error(validationResult.errorMessage);
       return; 
     }
-    const data = formData
+    const data = {...formData,recruiterId:recruiterData?._id}
+
+    
     axios.post(`${baseurl}/create-job-post`, { data }, { withCredentials: true })
       .then((res) => {
         if (res.data.status) {
-          console.log(res.data);
+          // console.log('res.data');
+          // console.log(res.data);
           toast.success(res?.data?.message);
 
         } else {

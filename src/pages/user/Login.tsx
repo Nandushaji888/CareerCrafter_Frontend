@@ -17,7 +17,6 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    // const [user,setUser] = useState('')
     useEffect(() => {
 
         const jwtToken = localStorage.getItem('user-jwtToken');
@@ -25,19 +24,6 @@ const Login = () => {
             navigate('/home');
         }
     }, [navigate]);
-    // useEffect(() => {
-    //     const accessToken = document.cookie.replace(
-    //       /(?:(?:^|.*;\s*)user_accessToken\s*\=\s*([^;]*).*$)|^.*$/,
-    //       "$1"
-    //     );
-    //     console.log('accessToken');
-    //     console.log(accessToken);
-
-    //     if (accessToken) {
-    //       // Redirect to home page if access token exists
-    //       navigate('/home');
-    //     }
-    //   }, [navigate]);
 
 
 
@@ -78,8 +64,8 @@ const Login = () => {
                             createdOn: res?.data?.user?.createdOn || Date.now(),
                             editedOn: res?.data?.user?.createdOn || Date.now(),
                             resume: res?.data?.user?.resume || "",
-                            qualification: res?.data?.user?.qualification || [],
-                            skills: res?.data?.user?.skills || [],
+                            qualification: res?.data?.user?.qualification || '',
+                            skills: res?.data?.user?.skills || '',
                             profilePic: res?.data?.user?.profilePic || "User-Profile-PNG-Download-Image.png"
                         }
                         dispatch(addUser(data))
@@ -177,7 +163,7 @@ const Login = () => {
             <div className="flex justify-center items-center h-screen">
                 <div className=" bg-slate-100 py-10   px-10 rounded-3xl h-[750px]">
                     <div className="title flex flex-col items-center">
-                        <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
+                        <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>    
                         <h6 className="text-2xl pb-3 font-bold  text-gray-600">User Login</h6>
 
                         <span className="pt-4 pb-4 text-xl w-full text-center text-gray-500">

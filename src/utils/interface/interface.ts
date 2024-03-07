@@ -42,7 +42,9 @@ export interface IPost {
     employmentType?:employmentType,  
     createdAt?:string;
     isListed?:boolean;
-    isPremium?:boolean
+    isPremium?:boolean;
+    recruiterId?:ObjectId;
+    isRejected?:boolean;
 }
 
 interface Question {
@@ -50,12 +52,48 @@ interface Question {
     answer: string;
   }
 
-  export interface NavbarProps {
-    url: string;
+
+  export interface IRecruiter {
+    _id?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    status?: boolean;
+    worksAt?: string;
+    profilePic?: string;
+    createdOn?: Date;
+    isPremium?:boolean;
   }
+  
 
 
 
+  export interface IApplication{
+      _id?:string,
+      name?:string,
+      email?:string,
+      phone?:string,
+      resume?:string,
+      jobPostId?:string,
+      createdOn?:Date,
+      userId?:string,
+      status?:ApplicationType,
+      questionAnswer?:IQuestion
+  
+  }
+  
+  export enum ApplicationType{
+      Pending="pending",
+      Accepted="accepted",
+      Rejected="rejected",
+  }
+  
+  export interface IQuestion {
+      question: string;
+      requiredAnswer: string;
+      givenAnswer:string;
+  }
+  
 
 
 

@@ -14,7 +14,7 @@ const SideBar = () => {
     useEffect(() => {
         axios.get(`${postUrl}/pending-post-count`, { withCredentials: true })
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setCount(res?.data?.count?.length)
             })
     }, [])

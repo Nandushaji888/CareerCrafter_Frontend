@@ -73,7 +73,7 @@ const UserHome = () => {
         .then((res) => {
           if (res?.data?.status) {
             const dataToSend = { data: res?.data?.jobData };
-            navigate('/job-details', { state: { data: dataToSend } });
+            navigate(`/job-details/${id}`, { state: { data: dataToSend } });
           }
         });
     }

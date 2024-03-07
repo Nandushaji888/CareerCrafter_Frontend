@@ -76,7 +76,7 @@ const PendingJobLists = () => {
     useEffect(() => {
         axios.get(`${postUrl}/pending-post-count`, { withCredentials: true })
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setJobList(res?.data?.count)
             })
     }, []);
