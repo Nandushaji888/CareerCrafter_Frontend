@@ -10,6 +10,10 @@ const RecruiterHome = () => {
   const dispatch = useDispatch()
   const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
 
+  console.log('recruiterData');
+  console.log(recruiterData);
+  
+
   useEffect(() => {
     const jwtToken = localStorage.getItem('recruiter-jwtToken');
     if (!jwtToken) {
@@ -38,9 +42,16 @@ const RecruiterHome = () => {
 
 
         <button onClick={handleLogout}>Logout</button><br />
+        <div className='flex flex-col'>
+
         <Link to="/recruiter/post-job" className="text-blue-600 hover:text-blue-400 ">
           Post jobs
-        </Link>{' '}
+        </Link>
+
+        <Link to="/recruiter/list-jobs" className="text-blue-600 hover:text-blue-400 ">
+          List jobs
+        </Link>
+        </div>
       </div>
     </div>
   )

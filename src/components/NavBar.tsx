@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
                         </button>
                         <button onClick={toggleDropdown} className="text-white ms-10 hover:text-gray-300"><UserRound /></button>
                         {isDropdownVisible && (
-                            <div className="absolute right-0  w-60 bg-white rounded-md shadow-lg py-2 flex flex-col gap-2 justify-center items-start mt-8">
+                            <div className="absolute right-0  w-60 bg-white rounded-md shadow-lg py-2 flex flex-col gap-2 justify-center items-start mt-8 z-10">
                                 <h4 className="block px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-100" >{userData?.email}</h4>
                                 <Link to="/user-profile" className=" px-4 py-2 text-sm  text-gray-700 flex gap-1" onClick={() => setIsDropdownVisible(false)}><FileText size={18} />See & Update Profile</Link>
                                 <Link to="/saved-jobs" className=" px-4 py-2 text-sm text-gray-700 flex gap-1" onClick={() => setIsDropdownVisible(false)}><Bookmark size={18} />Saved Jobs</Link>

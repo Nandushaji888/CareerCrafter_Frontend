@@ -24,7 +24,7 @@ export interface IUser {
 
 
 export interface IPost {
-    _id:string,
+    _id?:string,
     postName: string;
     company: string;
     responsibilities?:string,
@@ -43,7 +43,7 @@ export interface IPost {
     createdAt?:string;
     isListed?:boolean;
     isPremium?:boolean;
-    recruiterId?:ObjectId;
+    recruiterId?:string;
     isRejected?:boolean;
 }
 
@@ -70,14 +70,14 @@ interface Question {
 
   export interface IApplication{
       _id?:string,
-      name?:string,
-      email?:string,
-      phone?:string,
+      name:string,
+      email:string,
+      phone:string,
       resume?:string,
       jobPostId?:string,
-      createdOn?:Date,
+      createdOn:string,
       userId?:string,
-      status?:ApplicationType,
+      status:ApplicationType,
       questionAnswer?:IQuestion
   
   }

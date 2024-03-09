@@ -32,7 +32,7 @@ const JobPostForm = () => {
     closingDate: '',
     workArrangementType: WorkArrangementType.Office,
     employmentType: employmentType.Fulltime,
-    _id:''
+    recruiterId:recruiterData._id
     // isPremium: false,
     // isListed: true,
     // createdAt: new Date().toISOString().slice(0, 10),
@@ -57,10 +57,11 @@ const JobPostForm = () => {
       toast.error(validationResult.errorMessage);
       return; 
     }
-    const data = {...formData,recruiterId:recruiterData?._id}
+    // const data = {...formData,recruiterId:recruiterData?._id}
 
+    // setFormData(data)
     
-    axios.post(`${baseurl}/create-job-post`, { data }, { withCredentials: true })
+    axios.post(`${baseurl}/create-job-post`, { formData }, { withCredentials: true })
       .then((res) => {
         if (res.data.status) {
           // console.log('res.data');

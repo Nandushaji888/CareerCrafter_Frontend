@@ -33,10 +33,7 @@ const AddQuestionForm = () => {
 
         setQuestion('');
         setAnswer('');
-        // console.log('formData');
-        // console.log('updatedFormData');
-        // console.log(updatedFormData);
-        // console.log(formData);
+
 
         return updatedFormData;
     };
@@ -44,12 +41,9 @@ const AddQuestionForm = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const data = handleNext();
-        // console.log(res);
 
         if (data) {
-            // console.log(question, answer);
-            // console.log('hereee');
-            // console.log(res);
+     
 
 
             axios.post(`${baseurl}/create-job-post`, { data }, { withCredentials: true })
@@ -75,6 +69,7 @@ const AddQuestionForm = () => {
 
             <form className="max-w-5xl mx-auto mt-8 p-12  bg-gray-100 rounded-lg shadow-md" onSubmit={handleSubmit}>
                 <h2 className="text-3xl font-bold mb-4">Add Question</h2>
+                <p className='py-3 text-md font-bold'>If any of the answer from the applicant is diffetent from Required Answer you provide, Application will automatically get rejected</p>
                 <p>Question {formData.questions.length + 1}</p>
                 <div>
                     <input

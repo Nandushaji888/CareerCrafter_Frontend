@@ -6,7 +6,7 @@ import axios from 'axios';
 import { addUser } from '../../utils/redux/slices/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import ApplicationAnswerModal from '../../components/ApplicationAnswerModal';
-import { IApplication } from '../../utils/interface/interface';
+import { ApplicationType, IApplication } from '../../utils/interface/interface';
 // import JobDetailsComponent from '../../components/JobDetailsComponent';
 
 const JobDetails = () => {
@@ -61,7 +61,9 @@ const JobDetails = () => {
             name: userData?.name,
             email: userData?.email,
             phone: userData?.phone,
-            resume: resume
+            resume: resume,
+            createdOn:'',
+            status:ApplicationType.Pending
         }
         setApplicationData(formData)
         if (!data?.questions?.length) {
