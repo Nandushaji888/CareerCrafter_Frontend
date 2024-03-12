@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'; // Import useState
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/NavBar';
+import Navbar from '../user/components/NavBar';
 // import avatar from '../../../public/userProfilePic/User-Profile-PNG-Download-Image.png'
 import { useParams } from 'react-router-dom'
 import { IUser } from '../../utils/interface/interface';

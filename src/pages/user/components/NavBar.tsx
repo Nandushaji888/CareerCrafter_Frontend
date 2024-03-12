@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserRound, FileText, Bookmark, Send, Settings, Bell, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { clearUser } from '../utils/redux/slices/userSlice';
+import { clearUser } from '../../../utils/redux/slices/userSlice';
 
 
 
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             })
     }
     return (
-        <nav className="bg-gray-900 py-4" style={{ zIndex: 9999 }}>
+        <nav className="bg-gray-900 py-4 fixed top-0 right-0 left-0 mb-5" style={{ zIndex: 9999 }} >
             <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                 <div>
                     <span className="text-white font-semibold text-lg mx-6">Careercrafter</span>
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                         {isDropdownVisible && (
                             <div className="absolute right-0  w-60 bg-white rounded-md shadow-lg py-2 flex flex-col gap-2 justify-center items-start mt-8 z-10">
                                 <h4 className="block px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-100" >{userData?.email}</h4>
-                                <Link to="/user-profile" className=" px-4 py-2 text-sm  text-gray-700 flex gap-1" onClick={() => setIsDropdownVisible(false)}><FileText size={18} />See & Update Profile</Link>
+                                <Link to="/user-profile" className=" px-4 py-2 text-sm  text-gray-700 flex gap-1" onClick={() => setIsDropdownVisible(false)}><FileText size={18} />View & Update Profile</Link>
                                 <Link to="/saved-jobs" className=" px-4 py-2 text-sm text-gray-700 flex gap-1" onClick={() => setIsDropdownVisible(false)}><Bookmark size={18} />Saved Jobs</Link>
                                 <Link to="/applied-jobs" className=" px-4 py-2 text-sm text-gray-700  flex gap-1" onClick={() => setIsDropdownVisible(false)}><Send size={18} />Applied Jobs</Link>
                                 <Link to="/settings" className=" px-4 py-2 text-sm text-gray-700 flex gap-1" onClick={() => setIsDropdownVisible(false)}><Settings size={18} />Settings</Link>

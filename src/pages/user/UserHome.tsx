@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUser } from '../../utils/redux/slices/userSlice';
-import Navbar from '../../components/NavBar';
+import Navbar from './components/NavBar';
 import { IPost } from '../../utils/interface/interface';
 
 

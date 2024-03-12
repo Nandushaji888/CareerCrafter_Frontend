@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/NavBar';
+import Navbar from './components/NavBar';
 import { IPost } from '../../utils/interface/interface';
 
 const JobList: React.FC = () => {
@@ -17,9 +17,11 @@ const JobList: React.FC = () => {
 
     useEffect(() => {
         fetchJobs();
-    }, [page]); // Fetch jobs when the page changes
-    // Fetch jobs on initial load and when searchQuery or location changes
+    }, [page]); 
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []); 
     const fetchJobs = async () => {
         try {
             const response = await axios.get(`${postUrl}/list-jobs`, {
@@ -88,7 +90,7 @@ const JobList: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto p-10 ">
+            <div className="container mx-auto p-10 mt-14 ">
                 <div className="flex  flex-row  justify-center items-center mb-4 text-center w-full ">
                     {/* <div className="relative border-gray-300 bg-white rounded-full focus:outline-none focus:border-blue-500 px-3 border"> */}
                     <input

@@ -5,7 +5,7 @@ import { validate } from '../../helper/userValidate'
 import toast, { Toaster } from 'react-hot-toast'
 import { addUser } from '../../utils/redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/NavBar';
+import Navbar from './components/NavBar';
 // import avatar from '../../../public/User-Profile-PNG-Download
 
 
@@ -72,12 +72,15 @@ const UpdateUser: React.FC = () => {
                 console.error('Error updating user:', error);
             });
     };
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []); 
 
 
     return (
         <>
             <Navbar />
-            <div className="max-w-4xl mx-auto py-8">
+            <div className="max-w-4xl mx-auto mt-10 py-8">
                 <Toaster position='top-center' reverseOrder={false}></Toaster>
 
                 <form className="py-2" onSubmit={handleSubmit}>

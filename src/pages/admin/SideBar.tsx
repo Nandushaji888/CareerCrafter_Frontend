@@ -21,40 +21,40 @@ const SideBar = () => {
 
     return (
         <div className='bg-gray-800 w-80 h-screen fixed flex flex-col'>
-        <div className='flex items-center justify-between p-4'>
-            <Link to="/" className='flex items-center gap-3 text-white text-xl font-extrabold'>
-                <SiShopware />
-                <span>CareerCrafter</span>
-            </Link>
-            {/* <button onClick={()=> {}} className='text-white'>
+            <div className='flex items-center justify-between p-4'>
+                <Link to="/" className='flex items-center gap-3 text-white text-xl font-extrabold'>
+                    <SiShopware />
+                    <span>CareerCrafter</span>
+                </Link>
+                {/* <button onClick={()=> {}} className='text-white'>
                 <MdOutlineCancel />
             </button> */}
+            </div>
+            <div className=' overflow-y-auto flex flex-col items-center mt-10 '>
+                <ul className='space-y-6'>
+                    <div className='overflow-y-auto flex flex-col items-center mt-16'>
+                        <ul className='space-y-3'>
+                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaUser className="inline mr-2 mb-1 " /><NavLink to='/admin/users-list'>Users</NavLink>
+                            </li>
+                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaUserTie className="inline mr-2 mb-1" /> <NavLink to='/admin/recruiters'>Recruiters</NavLink>
+                            </li>
+                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaClipboardCheck className="inline mr-2 mb-1" /><NavLink to='/admin/active-job-posts'> Active Job Posts</NavLink>
+                            </li>
+                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaClipboardList className="inline mr-2 mb-1" /> <NavLink to='/admin/pending-job-posts'> Pending Job Posts <a className="inline-block bg-red-500  text-white font-bold px-2 rounded-full">
+                                    {count}
+                                </a>
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
         </div>
-        <div className=' overflow-y-auto flex flex-col items-center mt-10 '>
-            <ul className='space-y-6'>
-                <div className='overflow-y-auto flex flex-col items-center mt-16'>
-                    <ul className='space-y-6'>
-                        <li className='text-white'>
-                            <FaUser className="inline mr-2 mb-1" /><NavLink to='/admin/users-list'>Users</NavLink>
-                        </li>
-                        <li className='text-white'>
-                            <FaUserTie className="inline mr-2 mb-1" /> <NavLink to='/admin/recruiters'>Recruiters</NavLink>
-                        </li>
-                        <li className='text-white'>
-                            <FaClipboardCheck className="inline mr-2 mb-1" /><NavLink to='/admin/active-job-posts'> Active Job Posts</NavLink>
-                        </li>
-                        <li className='text-white'>
-                            <FaClipboardList className="inline mr-2 mb-1" /> <NavLink to='/admin/pending-job-posts'> Pending Job Posts <a className="inline-block bg-red-500  text-white font-bold px-2 rounded-full">
-                                {count}
-                            </a>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </div>
-            </ul>
-        </div>
-    </div>
-    
+
     )
 }
 

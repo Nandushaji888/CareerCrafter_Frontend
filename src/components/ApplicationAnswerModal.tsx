@@ -49,9 +49,9 @@ const ApplicationAnswerModal: React.FC<ApplicationAnswerModalProps> = ({ questio
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center overflow-y-auto'>
-      <div className='mt-36 flex flex-col gap-5 text-white '>
+      <div className='mt-26 flex flex-col gap-5 text-white '>
         <button onClick={onClose} className='place-self-end'><XCircle color='white' size={30} /></button>
-        <div className='bg-slate-700 rounded-xl px-10 py-10 flex flex-col gap-5 items-center mx-4'>
+        <div className='bg-slate-800 rounded-xl px-10 py-10 flex flex-col gap-5 items-center mx-4'>
           <h1 className='text-3xl font-extrabold'>Answer the questions</h1>
           {questionAnswer.map((question, index) => (
             <div key={index} className='w-full'>
