@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearUser } from '../../utils/redux/slices/userSlice';
 import Navbar from './components/NavBar';
 import { IPost } from '../../utils/interface/interface';
+import Footer from '../../components/Footer';
 
 
 const UserHome = () => {
@@ -45,25 +46,6 @@ const UserHome = () => {
     }
   };
 
-  // const handleSearch = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setPage(1); // Reset to the first page on new search
-  //   fetchJobs();
-  // };
-
-  // const handleFilterSort = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setPage(1); // Reset to the first page on new filter/sort
-  //   fetchJobs();
-  // };
-
-
-  useEffect(() => {
-    const jwtToken = localStorage.getItem('user-jwtToken');
-    if (!jwtToken) {
-      navigate('/login');
-    }
-  }, [navigate]);
 
 
   const handleJobDetails = (id: string | undefined, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -83,11 +65,10 @@ const UserHome = () => {
     <>
       <div className='flex flex-col'>
 
-        <Navbar  />
+        <Navbar />
 
         <div className='container flex flex-col min-h-screen'>
           <div className='bg-transparent flex justify-center items-center w-full relative' style={{ backgroundImage: 'url("—Pngtree—simple jobs to sum up_934887.jpg")', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', minHeight: '550px' }}>
-            {/* <div className="absolute bottom-16 left-20 mb-8 ml-8 text-center text-white bg-black bg-opacity-70 p-5 py-10 rounded-2xl"> */}
             <div className='absolute bottom-32 left-56 '>
               <h2 className="text-4xl font-extrabold mb-4">"Your Dream Job Awaits"</h2>
               <p className="text-xl  ps-2 max-w-96">Discover opportunities that ignite your passion and fuel your ambition.</p>
@@ -124,11 +105,30 @@ const UserHome = () => {
             </div>
 
           </div>
-          <div className='categories'>
-            sasfdsfd
+          <div className="relative bg-center h-[450px]  bg-white flex  mb-20 ">
+            <div className="absolute inset-0 top-0 bg-blue-950 flex ">
+              <img
+                src="/5052521.jpg"
+                alt="Your Image"
+                className="w-full h-auto object-contain "
+                style={{ marginTop: '-60px', marginBottom: '-60px' }} // Adjust as needed
+              />
+              <div className="w-1/2 h-full flex items-center justify-center">
+                <div className="relative z-10 text-start text-white " style={{marginLeft:'-80px'}}>
+                  <p className="text-lg md:text-xl lg:text-2xl italic mb-10">
+                    “If we wait for the moment when everything, absolutely everything is ready, we shall never begin.”
+                  </p>
+                  <p>- Ivan Turgenev</p>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
+
+        <Footer />
       </div>
+
 
 
     </>

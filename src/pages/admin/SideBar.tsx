@@ -17,7 +17,7 @@ const SideBar = () => {
                 // console.log(res.data);
                 setCount(res?.data?.count?.length)
             })
-    }, [])
+    }, [count])
 
     return (
         <div className='bg-gray-800 w-80 h-screen fixed flex flex-col'>

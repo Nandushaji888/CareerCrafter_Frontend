@@ -1,13 +1,14 @@
 import React from 'react'
 
 interface AdminJobDetailsButtonComponent {
-    jobDetails: any; 
-    setShowModal: any; 
-    jobAcceptHandler: any; 
-    jobRejecthandeler: any; 
+    jobDetails: any;
+    setShowModal: any;
+    jobAcceptHandler: any;
+    jobRejecthandeler: any;
+    isRejected: any
 }
 
-const AdminJobDetailsButtonComponent:React.FC<AdminJobDetailsButtonComponent> = ({jobDetails,setShowModal,jobAcceptHandler,jobRejecthandeler}) => {
+const AdminJobDetailsButtonComponent: React.FC<AdminJobDetailsButtonComponent> = ({ jobDetails, setShowModal, jobAcceptHandler, jobRejecthandeler, isRejected }) => {
     return (
         <div>
             {
@@ -24,8 +25,15 @@ const AdminJobDetailsButtonComponent:React.FC<AdminJobDetailsButtonComponent> = 
                     ) : (
                         <button className='bg-black  text-white py-2 mb-5 ms-24 mt-3 rounded-3xl px-5'>Disable post</button>
                     )}
+
                 </div>
             )}
+            {
+                jobDetails?.isRejected &&
+                <button onClick={(e: React.FormEvent) => jobDetails?._id && jobAcceptHandler(jobDetails?._id, e)} className='bg-blue-800 text-white py-2 mb-5 ms-24 mt-3 rounded-3xl px-5'>Re-approve post</button>
+
+            }
+
         </div>
     )
 }

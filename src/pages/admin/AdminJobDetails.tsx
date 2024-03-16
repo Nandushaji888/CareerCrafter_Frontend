@@ -12,6 +12,7 @@ import AdminJobDetailsButtonComponent from './components/AdminJobDetailsButtonCo
 const AdminJobDetails: React.FC = () => {
     const [jobDetails, setJobDetails] = useState<IPost>();
     const [showModal, setShowModal] = useState(false);
+    const [isRejected,setIsRejected] = useState(jobDetails?.isRejected)
     const { id } = useParams();
 
     useEffect(() => {
@@ -78,6 +79,7 @@ const AdminJobDetails: React.FC = () => {
                                     setShowModal={setShowModal}
                                     jobAcceptHandler={jobAcceptHandler}
                                     jobRejecthandeler={jobRejecthandeler}
+                                    isRejected={isRejected}
                                 />
                             }
                         />

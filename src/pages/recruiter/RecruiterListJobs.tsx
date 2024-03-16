@@ -1,19 +1,17 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 // import SideBar from './SideBar'
 import Header from '../../components/Header'
 import axios from 'axios'
 import { IPost } from '../../utils/interface/interface'
-import DataTable, { TableColumn } from 'react-data-table-component';
+import { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+const LazyJobListingComponent = lazy(() => import('./components/RecruiterJobListing'))
 
 const RecruiterListJobs = () => {
     const [jobList, setJobList] = useState<IPost[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
 
-    const postUrl = 'http://localhost:4001/api/post/recruiter';
 
     const columns: TableColumn<IPost>[] = [
         {
@@ -72,13 +70,7 @@ const RecruiterListJobs = () => {
         },
     ];
 
-    useEffect(() => {
-        axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
-            .then((res) => {
-                // console.log(res.data);
-                setJobList(res?.data?.jobList)
-            })
-    }, []);
+
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -89,27 +81,17 @@ const RecruiterListJobs = () => {
     );
     return (
 
-<div className='flex flex-col flex-grow justify-center items-center'>
-    <div className='mb-4 ' style={{marginLeft:'-700px'}}>
-        <Header category="" title="Your Posts" />
-    </div>
-    <div className='m-2 ps-8 bg-gray-100 rounded-xl p-5'>
-        <input
-            type="text"
-            placeholder="Search"
-            className="ml-2 px-7 py-2 border mb-5 border-gray-300 rounded-3xl focus:outline-none focus:border-blue-500 w-[300px] text-sm font-thin"
-            onChange={handleSearch}
-        />
-        <div className="flex flex-col px-3 rounded-2xl justify-center">
-            <DataTable
-                columns={columns}
-                data={filteredJobs}
-                fixedHeader
-                pagination
-            />
+        <div className='flex flex-col flex-grow justify-center items-center'>
+            <div className='mb-4 ' style={{ marginLeft: '-700px' }}>
+                <Header category="" title="Your Posts" />
+            </div>
+
+            <Suspense fallback={<div className='flex  justify-center items-center text-2xl h-screen '>Loading...</div>}>
+                <LazyJobListingComponent setJobList={setJobList} columns={columns} filteredJobs={filteredJobs} handleSearch={handleSearch} />
+            </Suspense>
+
+
         </div>
-    </div>
-</div>
 
 
     )

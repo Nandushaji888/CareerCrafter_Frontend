@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from './components/NavBar';
 import axios from 'axios';
 import { addUser } from '../../utils/redux/slices/userSlice';
@@ -21,6 +21,7 @@ const JobDetails = () => {
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
     const [applicationData, setApplicationData] = useState<IApplication>()
+    const navigate = useNavigate()
 
 
 
@@ -55,6 +56,8 @@ const JobDetails = () => {
 
     const handleAppliation = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 
+
+
         e.preventDefault()
 
         const formData = {
@@ -70,13 +73,34 @@ const JobDetails = () => {
         setApplicationData(formData)
         if (!data?.questions?.length) {
             try {
-                await axios.post(`${applicationUrl}/create-application`, formData, { withCredentials: true })
-                    .then((res) => {
-                        toast.success(res?.data?.message)
+
+                axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
+                    .then((res: any) => {
+                        if (!res.status) {
+                            navigate('/login')
+                        } else {
+                            axios.post(`${applicationUrl}/create-application`, formData, { withCredentials: true })
+                                .then((res) => {
+                                    toast.success(res?.data?.message)
+                                }).catch((err)=> {
+                                    toast.error(err?.response?.data?.message)
+                                })
+                        }
+
+
+                    }).catch((err) => {
+                        toast.error(err?.response?.data?.message)
+                        navigate('/login')
                     })
-            } catch (error) {
+
+
+            } catch (err) {
 
             }
+
+
+
+
         } else {
             setShowModal(true)
 
@@ -84,7 +108,7 @@ const JobDetails = () => {
     }
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []); 
+    }, []);
 
     return (
         <>
@@ -92,17 +116,11 @@ const JobDetails = () => {
 
             <div className='mx-20 mt-5'>
                 <Toaster position='top-center' reverseOrder={false}></Toaster>
-
-                <JobDetailsComponent data={data} buttons={<UserJobDetailsButtons resume={resume} handleAppliation={handleAppliation} />} />
-
-
-
+                <JobDetailsComponent data={data} buttons={<UserJobDetailsButtons  handleAppliation={handleAppliation} />} />
                 {
                     showModal && applicationData &&
                     <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} />
                 }
-
-
             </div>
 
         </>

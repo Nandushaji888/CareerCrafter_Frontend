@@ -17,13 +17,13 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const jwtToken = localStorage.getItem('user-jwtToken');
-        if (jwtToken) {
-            navigate('/home');
-        }
-    }, [navigate]);
+    //     const jwtToken = localStorage.getItem('accessToken');
+    //     if (jwtToken) {
+    //         navigate('/home');
+    //     }
+    // }, [navigate]);
 
 
 
@@ -69,9 +69,9 @@ const Login = () => {
                             profilePic: res?.data?.user?.profilePic || "User-Profile-PNG-Download-Image.png"
                         }
                         dispatch(addUser(data))
-                        localStorage.setItem('user-jwtToken', res.data.accessToken);
+                        // localStorage.setItem('accessToken', res.data.accessToken);
 
-                        navigate('/home');
+                        navigate('/');
                     } else {
                         toast.error(res?.data?.message);
                     }
@@ -126,7 +126,7 @@ const Login = () => {
                         ;
                         console.log('res.data');
                         console.log(res.data);
-                        localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
+                        // localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
                         if (res?.data?.googleSignup) {
                             console.log('to user-profile');
 

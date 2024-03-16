@@ -25,6 +25,7 @@ export const USER_FORGOT_PASS_VERIFY_OTP_API = `${AUTH_BASE_URL}/user/otp-verify
 export const USER_NEW_PASS_API = `${AUTH_BASE_URL}/user/new-password`
 export const USER_GOOGLE_AUTH_API = `${AUTH_BASE_URL}/user/google-auth`
 export const USER_LOGOUT_API = `${AUTH_BASE_URL}/user/logout`
+export const REFRESH_TOKEN_API = `${AUTH_BASE_URL}/user/refresh-token`
 
 
 //recruiter-actions

@@ -77,7 +77,7 @@ const OtpVerification = () => {
                         
                         dispatch(addUser(data))
 
-                        localStorage.setItem('user-jwtToken', res.data.accessToken);
+                        // localStorage.setItem('accessToken', res.data.accessToken);
                         navigate('/user-profile');}
                     // } else if (res.status === 401 && res.data.status1) {
                     //     toast.error('Incorrect OTP provided11');
