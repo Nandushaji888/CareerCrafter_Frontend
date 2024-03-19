@@ -10,6 +10,15 @@ const AddQuestionForm = () => {
     const navigate = useNavigate();
     const userData = useSelector((state: any) => state.persisted.postData.jobData);
     const [formData, setFormData] = useState(userData);
+
+    
+    useEffect(() => {
+        if (!userData.length) {
+            navigate('/recruiter/post-job');
+        }
+    }, []);
+
+
     const baseurl = "http://localhost:4001/api/post/recruiter";
 
     const [question, setQuestion] = useState('');
@@ -27,7 +36,6 @@ const AddQuestionForm = () => {
         }
         dispatch(addQuestion({ question, answer }));
         const updatedFormData = { ...formData, questions: [...formData.questions, { question, answer }] };
-        // console.log('question dispatcheddddddddddddddddddddddddddddddddd');
         setFormData(updatedFormData);
 
 

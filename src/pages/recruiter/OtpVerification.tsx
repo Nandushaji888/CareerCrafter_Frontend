@@ -2,22 +2,24 @@ import React, { useState,useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { addRecruiter } from '../../utils/redux/slices/recruiterSlice'
 
 
 const OtpVerification = () => {
     const [otp, setOtp] = useState('')
     const baseurl = "http://localhost:4000/api/auth/recruiter";
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    
+    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
     useEffect(() => {
-        const jwtToken = localStorage.getItem('recruiter-jwtToken');
-        if (jwtToken) {
-            // console.log('find token',jwtToken);
-            
-            navigate('/recruiter/home');
+        if (recruiterData?._id) {
+            navigate('/recruiter');
         }
-    }, [navigate]);
+    }, [navigate,recruiterData]);
+    
+
 
     const submitHandler = async (e: any) => {
         e.preventDefault()
@@ -32,9 +34,14 @@ const OtpVerification = () => {
                 .then((res)=> {
                     console.log(res.data);
                     if(res.status){
-                        localStorage.setItem('recruiter-jwtToken', res.data.accessToken);
 
-                        navigate('/recruiter/home')
+                        console.log('res?.data?.recruiter?.response');
+                        console.log(res?.data?.recruiter?.response);
+                        
+                        dispatch(addRecruiter(res?.data?.recruiter?.response))
+
+                        navigate('/recruiter')
+                        
                     }
                 })
         }

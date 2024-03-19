@@ -114,7 +114,7 @@ const UserHome = () => {
                 style={{ marginTop: '-60px', marginBottom: '-60px' }} // Adjust as needed
               />
               <div className="w-1/2 h-full flex items-center justify-center">
-                <div className="relative z-10 text-start text-white " style={{marginLeft:'-80px'}}>
+                <div className="relative z-10 text-start text-white " style={{ marginLeft: '-80px' }}>
                   <p className="text-lg md:text-xl lg:text-2xl italic mb-10">
                     “If we wait for the moment when everything, absolutely everything is ready, we shall never begin.”
                   </p>

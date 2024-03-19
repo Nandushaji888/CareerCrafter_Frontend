@@ -7,21 +7,26 @@ interface IRecruiterJobListing {
     columns: any;
     filteredJobs: any;
     handleSearch: any;
+    jobList:any
 }
 
-const RecruiterJobListing: React.FC<IRecruiterJobListing> = ({ setJobList, columns, filteredJobs, handleSearch }) => {
+const RecruiterJobListing: React.FC<IRecruiterJobListing> = ({ setJobList, columns, filteredJobs, handleSearch,jobList }) => {
 
     const postUrl = 'http://localhost:4001/api/post/recruiter';
 
     const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+    
 
-    useEffect(() => {
-        axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
-            .then((res) => {
-                // console.log(res.data);
-                setJobList(res?.data?.jobList)
-            })
-    }, []);
+    // useEffect(() => {
+    //     console.log('hereeeeeeeeeeeeeeee');
+        
+        
+    //     axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
+    //         .then((res) => {
+    //             console.log(res.data);
+    //             setJobList(res?.data?.jobList)
+    //         })
+    // }, []);
 
 
 
@@ -38,6 +43,8 @@ const RecruiterJobListing: React.FC<IRecruiterJobListing> = ({ setJobList, colum
             />
 
             <div className="flex flex-col px-3 rounded-2xl justify-center">
+
+                
                 <DataTable
                     columns={columns}
                     data={filteredJobs}

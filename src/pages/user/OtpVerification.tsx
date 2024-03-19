@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 import Loading from '../../assets/ZKZg.gif';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../../utils/redux/slices/userSlice';
 import '../../assets/css/Auth.css'
 import { IUser } from '../../utils/interface/interface';
@@ -21,6 +21,15 @@ const OtpVerification = () => {
     const baseurl = "http://localhost:4000/api/auth/user";
 
     const navigate = useNavigate()
+
+
+    const user = useSelector((state: any) => state.persisted.user.userData);
+    useEffect(() => {
+
+        if (user._id) {
+            navigate('/');
+        }
+    }, [navigate, user]);
 
     useEffect(() => {
         const interval = setInterval(() => {

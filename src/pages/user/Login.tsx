@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { auth } from '../../utils/firebase/config'
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../../utils/redux/slices/userSlice';
 import '../../assets/css/Auth.css'
 import { IUser } from '../../utils/interface/interface';
@@ -17,13 +17,13 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    // useEffect(() => {
+    const user = useSelector((state: any) => state.persisted.user.userData);
+    useEffect(() => {
 
-    //     const jwtToken = localStorage.getItem('accessToken');
-    //     if (jwtToken) {
-    //         navigate('/home');
-    //     }
-    // }, [navigate]);
+        if (user._id) {
+            navigate('/');
+        }
+    }, [navigate, user]);
 
 
 
@@ -163,7 +163,7 @@ const Login = () => {
             <div className="flex justify-center items-center h-screen">
                 <div className=" bg-slate-100 py-10   px-10 rounded-3xl h-[750px]">
                     <div className="title flex flex-col items-center">
-                        <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>    
+                        <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
                         <h6 className="text-2xl pb-3 font-bold  text-gray-600">User Login</h6>
 
                         <span className="pt-4 pb-4 text-xl w-full text-center text-gray-500">

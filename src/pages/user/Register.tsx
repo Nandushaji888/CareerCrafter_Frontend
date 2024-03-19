@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../assets/ZKZg.gif';
 import toast, { Toaster } from 'react-hot-toast'
@@ -6,6 +6,7 @@ import { useFormik } from 'formik'
 import { registerValidation } from '../../helper/Validate'
 import axios from 'axios'
 import '../../assets/css/Auth.css'
+import { useSelector } from 'react-redux';
 
 
 
@@ -13,8 +14,16 @@ import '../../assets/css/Auth.css'
 const Register = () => {
     const [loading, setLoading] = useState(false)
     const baseurl = "http://localhost:4000/api/auth/user";
-
     const navigate = useNavigate()
+
+    const user = useSelector((state: any) => state.persisted.user.userData);
+    useEffect(() => {
+
+        if (user._id) {
+            navigate('/');
+        }
+    }, [navigate, user]);
+
     const formik = useFormik({
         initialValues: {
             name: '',

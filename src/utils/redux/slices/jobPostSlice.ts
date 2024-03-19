@@ -9,18 +9,13 @@ const jobPostSlice = createSlice({
   },
   reducers: {
     jobPost: (state, action) => {
-      // console.log("job dataaaaaaa");
-      // console.log(action.payload);
       state.jobData = { ...state.jobData, ...action.payload };
-      // console.log(state.jobData);
       
     },
     addQuestion:(state,action)=> {
-      // console.log('add question');
       console.log(action.payload);
 
       state.jobData.questions.push(action.payload)
-      // console.log(state.jobData);
       
       
     },

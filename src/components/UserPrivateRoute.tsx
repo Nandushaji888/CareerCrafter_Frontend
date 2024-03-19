@@ -4,8 +4,12 @@ import { Outlet, Navigate } from 'react-router-dom'
 const UserPrivateRoute = () => {
     const user = useSelector((state: any) => state.persisted.user.userData);
 
+    console.log('user');
+    console.log(user);
+    
+
     return(
-        user ? <Outlet/> : <Navigate to="/login"/>
+        user?._id ? <Outlet/> : <Navigate to="/login"/>
     )
 }
 

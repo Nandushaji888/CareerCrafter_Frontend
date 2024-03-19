@@ -10,22 +10,14 @@ const RecruiterHome = () => {
   const dispatch = useDispatch()
   const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
 
-  console.log('recruiterData');
-  console.log(recruiterData);
   
 
-  useEffect(() => {
-    const jwtToken = localStorage.getItem('recruiter-jwtToken');
-    if (!jwtToken) {
-      navigate('/recruiter/login');
-    }
-  }, [navigate]);
+
 
   const handleLogout = () => {
     axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
-        localStorage.removeItem('recruiter-jwtToken');
         dispatch(clearRecruiter())
         navigate('/recruiter/login')
       })

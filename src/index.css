@@ -12,7 +12,28 @@ body {
     background: #dcdce6;
     /* background-image: url('./assets/top-view-desk-concept-with-gray-background.jpg'); */
     background-size: cover; 
+    background-repeat: no-repeat;
+    	background-position: center;
+
+
 } 
 
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #555;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #121212;
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #242424;
+}
 
     

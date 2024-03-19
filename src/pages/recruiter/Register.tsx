@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../assets/ZKZg.gif';
 import toast, { Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { recruiterRegisterValidation } from '../../helper/Validate'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux';
+import { addRecruiter } from '../../utils/redux/slices/recruiterSlice';
 
 
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
     const baseurl = "http://localhost:4000/api/auth/recruiter";
-
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+    useEffect(() => {
+        if (recruiterData?._id) {
+            navigate('/recruiter');
+        }
+    }, [navigate,recruiterData]);
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -26,18 +36,16 @@ const Register = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: async values => {
-            setLoading(true);
-            // Check if the form is valid
-            console.log('formik.isValid');
-            console.log(formik.isValid);
-            
+            setLoading(true);        
             if (formik.isValid) {
                 axios
                     .post(`${baseurl}/signup`, { values }, { withCredentials: true })
                     .then((res) => {
                         if (res.data.status) {
-                            console.log(res.data);
+                            console.log('valuesssssssssssssssssssssss');
+                            console.log(values);
                             
+                            // dispatch(addRecruiter(values))
                             navigate('/recruiter/verify-otp');
                         } else {
                             toast.error(res?.data?.message);
@@ -100,7 +108,7 @@ const Register = () => {
                             />
                             <input
                                 {...formik.getFieldProps('password')}
-                                type="text"
+                                type="password"
                                 placeholder="Password"
                                 className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />

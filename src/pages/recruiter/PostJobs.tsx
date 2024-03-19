@@ -64,8 +64,6 @@ const JobPostForm = () => {
     axios.post(`${baseurl}/create-job-post`, { formData }, { withCredentials: true })
       .then((res) => {
         if (res.data.status) {
-          // console.log('res.data');
-          // console.log(res.data);
           toast.success(res?.data?.message);
 
         } else {

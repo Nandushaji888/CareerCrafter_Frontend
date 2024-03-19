@@ -9,6 +9,7 @@ import JobList from '../pages/user/JobList'
 import JobDetails from '../pages/user/JobDetails'
 import UserProfile from '../pages/user/UserProfile'
 import UserPrivateRoute from '../components/UserPrivateRoute'
+import { ChatComponent } from '../components/chatComponent/ChatComponent'
 
 const UserRouter = () => {
   return (
@@ -24,6 +25,7 @@ const UserRouter = () => {
       <Route path='/new-password' element={<NewPassword />} />
       <Route path='/list-jobs' element={<JobList />} />
       <Route path='/job-details/:id' element={<JobDetails />} />
+      <Route path='/messages/:id' element={<ChatComponent/>} />
 
     </Routes>
   )

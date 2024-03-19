@@ -6,7 +6,7 @@ import { useFormik } from 'formik'
 import {signinValidation} from '../../helper/Validate'
 import axios from 'axios';
 import { IRecruiter } from '../../utils/interface/interface';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addRecruiter } from '../../utils/redux/slices/recruiterSlice';
 
 
@@ -14,27 +14,16 @@ const Login = () => {
 
     const baseurl = "http://localhost:4000/api/auth/recruiter";
 
-    const navigate = useNavigate()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     const jwtToken = localStorage.getItem('recruiter-jwtToken');
-    //     if (jwtToken) {
-    //         // console.log('find token',jwtToken);
-            
-    //         navigate('/recruiter/home');
-    //     }
-    // }, [navigate]);
-    // useEffect(() => {
-    //     const accessToken = document.cookie.replace(
-    //       /(?:(?:^|.*;\s*)user_accessToken\s*\=\s*([^;]*).*$)|^.*$/,
-    //       "$1"
-    //     );
-    //     if (accessToken) {
-    //       // Redirect to home page if access token exists
-    //       navigate('/recruiter/home');
-    //     }
-    //   }, [navigate]);
+
+    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+    useEffect(() => {
+        if (recruiterData?._id) {
+            navigate('/recruiter');
+        }
+    }, [navigate,recruiterData]);
 
     const formik = useFormik({
         initialValues: {
@@ -66,11 +55,9 @@ const Login = () => {
                                 isPremium:res?.data?.recruiter?.isPremium||'',
                             } 
                             
-                            localStorage.setItem('recruiter-jwtToken', res.data.accessToken);
                             dispatch(addRecruiter(data))
-                            // console.log('created token');
                             
-                            navigate('/recruiter/home');
+                            navigate('/recruiter');
                         } else {
                             toast.error(res?.data?.message);
                         }
