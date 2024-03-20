@@ -1,10 +1,11 @@
 import { create } from "zustand";
+import { IMessage, IUser } from "../interface/interface";
 
 interface ConversationState {
-  selectedConversation: string | null;
-  messages: string[];
-  setSelectedConversation: (selectedConversation: string | null) => void;
-  setMessages: (messages: string[]) => void;
+  selectedConversation: IUser | null;
+  messages: IMessage[];
+  setSelectedConversation: (selectedConversation: IUser | null) => void;
+  setMessages: (messages: IMessage[]) => void;
 }
 
 const useConversation = create<ConversationState>((set) => ({

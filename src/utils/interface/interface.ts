@@ -119,3 +119,21 @@ export enum AuthType {
     Recruiter = 'recruiter'
 }
 
+
+
+export interface IConversation {
+    _id: string;
+    participants: string[];
+    messages: IMessage[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface IMessage {
+    _id: string;
+    senderId: string; 
+    receiverId: string; 
+    message:string;
+    createdAt: Date;
+    updatedAt: Date;
+}

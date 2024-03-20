@@ -4,7 +4,7 @@ import { IoSearchSharp } from "react-icons/io5";
 const SearchInput = () => {
   const [search,setSearch] =useState("")
   return (
-    <form className="flex items-center gap-3 ">
+    <form className="flex items-center gap-3  mb-2">
       <input
         type="text"
         placeholder="Search…"

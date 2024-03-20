@@ -3,7 +3,7 @@ import SearchInput from "./SearchInput";
 import Conversations from "./Conversations";
 const Sidebar = () => {
   return (
-    <div className="border-r w-[350px] border-slate-500 p-4 gap-2 flex flex-col">
+    <div className="border-r w-[350px] border-slate-500 p-4 gap-2 flex flex-col mt-5">
       <SearchInput />
       <div className="divider px-3"></div>
       <Conversations />

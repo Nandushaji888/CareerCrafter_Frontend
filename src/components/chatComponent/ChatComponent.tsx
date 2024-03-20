@@ -9,7 +9,7 @@ export const ChatComponent = () => {
       <Navbar/>
     <div className='flex items-center justify-center h-screen'>
 
-      <div className=" flex text-white mt-16  sm:h-[450px] md:h-[700px] w-2/3 rounded-lg overflow-hidden bg-gray-800 bg-clip-padding">
+      <div className=" flex text-white mt-16  sm:h-[450px] md:h-[700px] w-2/3 rounded-lg overflow-hidden bg-slate-700 bg-clip-padding">
         <Sidebar />
         <MessageContainer />
       </div>
