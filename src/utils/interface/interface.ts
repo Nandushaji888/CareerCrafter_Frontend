@@ -17,9 +17,12 @@ export interface IUser {
     resume?:string;
     qualification?:string;
     skills?:string;
+    secondarySkills?:string;
     profilePic?:string;
     createdOn?:Date;
     editedOn?:Date;
+    location?:String;
+    experience?:String
 }
 
 
@@ -39,11 +42,12 @@ export interface IPost {
     recruitingPlace:string,
     closingDate :string,
     workArrangementType?:WorkArrangementType,
-    employmentType?:employmentType,  
-    createdAt?:string;
+    employmentType:employmentType,  
+    createdAt:string;
     isListed?:boolean;
     isPremium?:boolean;
     recruiterId?:string;
+    rejectedReason?:string;
     isRejected?:boolean;
 }
 

@@ -10,12 +10,21 @@ import JobDetails from '../pages/user/JobDetails'
 import UserProfile from '../pages/user/UserProfile'
 import UserPrivateRoute from '../components/UserPrivateRoute'
 import { ChatComponent } from '../components/chatComponent/ChatComponent'
+import ContactPage from '../components/ContactPage'
+import AboutUsPage from '../components/AboutUsPage'
+import AppliedJobList from '../pages/user/AppliedJobsList'
+import AppliedJobDetails from '../pages/user/AppliedJobDetails'
+import SavedJobList from '../pages/user/SavedJobList'
 
 const UserRouter = () => {
   return (
     <Routes>
       <Route element={<UserPrivateRoute />}>
         <Route path='/user-profile' element={<UserProfile />} />
+      <Route path='/messages' element={<ChatComponent/>} />
+      <Route path='/applied-jobs/:id' element={<AppliedJobList/>} />
+      <Route path='/saved-jobs/:id' element={<SavedJobList/>} />
+      <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails/>} />
       </Route>
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
@@ -25,7 +34,8 @@ const UserRouter = () => {
       <Route path='/new-password' element={<NewPassword />} />
       <Route path='/list-jobs' element={<JobList />} />
       <Route path='/job-details/:id' element={<JobDetails />} />
-      <Route path='/messages' element={<ChatComponent/>} />
+      <Route path='/contact-us' element={<ContactPage/>} />
+      <Route path='/about-us' element={<AboutUsPage/>} />
 
     </Routes>
   )

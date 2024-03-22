@@ -30,6 +30,8 @@ const UserDetails: React.FC = () => {
             console.log('res.data');
             console.log(res.data);
             setUser(res?.data?.user)
+        }).catch((err)=> {
+            
         })
     },[])
 
@@ -57,7 +59,7 @@ const UserDetails: React.FC = () => {
                                 {/* Show original image if available */}
                                 {/* {userData.profilePic && ( */}
                                 <img
-                                    src='profile.png'
+                                    src={`/${user?.profilePic}`}
                                     // src={`userProfilePic/User-Profile-PNG-Download-Image.png`}
                                     alt="avatar"
                                     width="200px"

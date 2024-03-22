@@ -11,7 +11,7 @@ import Footer from '../../components/Footer';
 const UserHome = () => {
   const baseurl = "http://localhost:4000/api/auth/user";
   const navigate = useNavigate()
-  // const userData = useSelector((state: any) => state.persisted.user.userData);
+  const userData = useSelector((state: any) => state.persisted.user.userData);
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [jobList, setJobList] = useState<IPost[]>([]);
@@ -33,7 +33,8 @@ const UserHome = () => {
         params: {
           search: searchQuery,
           page: page,
-          limit: limit
+          limit: limit,
+          userId:userData?._d?userData?._id:undefined
         },
         withCredentials: true
       });

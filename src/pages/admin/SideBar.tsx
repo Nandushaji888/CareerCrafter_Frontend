@@ -11,13 +11,13 @@ const SideBar = () => {
     const postUrl = 'http://localhost:4001/api/post/admin';
     const [count, setCount] = useState('')
 
-    useEffect(() => {
-        axios.get(`${postUrl}/pending-post-count`, { withCredentials: true })
-            .then((res) => {
-                // console.log(res.data);
-                setCount(res?.data?.count?.length)
-            })
-    }, [count])
+    // useEffect(() => {
+    //     axios.get(`${postUrl}/pending-post-count`, { withCredentials: true })
+    //         .then((res) => {
+    //             // console.log(res.data);
+    //             setCount(res?.data?.count?.length)
+    //         })
+    // }, [count])
 
     return (
         <div className='bg-gray-800 w-80 h-screen fixed flex flex-col'>
@@ -26,29 +26,32 @@ const SideBar = () => {
                     <SiShopware />
                     <span>CareerCrafter</span>
                 </Link>
-                {/* <button onClick={()=> {}} className='text-white'>
-                <MdOutlineCancel />
-            </button> */}
             </div>
             <div className=' overflow-y-auto flex flex-col items-center mt-10 '>
                 <ul className='space-y-6'>
                     <div className='overflow-y-auto flex flex-col items-center mt-16'>
                         <ul className='space-y-3'>
-                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
-                                <FaUser className="inline mr-2 mb-1 " /><NavLink to='/admin/users-list'>Users</NavLink>
+                            <NavLink to='/admin/users-list' className='navbar-link' ><li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaUser className="inline  mr-3 mb-1 " />Users
                             </li>
-                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
-                                <FaUserTie className="inline mr-2 mb-1" /> <NavLink to='/admin/recruiters'>Recruiters</NavLink>
-                            </li>
+                            </NavLink>
+
+                       
+                            <NavLink to='/admin/recruiters' className='navbar-link' >   <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaUserTie className="inline mr-2 mb-1" /> Recruiters
+                            </li></NavLink>
                             <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
                                 <FaClipboardCheck className="inline mr-2 mb-1" /><NavLink to='/admin/active-job-posts'> Active Job Posts</NavLink>
                             </li>
-                            <li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
-                                <FaClipboardList className="inline mr-2 mb-1" /> <NavLink to='/admin/pending-job-posts'> Pending Job Posts <a className="inline-block bg-red-500  text-white font-bold px-2 rounded-full">
-                                    {count}
-                                </a>
-                                </NavLink>
+             
+
+                            <NavLink to='/admin/pending-job-posts' className='navbar-link' ><li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <FaClipboardList className="inline  mr-3 mb-1 " />Pending Job Posts
+                                {/* <a className="inline-block bg-red-500  text-white font-bold px-2 rounded-full">
+                               {count}
+                                </a> */}
                             </li>
+                            </NavLink>
                         </ul>
                     </div>
                 </ul>

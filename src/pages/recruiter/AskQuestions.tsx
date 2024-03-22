@@ -8,12 +8,13 @@ import { useNavigate } from 'react-router-dom';
 const AddQuestionForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userData = useSelector((state: any) => state.persisted.postData.jobData);
-    const [formData, setFormData] = useState(userData);
+    const postData = useSelector((state: any) => state.persisted.postData.jobData);
+    const [formData, setFormData] = useState(postData);
 
+    console.log();
     
     useEffect(() => {
-        if (!userData.length) {
+        if (!postData.postName) {
             navigate('/recruiter/post-job');
         }
     }, []);

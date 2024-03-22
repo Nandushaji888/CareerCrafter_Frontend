@@ -1,39 +1,49 @@
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * > * {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-    background: #dcdce6;
-    /* background-image: url('./assets/top-view-desk-concept-with-gray-background.jpg'); */
-    background-size: cover; 
-    background-repeat: no-repeat;
-    	background-position: center;
-
-
-} 
-
+  background: #dcdce6;
+  /* background-image: url('./assets/top-view-desk-concept-with-gray-background.jpg'); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 ::-webkit-scrollbar {
-	width: 8px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-	background: #555;
+  background: #555;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #121212;
-	border-radius: 5px;
+  background: #121212;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #242424;
+  background: #242424;
 }
+.navbar-link {
+  display: block; 
+  color: white;
+  text-decoration: none; 
+  transition: background-color 0.3s ease;
+ }
+ 
 
-    
+ 
+ .navbar-link.active {
+  width: 200px;
+  color: black; 
+  background-color: black; 
+  border-radius: 10px;
+ }

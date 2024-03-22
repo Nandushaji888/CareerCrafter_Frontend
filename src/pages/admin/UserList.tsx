@@ -27,7 +27,7 @@ const UserList: React.FC = () => {
             style: {
                 fontWeight: 'bold'
             },
-            width:'250px'
+            width:'180px'
             
         },
         {
@@ -173,10 +173,11 @@ const UserList: React.FC = () => {
                     />
 
                     <DataTable
+                    className='ms-10'
                         
                         columns={columns}
                         data={filteredUsers}
-                        selectableRows
+                        // selectableRows
                         fixedHeader
                         pagination
                     />

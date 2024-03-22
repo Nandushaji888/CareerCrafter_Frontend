@@ -8,11 +8,14 @@ import SideBar from './SideBar';
 import PostQuestionsModal from '../../components/PostQuestionsModal';
 import JobDetailsComponent from '../../components/JobDetailsComponent';
 import AdminJobDetailsButtonComponent from './components/AdminJobDetailsButtonComponent';
+import RejectReasonModal from '../../components/RejectReasonModal';
 
 const AdminJobDetails: React.FC = () => {
     const [jobDetails, setJobDetails] = useState<IPost>();
     const [showModal, setShowModal] = useState(false);
-    const [isRejected,setIsRejected] = useState(jobDetails?.isRejected)
+    const [reasonModal, setReasonModal] = useState(false);
+    const [isRejected, setIsRejected] = useState(jobDetails?.isRejected)
+    const [rejectedReason, setRejectedReason] = useState('')
     const { id } = useParams();
 
     useEffect(() => {
@@ -32,8 +35,13 @@ const AdminJobDetails: React.FC = () => {
     };
 
     const jobStatusHandler = (id: string, status: string) => {
+
+        
         const baseUrl = 'http://localhost:4001/api/post/admin';
-        const formData = { id, status };
+        const formData = { id, status,rejectedReason };
+        console.log('formDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        console.log(formData);
+        
         axios.post(`${baseUrl}/job-post-status-change`, { formData }, { withCredentials: true })
             .then((res) => {
                 if (res.data.status) {
@@ -41,6 +49,7 @@ const AdminJobDetails: React.FC = () => {
                         toast.success(res.data.message);
                     }
                     fetchPostDetails(id);
+                    setRejectedReason('')
                 } else {
                     toast.error(res.data.message);
                 }
@@ -56,7 +65,7 @@ const AdminJobDetails: React.FC = () => {
         jobStatusHandler(id, status);
     };
 
-    const jobRejecthandeler = (id: string, e: React.FormEvent) => {
+    const jobRejecthandeler = (id: string,e: React.FormEvent) => {
         e.preventDefault();
         const status = "NotList";
         jobStatusHandler(id, status);
@@ -80,12 +89,16 @@ const AdminJobDetails: React.FC = () => {
                                     jobAcceptHandler={jobAcceptHandler}
                                     jobRejecthandeler={jobRejecthandeler}
                                     isRejected={isRejected}
+                                    setReasonModal={setReasonModal}
+                                    setRejectedReason={setRejectedReason}
+                                    reasonModal={reasonModal}
                                 />
                             }
                         />
                     </div>
                 </div>
                 {showModal && <PostQuestionsModal onClose={() => setShowModal(false)} questions={(jobDetails?.questions || [])} />}
+               
             </div>
         </>
     );

@@ -3,7 +3,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react'; // Import us
 import { useDispatch, useSelector } from 'react-redux';
 import { validate } from '../../helper/userValidate'
 import toast, { Toaster } from 'react-hot-toast'
-import { addUser } from '../../utils/redux/slices/userSlice';
+import { addUser, clearUser } from '../../utils/redux/slices/userSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from './components/NavBar';
 import { IUser } from '../../utils/interface/interface';
@@ -26,18 +26,20 @@ const UserProfile: React.FC = () => {
         axios.get(`${baseUrl}/${user._id}`, { withCredentials: true })
             .then((res: any) => {
 
-                console.log(res.data);
+                // console.log(res.data);
 
                 if (!res?.data?.status) {
-
+                    dispatch(clearUser())
                     navigate('/login')
                 }
                 setUserData(res?.data?.user)
+                setFile(res?.data?.user?.resume)
 
             }).catch(() => {
-                console.log('hereeee');
+                dispatch(clearUser())
 
                 navigate('/login')
+                
             })
 
     }, [])
@@ -54,7 +56,10 @@ const UserProfile: React.FC = () => {
         qualification: userData?.qualification || '',
         skills: userData?.skills || '',
         profilePic: userData?.profilePic || '',
-        status: userData?.status
+        location:userData?.location || '',
+        secondarySkills:userData?.secondarySkills || '',
+        experience:userData?.experience || '',
+        status: userData?.status,
     });
 
     useEffect(() => {
@@ -69,6 +74,9 @@ const UserProfile: React.FC = () => {
                 qualification: userData.qualification || '',
                 skills: userData.skills || '',
                 profilePic: userData.profilePic || '',
+                location:userData?.location || '',
+                secondarySkills:userData?.secondarySkills || '',
+                experience:userData?.experience || '',
                 status: userData.status
             });
         }
@@ -98,9 +106,11 @@ const UserProfile: React.FC = () => {
             toast.error(validationResult.errorMessage);
             return;
         }
-
-        const data = { formData, file }
-
+        
+        const data = { ...formData, file }
+        console.log('data');
+        console.log(data);
+        
         axios.post(`${baseUrl}/update-user`, data, {
             headers: {
                 "Content-Type": "multipart/form-data"
@@ -133,7 +143,7 @@ const UserProfile: React.FC = () => {
                     <Suspense fallback={<div className='flex w-7/12 justify-center items-center text-2xl '>Loading...</div>} >
 
 
-                        <LazyUserDetailsInProfile handleSubmit={handleSubmit} userData={userData} formData={formData} handleChange={handleChange} setFile={setFile} />
+                        <LazyUserDetailsInProfile handleSubmit={handleSubmit} userData={userData} formData={formData} handleChange={handleChange} setFile={setFile} file={file} />
                     </Suspense>
 
                 }

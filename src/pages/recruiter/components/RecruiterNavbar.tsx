@@ -6,6 +6,7 @@ import axios from 'axios';
 import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 
 
 const RecruiterNavbar = () => {
@@ -33,14 +34,16 @@ const RecruiterNavbar = () => {
     }
   return (
     <nav className="bg-gray-900 py-4 fixed top-0 right-0 left-0 mb-5" style={{ zIndex: 9999 }} >
+              <Toaster position='top-center' reverseOrder={false}></Toaster>
+
             <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                 <div className='flex'>
-                    <Link to="/" className='flex items-center gap-3 text-white text-xl font-extrabold'>
+                    <Link to="/recruiter" className='flex items-center gap-3 text-white text-xl font-extrabold'>
                         <SiShopware />
                         <span>CareerCrafter</span>
                     </Link>
 
-                    <Link to={'/'} aria-label="Our product" title="Our product" className="relative ms-24 font-medium tracking-wide text-white inline-block group transition duration-300 ease-in-out hover:text-blue-400" >
+                    <Link to={'/recruiter'} aria-label="Our product" title="Our product" className="relative ms-24 font-medium tracking-wide text-white inline-block group transition duration-300 ease-in-out hover:text-blue-400" >
                         Home
                         <span className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-500 origin-left transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                     </Link>
@@ -49,11 +52,11 @@ const RecruiterNavbar = () => {
                         <span className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-500 origin-left transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                     </Link>
 
-                    <Link to={'/'} aria-label="Our product" title="Our product" className="relative ms-10 font-medium tracking-wide text-white inline-block group transition duration-300 ease-in-out hover:text-blue-400" >
+                    <Link to={'/contact-us'} aria-label="Our product" title="Our product" className="relative ms-10 font-medium tracking-wide text-white inline-block group transition duration-300 ease-in-out hover:text-blue-400" >
                         Contact
                         <span className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-500 origin-left transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                     </Link>
-                    <Link to={'/'} aria-label="Our product" title="Our product" className="relative ms-10 font-medium tracking-wide text-white inline-block group transition duration-300 ease-in-out hover:text-blue-400" >
+                    <Link to={'/about-us'} aria-label="Our product" title="Our product" className="relative ms-10 font-medium tracking-wide text-white inline-block group transition duration-300 ease-in-out hover:text-blue-400" >
                         About us
                         <span className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-500 origin-left transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
                     </Link>

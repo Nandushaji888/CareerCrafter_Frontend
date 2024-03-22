@@ -3,29 +3,75 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from './components/NavBar';
 import axios from 'axios';
-import { addUser } from '../../utils/redux/slices/userSlice';
+import { addUser, clearUser } from '../../utils/redux/slices/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import ApplicationAnswerModal from '../../components/ApplicationAnswerModal';
-import { ApplicationType, IApplication } from '../../utils/interface/interface';
+import { ApplicationType, IApplication, IUser } from '../../utils/interface/interface';
 import JobDetailsComponent from '../../components/JobDetailsComponent';
 import UserJobDetailsButtons from './components/UserJobDetailsButtons';
+import Footer from '../../components/Footer';
 // import JobDetailsComponent from '../../components/JobDetailsComponent';
 
 const JobDetails = () => {
+    const userData = useSelector((state: any) => state.persisted.user.userData);
     const location = useLocation();
     const receivedData = location.state?.data;
     const [data, setData] = useState(receivedData?.data)
     const [resume, setResume] = useState('');
     const baseUrl = 'http://localhost:4002/api/user';
     const applicationUrl = 'http://localhost:4004/api/application';
+    const postUrl = 'http://localhost:4001/api/post';
+
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
     const [applicationData, setApplicationData] = useState<IApplication>()
+    const [user, setUser] = useState<IUser>()
+    const [applied, setApplied] = useState(false)
+    const [saved, setSaved] = useState(false)
     const navigate = useNavigate()
 
+        const { id } = useParams();
 
 
-    const userData = useSelector((state: any) => state.persisted.user.userData);
+
+    const isApplied = () => {
+        if (userData._id && data?._id) {
+            axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
+                .then((res: any) => {
+                    if (res?.data?.status) {
+                        // console.log('in application job details');
+                        // console.log(res?.data?.user?.appliedJobs);
+                        setUser(res?.data?.user)
+                        dispatch(clearUser())
+                        dispatch(addUser(res?.data?.user))
+                        if (res?.data?.user?.appliedJobs.includes(data?._id)) {
+                            setApplied(true)
+                        }
+                        if (res?.data?.user?.savedJobs.includes(data?._id)) {
+                            setSaved(true)
+                        }
+                    } else {
+                        navigate('/login')
+                    }
+
+
+                }).catch(() => {
+
+                })
+        }
+    }
+
+    useEffect(() => {
+        isApplied()
+        axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+            .then((res) => {
+                if (res?.data?.status) {
+                    setData(res?.data?.jobData)
+                }
+            });
+        window.scrollTo(0, 0);
+
+    }, [])
 
 
     useEffect(() => {
@@ -55,10 +101,17 @@ const JobDetails = () => {
     };
 
     const handleAppliation = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
-
-
         e.preventDefault()
+        isApplied()
+
+        if (!userData?._id) {
+            navigate('/login')
+            return
+        }
+        if (resume === '') {
+            toast.error('Please upload your resume')
+            return
+        }
 
         const formData = {
             userId: userData?._id,
@@ -82,7 +135,9 @@ const JobDetails = () => {
                             axios.post(`${applicationUrl}/create-application`, formData, { withCredentials: true })
                                 .then((res) => {
                                     toast.success(res?.data?.message)
-                                }).catch((err)=> {
+                                    setApplied(true)
+                                    // isApplied()
+                                }).catch((err) => {
                                     toast.error(err?.response?.data?.message)
                                 })
                         }
@@ -95,12 +150,9 @@ const JobDetails = () => {
 
 
             } catch (err) {
-
+                toast.error('Internal server error')
+                navigate('/login')
             }
-
-
-
-
         } else {
             setShowModal(true)
 
@@ -116,12 +168,16 @@ const JobDetails = () => {
 
             <div className='mx-20 mt-5'>
                 <Toaster position='top-center' reverseOrder={false}></Toaster>
-                <JobDetailsComponent data={data} buttons={<UserJobDetailsButtons  handleAppliation={handleAppliation} />} />
+                <JobDetailsComponent data={data} buttons={<UserJobDetailsButtons handleAppliation={handleAppliation} applied={applied} isApplied={isApplied} userId={userData?._id} jobPostId={data?._id}
+                    saved={saved} setSaved={setSaved}
+
+                />} />
                 {
                     showModal && applicationData &&
                     <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} />
                 }
             </div>
+            <Footer/>
 
         </>
     )
