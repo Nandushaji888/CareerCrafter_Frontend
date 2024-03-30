@@ -30,48 +30,82 @@ const JobDetails = () => {
     const [saved, setSaved] = useState(false)
     const navigate = useNavigate()
 
-        const { id } = useParams();
+    const { id } = useParams();
 
 
 
     const isApplied = () => {
-        if (userData._id && data?._id) {
+        
+        if (userData._id) {            
             axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
                 .then((res: any) => {
+
+
                     if (res?.data?.status) {
-                        // console.log('in application job details');
-                        // console.log(res?.data?.user?.appliedJobs);
                         setUser(res?.data?.user)
                         dispatch(clearUser())
                         dispatch(addUser(res?.data?.user))
-                        if (res?.data?.user?.appliedJobs.includes(data?._id)) {
+                        if (res?.data?.user?.appliedJobs.includes(id)) {
+                            console.log('before ture');
+                            
                             setApplied(true)
                         }
-                        if (res?.data?.user?.savedJobs.includes(data?._id)) {
+                        if (res?.data?.user?.savedJobs.includes(id)) {
                             setSaved(true)
                         }
                     } else {
-                        navigate('/login')
+                        navigate("/error")
+
                     }
 
 
-                }).catch(() => {
+                }).catch((err) => {
+                    console.log(err);
+                    setApplied(false)
+                    setSaved(false)
 
+
+                    // navigate("/error")
                 })
         }
     }
+    useEffect(()=> {
+        
+        if(userData?._id){
+            isApplied()
+        }
+    },[])
 
     useEffect(() => {
-        isApplied()
-        axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
-            .then((res) => {
-                if (res?.data?.status) {
-                    setData(res?.data?.jobData)
+        const fetchData = async () => {
+            try {
+                // isApplied();
+                const response = await axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true });
+                if (response?.data?.status) {
+                    setData(response?.data?.jobData);
                 }
-            });
-        window.scrollTo(0, 0);
+            } catch (error: any) {
+                console.log('error');
+                console.log(error);
 
-    }, [])
+                if (error && error?.response?.status === 401) {
+                    navigate("/login");
+                    return
+
+                }
+                if (error && error?.response?.status === 404) {
+                    navigate("/error");
+                    return
+                }
+                console.error("Error fetching data:", error);
+                navigate("/error");
+            }
+        };
+
+        fetchData();
+        window.scrollTo(0, 0);
+    }, []);
+
 
 
     useEffect(() => {
@@ -97,6 +131,7 @@ const JobDetails = () => {
                 })
         } catch (error) {
             console.error('Error fetching resume:', error);
+            // toast.error("Error in fetching")
         }
     };
 
@@ -129,13 +164,15 @@ const JobDetails = () => {
 
                 axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
                     .then((res: any) => {
-                        if (!res.status) {
+                        if (!res.data?.status) {
                             navigate('/login')
                         } else {
                             axios.post(`${applicationUrl}/create-application`, formData, { withCredentials: true })
                                 .then((res) => {
-                                    toast.success(res?.data?.message)
                                     setApplied(true)
+                                    console.log('set applied true');
+                                    toast.success(res?.data?.message)
+                                    
                                     // isApplied()
                                 }).catch((err) => {
                                     toast.error(err?.response?.data?.message)
@@ -174,10 +211,10 @@ const JobDetails = () => {
                 />} />
                 {
                     showModal && applicationData &&
-                    <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} />
+                    <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} setApplied={setApplied}/>
                 }
             </div>
-            <Footer/>
+            <Footer />
 
         </>
     )

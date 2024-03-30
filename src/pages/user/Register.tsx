@@ -30,6 +30,7 @@ const Register = () => {
             email: '',
             phone: '',  
             password: '',
+            location:'',
             // confirm_pwd: ''
         },
         validate: registerValidation,
@@ -72,7 +73,7 @@ const Register = () => {
         <Toaster position='top-center' reverseOrder={false}></Toaster>
 
         <div className="flex justify-center items-center h-screen">
-            <div className=" bg-slate-100 pt-10 pb-10  px-10 rounded-3xl h-[680px]">
+            <div className=" bg-slate-100 pt-10 pb-10  px-10 rounded-3xl h-[750px]">
                 <div className="title flex flex-col items-center">
                         <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
                         <h6 className="text-2xl pb-3 font-bold  text-gray-600">User Signup</h6>
@@ -102,7 +103,12 @@ const Register = () => {
                                 placeholder="Phone Number"
                                 className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
                             />
-                           
+                             <input
+                                {...formik.getFieldProps('location')}
+                                type="text"
+                                placeholder="Your current location"
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                            />
                             <input
                                 {...formik.getFieldProps('password')}
                                 type="password"

@@ -7,6 +7,7 @@ interface Errors {
   phone?: string;
   worksAt?:string;
   confirm_pwd?: string;
+  location?:string
 }
 
 interface Values {
@@ -15,6 +16,7 @@ interface Values {
   email?: string;
   phone?: string;
   worksAt?:string;
+  location?:string
   confirm_pwd?: string;
 }
 
@@ -27,6 +29,8 @@ export const registerValidation = async (values: Values) => {
     passwordVerify(error, values),
     emailVerify(error, values),
     phoneVerify(error, values),
+    locationVerify(error,values)
+
   ]);
 
   console.log('hereee');
@@ -43,6 +47,7 @@ export const recruiterRegisterValidation = async (values: Values) => {
       emailVerify(error, values),
       worksAtVerify(error,values),
       phoneVerify(error, values),
+      locationVerify(error,values)
     ]);
   
     console.log("error111111", error);
@@ -95,6 +100,20 @@ const nameVerify = (error: Errors = {}, values: Values) => {
   }
    else if (!nameRegex.test(values.name.trim())) {
     error.name = toast.error("Invalid Name...!");
+  }
+  return error;
+};
+
+const locationVerify = (error: Errors = {}, values: Values) => {
+  const nameRegex = /^[a-zA-Z0-9\s\,\''\-]*$/
+
+  if (!values.name) {
+    error.name = toast.error("Location Required...!!");
+  } else if (values.name?.trim() === "") {
+    error.name = toast.error("Location Required...!!");
+  }
+   else if (!nameRegex.test(values.name.trim())) {
+    error.name = toast.error("Invalid Location...!");
   }
   return error;
 };

@@ -20,7 +20,7 @@ export const validate = (formData: IPost) => {
     return { isValid: false, errorMessage: "Contact email required...!!!" };
   } else if (!emailRegex.test(formData?.recruiterEmail)) {
     return { isValid: false, errorMessage: "Invalid email address...!!!" };
-  } else if (!formData.recruitingPlace) {
+  } else if (!formData.location) {
     return { isValid: false, errorMessage: "Recruiting place required...!!!" };
   } else if (Number(formData?.salary) < 0) {
     return {

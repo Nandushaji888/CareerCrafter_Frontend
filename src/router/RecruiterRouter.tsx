@@ -10,6 +10,7 @@ import RecruiterJobDetails from '../pages/recruiter/RecruiterJobDetails'
 import RecruiterApplicationList from '../pages/recruiter/RecruiterApplicationList'
 import RecruiterApplicationDetails from '../pages/recruiter/RecruiterApplicationDetails'
 import RecruiterProtectedRoutes from '../components/RecruiterProtectedRoutes'
+import RecruiterDashboard from '../pages/recruiter/RecruiterDashboard'
 
 
 const RecruiterRouter = () => {
@@ -22,6 +23,7 @@ const RecruiterRouter = () => {
 
       <Route element={<RecruiterProtectedRoutes />}>
         <Route path='/' element={<RecruiterHome />} />
+        <Route path='/dashboard' element={<RecruiterDashboard />} />
         <Route path='/post-job' element={<PostJobs />} />
         <Route path='/post-job-ask-questions' element={<AskQuestions />} />
         <Route path='/list-jobs' element={<RecruiterListJobs />} />

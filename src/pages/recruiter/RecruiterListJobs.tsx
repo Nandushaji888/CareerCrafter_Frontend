@@ -7,6 +7,8 @@ import { IPost } from '../../utils/interface/interface'
 import { TableColumn } from 'react-data-table-component';
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux';
+import RecruiterNavbar from './components/RecruiterNavbar';
+import Footer from '../../components/Footer';
 const LazyJobListingComponent = lazy(() => import('./components/RecruiterJobListing'))
 
 
@@ -19,9 +21,6 @@ const RecruiterListJobs = () => {
 
     const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
     useEffect(() => {
-        console.log('hereeeeeeeeeeeeeeee');
-
-
         axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
             .then((res) => {
                 console.log(res.data);
@@ -51,7 +50,7 @@ const RecruiterListJobs = () => {
         },
         {
             name: 'Company Place',
-            selector: row => row.recruitingPlace,
+            selector: row => row.recruitingPlace?.locationName,
             width: '150px',
             style: {
                 textAlign: 'left'
@@ -95,29 +94,30 @@ const RecruiterListJobs = () => {
         job.postName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return (
+        <>
+            <RecruiterNavbar />
+            <div className='flex flex-col flex-grow justify-center items-center mt-14'>
+                <div className='' style={{ marginLeft: '-900px' }}>
+                    <Header category="page" title="Your Posts" />
+                </div>
 
-        <div className='flex flex-col flex-grow justify-center items-center'>
-            <div className='mb-4 ' style={{ marginLeft: '-700px' }}>
-                <Header category="" title="Your Posts" />
+
+                {
+                    jobList.length > 0 ?
+
+
+                        (<Suspense fallback={<div className='flex  justify-center items-center text-2xl h-screen '>Loading...</div>}>
+                            <LazyJobListingComponent setJobList={setJobList} columns={columns} filteredJobs={filteredJobs} handleSearch={handleSearch} jobList={jobList} />
+                        </Suspense>) : (
+                            <div className='container flex justify-center items-center h-screen text-2xl  pb-28' >
+                                No Job Posted
+                            </div>
+                        )
+                }
+
+
             </div>
-
-
-            {
-                jobList.length > 0 ?
-
-
-                    (<Suspense fallback={<div className='flex  justify-center items-center text-2xl h-screen '>Loading...</div>}>
-                        <LazyJobListingComponent setJobList={setJobList} columns={columns} filteredJobs={filteredJobs} handleSearch={handleSearch} jobList={jobList} />
-                    </Suspense>) : (
-                        <div className='container flex justify-center items-center h-screen text-2xl  pb-28' >
-                            No Job Posted
-                        </div>
-                    )
-            }
-
-
-        </div>
-
+        </>
 
     )
 }

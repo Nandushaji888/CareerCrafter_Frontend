@@ -17,7 +17,7 @@ const JobDetailsComponent: React.FC<JobDetailsProps> = ({ data,buttons }) => {
                     <div className='heading ps-16 ms-2 mb-10 '>
                         <h2 className='text-3xl font-semibold'>{data?.postName}</h2>
                         <h4 className='text-lg ps-10 pt-3 font-semibold'>{data?.company}</h4>
-                        <h4 className='text-lg ps-10 pb-3 font-semibold'>{data?.recruitingPlace} , {data?.employmentType}</h4>
+                        <h4 className='text-lg ps-10 pb-3 font-semibold'>{data?.recruitingPlace?.locationName} , {data?.employmentType}</h4>
                     </div>
 
                     <div className='flex flex-row w-full mx-auto px-14 justify-between'>

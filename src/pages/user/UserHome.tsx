@@ -16,8 +16,8 @@ const UserHome = () => {
   const [location, setLocation] = useState('');
   const [jobList, setJobList] = useState<IPost[]>([]);
   const [page, setPage] = useState();
-  const [limit, setLimit] = useState(''); // Adjust limit as needed
-  const [totalPages, setTotalPages] = useState('');
+  const [limit, setLimit] = useState(4); // Adjust limit as needed
+  const [totalPages, setTotalPages] = useState(0);
   const postUrl = 'http://localhost:4001/api/post';
 
   const dispatch = useDispatch()
@@ -31,14 +31,15 @@ const UserHome = () => {
     try {
       const response = await axios.get(`${postUrl}/list-jobs`, {
         params: {
-          search: searchQuery,
-          page: page,
-          limit: limit,
-          userId:userData?._d?userData?._id:undefined
+            search: searchQuery,
+            page: page,
+            limit: limit,
+            location,
+            userId:userData?._id?userData?._id:undefined
+
         },
         withCredentials: true
-      });
-      console.log(response.data);
+    });
 
       setJobList(response.data.postDatas);
       setTotalPages(response.data.totalPages);
@@ -85,12 +86,12 @@ const UserHome = () => {
             <div className='w-8/12 border border-none my-7 flex flex-col mt-4'>
               <h1 className='text-4xl font-extrabold my-2'>Featured Jobs</h1>
 
-              {jobList.slice(0, 4).map((job, index) => (
+              {jobList.slice(0, 3).map((job, index) => (
                 <div key={index} onClick={(e) => handleJobDetails(job?._id, e)} className="cursor-pointer flex flex-row justify-between px-8 bg-white shadow-xl border-gray-300 p-4 border my-6 h-44 rounded-xl">
                   <div className='h-3/6 flex flex-col gap-1'>
                     <p className="text-gray-600 mb-2 ">{job?.company}</p>
                     <h2 className="text-lg font-semibold mb-2 max-w-sm">{job?.postName}</h2>
-                    <p className="text-gray-700 font-bold">{job?.recruitingPlace}</p>
+                    <p className="text-gray-700 font-bold">{job?.recruitingPlace?.locationName}</p>
                     <p className="text-gray-700 font-bold pt-2">{job?.workArrangementType}</p>
                   </div>
                   <div className=''>

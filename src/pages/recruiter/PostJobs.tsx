@@ -7,6 +7,7 @@ import { WorkArrangementType, employmentType } from '../../utils/interface/inter
 import { useDispatch, useSelector } from 'react-redux';
 import { jobPost } from '../../utils/redux/slices/jobPostSlice';
 import RecruiterNavbar from './components/RecruiterNavbar';
+import {RecruitingPlace} from '../../utils/interface/interface'
 
 
 const JobPostForm = () => {
@@ -32,14 +33,16 @@ const JobPostForm = () => {
     // category: '',
     questions: [],
     recruiterEmail: recruiterData?.email,
-    recruitingPlace: '',
+    recruitingPlace: {locationName:'',type:'',coordinates:[]},
+    location:'',
     closingDate: '',
     workArrangementType: WorkArrangementType.Office,
     employmentType: employmentType.Fulltime,
-    recruiterId: recruiterData._id
+    recruiterId: recruiterData._id,
+
     // isPremium: false,
     // isListed: true,
-    // createdAt: new Date().toISOString().slice(0, 10),
+    createdAt: '',
   });
 
 
@@ -150,7 +153,7 @@ const JobPostForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className='mt-2'>
               <label className="block text-gray-700 mb-2">Recruiting Place<span className="text-red-500">*</span></label>
-              <input type="text" name="recruitingPlace" value={formData.recruitingPlace} onChange={handleChange} className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+              <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
             </div>
             <div className='mt-2'>
               <label className="block text-gray-700 mb-2">Job Closing Date</label>

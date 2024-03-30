@@ -19,7 +19,7 @@ const JobListingComponent:React.FC<IJobListingComponent> = ({noData,jobList,hand
                     <div className='h-3/6'>
                         <p className="text-gray-600 mb-2 ">{job?.company}</p>
                         <h2 className="text-lg font-semibold mb-2 max-w-sm">{job?.postName}</h2>
-                        <p className="text-gray-700 font-bold">{job?.recruitingPlace}</p>
+                        <p className="text-gray-700 font-bold">{job?.recruitingPlace?.locationName}</p>
                     </div>
                     <div className=''>
                         <p className="text-gray-600">{job?.employmentType}</p>

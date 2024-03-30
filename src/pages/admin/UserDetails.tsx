@@ -31,7 +31,7 @@ const UserDetails: React.FC = () => {
             console.log(res.data);
             setUser(res?.data?.user)
         }).catch((err)=> {
-            
+            navigate("/admin/error")
         })
     },[])
 

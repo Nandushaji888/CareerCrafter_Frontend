@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IUser } from '../../../utils/interface/interface';
 interface IUserDetailsInProfile {
     handleSubmit: any;
@@ -11,8 +11,30 @@ interface IUserDetailsInProfile {
 }
 
 const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, userData, formData, handleChange, setFile, file }) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0]);
+        } else {
+            setFile(null);
+        }
+    };
+
+
+    const [resumeUrl, setResumeUrl] = useState<string | null>(null);
+
+    const handleViewResume = () => {
+        if (userData?.resume) {
+            const resumeBlob = new Blob([userData.resume], { type: 'application/pdf' });
+            const url = URL.createObjectURL(resumeBlob);
+            setResumeUrl(url);
+
+            // Open the PDF in a new tab
+            window.open(url, '_blank');
+        }
+    };
+    
     return (
-        <form className="py-2" >
+        <form className="py-2" onSubmit={handleSubmit} >
             <div className="bg-white shadow-md  px-16 pt-6 pb-8 mb-4 rounded-3xl ">
                 <div className="mb-4 flex justify-start gap-16  ">
 
@@ -153,35 +175,31 @@ const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, u
                     <input
                         type="file"
                         name='file'
-                        // value={formData?.resume}
                         className="custom-file-input appearance-none bg-white border border-gray-400 rounded py-2 px-4 mr-2 focus:outline-none focus:border-blue-500"
-                        onChange={(e: any) => setFile(e.target.files[0]?.name)}
+                        onChange={handleFileChange}
                         accept="application/pdf"
                     />
                 </div>
-                {userData?.resume && (
-                    <>
-                        <div className='flex my-3'>
-                            <p className="text-gray-500 text-sm mt-2 me-5">
-                                Current Resume: {file}
-                            </p>
-                            <button
-                                className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                disabled={!file}
-                            >
-                                View resume
-                            </button>
-                        </div>
-                    </>
-
-                )}
+                {/* {userData?.resume && (
+                <div className='flex my-3'>
+                    <p className="text-gray-500 text-sm mt-2 me-5">
+                        Current Resume: {file}
+                    </p>
+                    <button
+                        className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        onClick={handleViewResume}
+                        disabled={!userData.resume}
+                    >
+                        View resume
+                    </button>
+                </div>
+            )} */}
 
 
                 <div className="flex items-center justify-between">
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        // type="submit" // Change type to "submit"
-                        onClick={handleSubmit}
+                        type="submit"
                     >
                         Update
                     </button>

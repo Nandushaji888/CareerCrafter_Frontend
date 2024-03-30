@@ -2,8 +2,11 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { IUser } from '../interface/interface'
+import { useNavigate } from 'react-router-dom'
+import { clearRecruiter } from '../redux/slices/recruiterSlice'
+import { clearUser } from '../redux/slices/userSlice'
 
 const useGetConversations = () => {
     const [loading,setLoading] = useState(false)
@@ -13,24 +16,35 @@ const useGetConversations = () => {
         const userData = state.persisted.user.userData || state.persisted.recruiter.recruiterData;
         return userData;
        });
+
+       const navigate = useNavigate()
+       const dispatch = useDispatch()
 useEffect(()=> {
-    console.log('get conversations');
     
     const getConverstions = async()=> {
+        console.log('in useget conversation');
+        
         setLoading(true)
         try {
-            console.log(`${messageUrl}/users/${messenger?._id}`);
             
-            await axios.get(`${messageUrl}/users/${messenger?._id}`)
+            await axios.get(`${messageUrl}/users/${messenger?._id}`,{withCredentials:true})
             .then((res)=> {
-                console.log('res?.data?.messagedUsers');
-                console.log(res?.data?.messagedUsers);
+                if(res?.data?.status){
+                    console.log('res?.data?.messagedUsers');
+                    console.log(res?.data?.messagedUsers);
+                    setConversation(res?.data?.messagedUsers)
+
+                }
                 
-                setConversation(res?.data?.messagedUsers)
+                
             })
             
-        } catch (error) {
+        } catch (error:any) {
             // toast.error(error)
+            if(error?.response?.status){
+                messenger?.worksAt ? dispatch(clearRecruiter()):dispatch(clearUser())
+                messenger?.worksAt ? navigate('/recruiter/login'):navigate('/login')
+            }
             console.log(error);
             
         } 

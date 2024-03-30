@@ -6,6 +6,7 @@ import { clearRecruiter } from '../../utils/redux/slices/recruiterSlice';
 import toast from 'react-hot-toast';
 import { IPost } from '../../utils/interface/interface';
 import RecruiterNavbar from './components/RecruiterNavbar';
+import Footer from '../../components/Footer';
 
 const RecruiterHome = () => {
   const baseurl = "http://localhost:4000/api/auth/recruiter";
@@ -89,7 +90,7 @@ const RecruiterHome = () => {
                   <div className='h-3/6 flex flex-col gap-1'>
                     <p className="text-gray-600 mb-2 ">{job?.company}</p>
                     <h2 className="text-lg font-semibold mb-2 max-w-sm">{job?.postName}</h2>
-                    <p className="text-gray-700 font-bold">{job?.recruitingPlace}</p>
+                    <p className="text-gray-700 font-bold">{job?.recruitingPlace?.locationName}</p>
                     <p className="text-gray-700 font-bold pt-2">{job?.workArrangementType}</p>
                   </div>
                   <div className=''>
@@ -100,7 +101,7 @@ const RecruiterHome = () => {
               ))}
               <div className='flex  justify-end '>
 
-                <Link to='/list-jobs' className=' bg-black text-white mt-5 px-4 py-2 rounded-3xl text-end'>See more</Link >
+                <Link to='/recruiter/list-jobs' className=' bg-black text-white mt-5 px-4 py-2 rounded-3xl text-end'>See more</Link >
               </div>
             </div>
 
@@ -128,6 +129,7 @@ const RecruiterHome = () => {
 
       </div>
 
+      <Footer/>
 
 
     </>

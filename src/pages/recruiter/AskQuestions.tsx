@@ -12,7 +12,7 @@ const AddQuestionForm = () => {
     const [formData, setFormData] = useState(postData);
 
     console.log();
-    
+
     useEffect(() => {
         if (!postData.postName) {
             navigate('/recruiter/post-job');
@@ -48,27 +48,32 @@ const AddQuestionForm = () => {
     };
 
     const handleSubmit = async (e: any) => {
+        const formData = handleNext();
         e.preventDefault();
-        const data = handleNext();
 
-        if (data) {
-     
+        if (formData) {
 
 
-            axios.post(`${baseurl}/create-job-post`, { data }, { withCredentials: true })
-                .then((response) => {
-                    if (response.data.status) {
-                        console.log(response.data);
+
+            axios.post(`${baseurl}/create-job-post`, { formData }, { withCredentials: true })
+            .then((response) => {
+                if (response.data.status) {
+                    if (response?.data?.status) {
                         dispatch(clearJobPost());
-                        navigate('/recruiter/post-job');
-                    } else {
-                        toast.error(response?.data?.message);
+                        toast.success(response?.data?.message);
+                        setTimeout(() => {
+                            navigate('/recruiter/post-job');
+                        }, 2000); // Adjust the delay time as needed
                     }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    toast.error('An error occurred.');
-                });
+                } else {
+                    toast.error(response?.data?.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                toast.error('Internal server error');
+            });
+        
         }
     };
 

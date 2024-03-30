@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 
 
 const AppliedJobList: React.FC = () => {
+    
     const baseUrl = 'http://localhost:4002/api/user';
     const user = useSelector((state: any) => state.persisted.user.userData);
     const navigate = useNavigate()
@@ -24,12 +25,10 @@ useEffect(()=> {
     if(!user?._id){
         navigate('/login')
         return
-    }
-    console.log(user);
-    
+    }    
 axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
 .then((res)=> {
-    console.log(res?.data);
+    console.log(res?.data?.appliedJobList);
     if(res?.data?.status){
 
         setJobList(res?.data?.appliedJobList)
@@ -55,7 +54,7 @@ axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
         },
         {
             name: 'Place',
-            selector: row => row.recruitingPlace,
+            selector: row => row.recruitingPlace?.locationName,
             sortable: true,
             width:'250px'
         },
@@ -122,7 +121,7 @@ axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
 
                      <DataTable
                     columns={columns}
-                    data={filteredJobList}
+                    data={filteredJobList.reverse()}
                     fixedHeader
                     pagination
                     /> 

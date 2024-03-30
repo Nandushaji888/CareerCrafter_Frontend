@@ -1,6 +1,21 @@
 import { IUser } from "../utils/interface/interface";
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  aboutYou: string;
+  dateOfBirth: string;
+  resume: File | null;
+  qualification: string;
+  skills: string;
+  profilePic: string;
+  location: string;
+  secondarySkills: string;
+  experience: string;
+  status: boolean | undefined
+}
 
-export const validate = (formData: IUser) => {
+export const validate = (formData: FormData) => {
   if (!formData?.aboutYou) {
     return { isValid: false, errorMessage: "About You required...!!!" };
   } else if (!formData?.dateOfBirth) {

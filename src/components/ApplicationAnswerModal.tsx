@@ -14,9 +14,11 @@ interface ApplicationAnswerModalProps {
   questions: Question[];
   onClose: () => void;
   applicationData: IApplication | undefined;
+  setApplied:any
+
 }
 
-const ApplicationAnswerModal: React.FC<ApplicationAnswerModalProps> = ({ questions, onClose, applicationData }) => {
+const ApplicationAnswerModal: React.FC<ApplicationAnswerModalProps> = ({ questions, onClose, applicationData, setApplied}) => {
   const [questionAnswer, setquestionAnswer] = useState<Question[]>(questions.map(q => ({ ...q })));
   const applicationUrl = 'http://localhost:4004/api/application';
 
@@ -31,11 +33,12 @@ const ApplicationAnswerModal: React.FC<ApplicationAnswerModalProps> = ({ questio
     e.preventDefault();
 
     // Access questionAnswer here, each question object will have a givenAnswer field
-    console.log('Updated Questions:', questionAnswer);
+    // console.log('Updated Questions:', questionAnswer);
 
     await axios.post(`${applicationUrl}/create-application`, { ...applicationData, questionAnswer }, { withCredentials: true })
       .then((res) => {
         toast.success(res?.data?.message)
+        setApplied(true)
       })
       .catch((error) => {
 

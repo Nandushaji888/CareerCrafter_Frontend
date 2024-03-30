@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
+import { Mail } from 'lucide-react';
+
 
 
 
@@ -62,6 +64,11 @@ const Navbar: React.FC = () => {
                             <Bell className='relative' />
                             <span className="absolute right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full" style={{ top: '-8px', marginRight: '-8px' }}>2</span>
                         </button>
+                        <button className="text-white ms-10 hover:text-gray-300 relative" onClick={()=>navigate("/messages")} >
+                            <Mail className='relative' />
+                            <span className="absolute right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full" style={{ top: '-8px', marginRight: '-8px' }}></span>
+                        </button>
+                        
                         <button onClick={toggleDropdown} className="text-white ms-10 hover:text-gray-300"><UserRound /></button>
                         {isDropdownVisible && (
                             <div className="absolute right-0  w-60 bg-white rounded-md shadow-lg py-2 flex flex-col gap-2 justify-center items-start mt-8 z-10">

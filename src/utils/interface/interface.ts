@@ -14,16 +14,22 @@ export interface IUser {
     appliedJobs?:ObjectId;
     savedJobs?:ObjectId;
     aboutYou?:string;
-    resume?:string;
+    resume: File | null;
     qualification?:string;
     skills?:string;
     secondarySkills?:string;
     profilePic?:string;
     createdOn?:Date;
     editedOn?:Date;
-    location?:String;
-    experience?:String
-}
+    experience?:string
+    location?: {
+        locationName:string;
+        type: 'Point';
+        coordinates: [number, number]; // [longitude, latitude]
+      };
+    
+    
+    }
 
 
 export interface IPost {
@@ -39,7 +45,6 @@ export interface IPost {
     questions?:Question[],
     skills?:string,
     recruiterEmail:string,
-    recruitingPlace:string,
     closingDate :string,
     workArrangementType?:WorkArrangementType,
     employmentType:employmentType,  
@@ -49,8 +54,19 @@ export interface IPost {
     recruiterId?:string;
     rejectedReason?:string;
     isRejected?:boolean;
+    recruitingPlace:RecruitingPlace ;
+    location?:string
 }
 
+
+
+
+
+export interface RecruitingPlace{
+    locationName:string;
+    type:string;
+    coordinates: string[]
+}
 interface Question {
     question: string;
     answer: string;
@@ -59,11 +75,11 @@ interface Question {
 
   export interface IRecruiter {
     _id?: string;
-    name?: string;
-    email?: string;
-    phone?: string;
+    name: string;
+    email: string;
+    phone: string;
     status?: boolean;
-    worksAt?: string;
+    worksAt: string;
     profilePic?: string;
     createdOn?: Date;
     isPremium?:boolean;
@@ -140,4 +156,5 @@ export interface IMessage {
     message:string;
     createdAt: Date;
     updatedAt: Date;
+    readStatus:boolean;
 }

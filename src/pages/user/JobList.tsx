@@ -7,8 +7,10 @@ import JobListSearchComponent from './components/JobListSearchComponent';
 const LazyJobListingComponent = lazy(() => import('./components/JobListingComponent'));
 import JobListFilterComponent from './components/JobListFilterComponent';
 import JobListPagination from './components/JobListPagination';
+import { useSelector } from 'react-redux';
 
 const JobList: React.FC = () => {
+
     const [searchQuery, setSearchQuery] = useState('');
     const [location, setLocation] = useState('');
     const [jobList, setJobList] = useState<IPost[]>([]);
@@ -21,6 +23,8 @@ const JobList: React.FC = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [noData, setNoData] = useState(false)
     const postUrl = 'http://localhost:4001/api/post';
+    const userData = useSelector((state: any) => state.persisted.user.userData);
+
 
     const navigate = useNavigate();
 
@@ -36,7 +40,7 @@ const JobList: React.FC = () => {
 
             setNoData(false)
 
-
+            
             const response = await axios.get(`${postUrl}/list-jobs`, {
                 params: {
                     search: searchQuery,
@@ -47,12 +51,13 @@ const JobList: React.FC = () => {
                     employmentType: emplType,
                     location,
                     workArrangementType,
+                    userId:userData?._id?userData?._id:undefined
 
                 },
                 withCredentials: true
             });
 
-            if (!response?.data?.postDatas.length) {
+            if (response?.data?.postDatas.length===0) {
                 setNoData(true)
             }
             console.log(response.data);

@@ -29,7 +29,7 @@ export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ ch
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<IUser[]>([]);
   const userData = useSelector((state: any) => state.persisted.user.userData);
-  console.log(userData);
+  // console.log(userData);
 
   useEffect(() => {
     if (userData && !socket) {

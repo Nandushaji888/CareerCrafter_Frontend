@@ -56,7 +56,7 @@ axios.get(`${baseUrl}/saved-jobs/${user?._id}`,{withCredentials:true})
         },
         {
             name: 'Place',
-            selector: row => row.recruitingPlace,
+            selector: row => row.recruitingPlace?.locationName,
             sortable: true,
             width:'250px'
         },
@@ -108,7 +108,7 @@ axios.get(`${baseUrl}/saved-jobs/${user?._id}`,{withCredentials:true})
             <div className='flex flex-col flex-grow'>
                 <div className=''>
 
-                    <Header category="Page" title="Applied Jobs" />
+                    <Header category="Page" title="Saved Jobs" />
                 </div>
                 <div className='m-2 p-2 bg-gray-100 h-screen '>
                     <input
@@ -123,7 +123,7 @@ axios.get(`${baseUrl}/saved-jobs/${user?._id}`,{withCredentials:true})
 
                      <DataTable
                     columns={columns}
-                    data={filteredJobList}
+                    data={filteredJobList.reverse()}
                     fixedHeader
                     pagination
                     /> 

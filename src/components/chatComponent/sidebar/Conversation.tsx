@@ -2,16 +2,17 @@ import React from "react";
 import { IUser } from "../../../utils/interface/interface";
 
 import useConversation from "../../../utils/zustand/userConversation";
-
+import { useNavigate } from "react-router-dom";
 interface ConversationProps {
   conversation: IUser;
   lastIdx: boolean;
 }
 
 const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) => {
-const {selectedConversation,setSelectedConversation} = useConversation()
+  const {selectedConversation,setSelectedConversation} = useConversation()
   const isSelected = selectedConversation?._id === conversation?._id
-
+  
+  const navigate = useNavigate()
 
   return (
     <>
@@ -19,7 +20,9 @@ const {selectedConversation,setSelectedConversation} = useConversation()
         className={`flex gap-4 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
         ${isSelected ? "bg-gray-500" : ""}
         `}
-        onClick={() => setSelectedConversation(conversation)
+        onClick={() =>{ setSelectedConversation(conversation) 
+        navigate(`/messages/${conversation?._id}`)
+        }
           
         }
       >
