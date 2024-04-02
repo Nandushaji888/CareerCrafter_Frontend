@@ -79,7 +79,6 @@ const JobListComponent:React.FC<JobListComponent> = ({endPoint}) => {
     useEffect(() => {
         console.log(`${postUrl}/${endPoint}`);
         axios.get(`${postUrl}/${endPoint}`, { withCredentials: true })
-        
             .then((res) => {
                 console.log(res.data);
                 setJobList(res?.data?.posts)

@@ -18,6 +18,7 @@ import SavedJobList from '../pages/user/SavedJobList'
 import Notification from '../components/Notification'
 import NotFound from '../components/NotFound'
 import { EmptyChatComponent } from '../components/chatComponent/EmptyChatComponent'
+import NotificationPage from '../components/NotificationPage'
 
 const UserRouter = () => {
   return (
@@ -29,7 +30,7 @@ const UserRouter = () => {
       <Route path='/applied-jobs/:id' element={<AppliedJobList/>} />
       <Route path='/saved-jobs/:id' element={<SavedJobList/>} />
       <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails/>} />
-      <Route path='/notifications' element={<Notification/>} />
+      <Route path='/notifications' element={<NotificationPage/>} />
 
       </Route>
       <Route path='/login' element={<Login />} />

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApplicationType, IApplication } from '../../utils/interface/interface';
 import toast, { Toaster } from 'react-hot-toast';
+import RecruiterNavbar from './components/RecruiterNavbar';
 
 const RecruiterApplicationDetails = () => {
   const [appDetails, setAppDetails] = useState<IApplication>();
@@ -58,7 +59,9 @@ const RecruiterApplicationDetails = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
+    <>
+    <RecruiterNavbar/>
+    <div className="max-w-4xl mx-auto py-8 mt-16">
       <Toaster position='top-center' reverseOrder={false}></Toaster>
 
       <div className="bg-white shadow-md px-10 pt-6 pb-8 mb-4 rounded-3xl ">
@@ -141,6 +144,7 @@ const RecruiterApplicationDetails = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
                 <div>
                     <div className='flex'>
 
-                        <button className="text-white ms-10 hover:text-gray-300 relative">
+                    <button className="text-white ms-10 hover:text-gray-300 relative" onClick={()=>navigate("/notifications")} >
                             <Bell className='relative' />
                             <span className="absolute right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full" style={{ top: '-8px', marginRight: '-8px' }}>2</span>
                         </button>
