@@ -18,8 +18,10 @@ const Messages = () => {
   useEffect(() => {
     const getMessages = async (): Promise<void> => {
 
+
       setLoading(true);
       try {
+
         const response = await axios.get(`${messageUrl}/${id}`, { withCredentials: true });
         const data = response.data;
         if (data.error) {

@@ -18,19 +18,22 @@ import SavedJobList from '../pages/user/SavedJobList'
 import Notification from '../components/Notification'
 import NotFound from '../components/NotFound'
 import { EmptyChatComponent } from '../components/chatComponent/EmptyChatComponent'
-import NotificationPage from '../components/NotificationPage'
+import NotificationPage from '../pages/user/components/NotificationPage'
+import JistyVedioCall from '../components/jitsiVideoCallComponent'
 
 const UserRouter = () => {
   return (
     <Routes>
       <Route element={<UserPrivateRoute />}>
         <Route path='/user-profile' element={<UserProfile />} />
-      <Route path='/messages' element={<EmptyChatComponent/>} />
-      <Route path='/messages/:id' element={<ChatComponent/>} />
-      <Route path='/applied-jobs/:id' element={<AppliedJobList/>} />
-      <Route path='/saved-jobs/:id' element={<SavedJobList/>} />
-      <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails/>} />
-      <Route path='/notifications' element={<NotificationPage/>} />
+        <Route path='/messages' element={<EmptyChatComponent />} />
+        <Route path='/messages/:id' element={<ChatComponent />} />
+        <Route path='/applied-jobs/:id' element={<AppliedJobList />} />
+        <Route path='/saved-jobs/:id' element={<SavedJobList />} />
+        <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails />} />
+        <Route path='/notifications' element={<NotificationPage />} />
+        <Route path='/video-call' element={<JistyVedioCall />} />
+
 
       </Route>
       <Route path='/login' element={<Login />} />
@@ -41,8 +44,8 @@ const UserRouter = () => {
       <Route path='/new-password' element={<NewPassword />} />
       <Route path='/list-jobs' element={<JobList />} />
       <Route path='/job-details/:id' element={<JobDetails />} />
-      <Route path='/contact-us' element={<ContactPage/>} />
-      <Route path='/about-us' element={<AboutUsPage/>} />
+      <Route path='/contact-us' element={<ContactPage />} />
+      <Route path='/about-us' element={<AboutUsPage />} />
       <Route path='*' element={<NotFound />} />
 
     </Routes>

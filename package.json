@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@jitsi/react-sdk": "^1.4.0",
     "@reduxjs/toolkit": "^2.2.1",
     "@syncfusion/ej2": "^24.2.8",
     "@syncfusion/ej2-react-grids": "^24.2.8",

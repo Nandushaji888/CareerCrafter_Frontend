@@ -158,3 +158,16 @@ export interface IMessage {
     updatedAt: Date;
     readStatus:boolean;
 }
+
+export interface INotification {
+    _id?:string
+    userId?: string;
+    readStatus?:boolean;
+    message?: string;
+    jobPostId:string;
+    applicationId?:string;
+    applicationStatus?:string;
+    postStatus?:string;
+    createdAt?:string
+    updatedAt?:string
+  }

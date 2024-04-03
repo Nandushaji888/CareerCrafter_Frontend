@@ -32,9 +32,9 @@ const Message:React.FC<MessageProps> = ({message}) => {
     }
 }, [socket]);
 
-  const {selectedConversation} = useConversation()
+  // const {selectedConversation} = useConversation()
 
-  console.log('selected conv',selectedConversation);
+  // console.log('selected conv',selectedConversation);
   
   const userData = useSelector((state: any) => state.persisted.user.userData)
 

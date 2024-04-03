@@ -34,6 +34,10 @@ useEffect(()=> {
                     console.log(res?.data?.messagedUsers);
                     setConversation(res?.data?.messagedUsers)
 
+                    console.log('conversation');
+                    console.log(conversation);
+                    
+
                 }
                 
                 
