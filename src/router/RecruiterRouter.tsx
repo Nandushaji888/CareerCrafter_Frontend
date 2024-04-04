@@ -34,8 +34,8 @@ const RecruiterRouter = () => {
         <Route path='/all-applications/:id' element={<RecruiterApplicationList />} />
         <Route path='/application-details/:id' element={<RecruiterApplicationDetails />} />
         <Route path='/notifications' element={<RecruiterNotification />} />
-        <Route path='/messages' element={<EmptyChatComponent />} />
-        <Route path='/messages/:id' element={<ChatComponent />} />
+        {/* <Route path='/messages' element={<EmptyChatComponent />} />
+        <Route path='/messages/:id' element={<ChatComponent />} /> */}
       </Route>
 
     </Routes>

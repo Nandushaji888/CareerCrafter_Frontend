@@ -12,7 +12,7 @@ const MessageContainer = () => {
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
-  const { selectedConversation } = useConversation();
+  const { selectedConversation,setSelectedConversation } = useConversation();
 
   const { conversation } = useGetConversations()
   const { id } = useParams()
@@ -26,6 +26,7 @@ const MessageContainer = () => {
     if (filteredName && filteredName.length > 0) {
 
       setName(filteredName[0]?.name)
+      setSelectedConversation(filteredName[0])
     }
 
 

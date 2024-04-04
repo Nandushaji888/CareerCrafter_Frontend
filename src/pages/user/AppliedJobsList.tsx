@@ -7,38 +7,44 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Navbar from './components/NavBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearUser } from '../../utils/redux/slices/userSlice';
 
 
 
 
 const AppliedJobList: React.FC = () => {
-    
+
     const baseUrl = 'http://localhost:4002/api/user';
     const user = useSelector((state: any) => state.persisted.user.userData);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [jobList, setJobList] = useState<IPost[]>([]);
     // const [filteredJobList, setfilteredJobList] = useState<IPost[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
 
-useEffect(()=> {
-    if(!user?._id){
-        navigate('/login')
-        return
-    }    
-axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
-.then((res)=> {
-    console.log(res?.data?.appliedJobList);
-    if(res?.data?.status){
+    useEffect(() => {
+        if (!user?._id) {
+            navigate('/login')
+            return
+        }
+        axios.get(`${baseUrl}/applied-jobs/${user?._id}`, { withCredentials: true })
+            .then((res) => {
+                console.log(res?.data?.appliedJobList);
+                if (res?.data?.status) {
 
-        setJobList(res?.data?.appliedJobList)
-    }
-    // if(res.data?.status)
-}).catch((err)=> {
-    console.log(err);
-    
-})
-},[])
+                    setJobList(res?.data?.appliedJobList)
+                }
+                // if(res.data?.status)
+            }).catch((err) => {
+                if (err?.response?.status === 401) {
+                    dispatch(clearUser())
+                    navigate('/login')
+                }
+                console.log(err);
+
+            })
+    }, [])
 
 
     const columns: TableColumn<IPost>[] = [
@@ -49,24 +55,24 @@ axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
             style: {
                 fontWeight: 'bold'
             },
-            width:'350px'
-            
+            width: '350px'
+
         },
         {
             name: 'Place',
             selector: row => row.recruitingPlace?.locationName,
             sortable: true,
-            width:'250px'
+            width: '250px'
         },
         {
             name: 'Company',
             selector: row => row.company,
-            width:'200px'
+            width: '200px'
         },
         {
             name: 'Job Type',
             selector: row => row.employmentType,
-            width:'200px'
+            width: '200px'
         },
         // {
         //     name: 'Closing Date',
@@ -75,7 +81,7 @@ axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
         // },
         {
             name: 'Details',
-            width:'150px',
+            width: '150px',
             cell: (row: IPost) => (
                 <Link className='px-4 bg-blue-800 text-white rounded-2xl py-1 hover:bg-blue-400 font-semibold' to={`/applied-jobs/details/${row._id}`}>Details</Link>
             ),
@@ -96,40 +102,40 @@ axios.get(`${baseUrl}/applied-jobs/${user?._id}`,{withCredentials:true})
 
     return (
         <>
-        <Navbar/>
-        <div className='flex flex-row mt-16'>
+            <Navbar />
+            <div className='flex flex-row mt-16'>
 
-            <Toaster position='top-center' reverseOrder={false}></Toaster>
-
-
-     
-            <div className='flex flex-col flex-grow'>
-                <div className=''>
-
-                    <Header category="Page" title="Applied Jobs" />
-                </div>
-                <div className='m-2 p-2 bg-gray-100 h-screen '>
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="ml-2 px-7 ms-36 py-2 border mb-5 border-gray-300 rounded-3xl focus:outline-none focus:border-blue-500 w-[300px] text-sm font-thin"
-                        onChange={handleSearch}
-                    />
-
-                    <div className='px-40'>
+                <Toaster position='top-center' reverseOrder={false}></Toaster>
 
 
-                     <DataTable
-                    columns={columns}
-                    data={filteredJobList.reverse()}
-                    fixedHeader
-                    pagination
-                    /> 
+
+                <div className='flex flex-col flex-grow'>
+                    <div className=''>
+
+                        <Header category="Page" title="Applied Jobs" />
+                    </div>
+                    <div className='m-2 p-2 bg-gray-100 h-screen '>
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            className="ml-2 px-7 ms-36 py-2 border mb-5 border-gray-300 rounded-3xl focus:outline-none focus:border-blue-500 w-[300px] text-sm font-thin"
+                            onChange={handleSearch}
+                        />
+
+                        <div className='px-40'>
+
+
+                            <DataTable
+                                columns={columns}
+                                data={filteredJobList.reverse()}
+                                fixedHeader
+                                pagination
+                            />
+                        </div>
                     </div>
                 </div>
+
             </div>
-            
-        </div>
         </>
 
 

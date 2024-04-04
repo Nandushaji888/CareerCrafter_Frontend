@@ -6,6 +6,7 @@ import axios from 'axios';
 import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
+import { useSocketContext } from '../../../utils/context/SocketContext';
 
 
 
@@ -13,7 +14,7 @@ const Navbar: React.FC = () => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const userData = useSelector((state: any) => state.persisted.user.userData);
     const dispatch = useDispatch()
-
+    // const { socket } = useSocketContext()
     const navigate = useNavigate();
     const baseurl = "http://localhost:4000/api/auth/user";
     const countUrl = 'http://localhost:4005/api/notifications';
@@ -101,8 +102,16 @@ const Navbar: React.FC = () => {
                             }
                         </button>
 
+                        {
+                            userData?._id &&
+                            <button onClick={toggleDropdown} className="text-white ms-10 hover:text-gray-300"><UserRound /></button>
+                        }
+                        {
+                            !userData?._id &&
+                            <Link className='text-white ps-10' to='/login'>Sign in / Sign up</Link>
+                        }
 
-                        <button onClick={toggleDropdown} className="text-white ms-10 hover:text-gray-300"><UserRound /></button>
+
                         {isDropdownVisible && (
                             <div className="absolute right-0  w-60 bg-white rounded-md shadow-lg py-2 flex flex-col gap-2 justify-center items-start mt-8 z-10">
                                 {
