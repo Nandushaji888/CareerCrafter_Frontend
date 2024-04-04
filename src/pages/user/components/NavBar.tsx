@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserRound, FileText, Bookmark, Send, Settings, Bell, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,8 +9,6 @@ import { Mail } from 'lucide-react';
 
 
 
-
-
 const Navbar: React.FC = () => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const userData = useSelector((state: any) => state.persisted.user.userData);
@@ -18,6 +16,10 @@ const Navbar: React.FC = () => {
 
     const navigate = useNavigate();
     const baseurl = "http://localhost:4000/api/auth/user";
+    const countUrl = 'http://localhost:4005/api/notifications';
+    const [notificationsCount, setNotificationCount] = useState('')
+    const [messagesCount, setMessageCount] = useState('')
+
 
 
     const toggleDropdown = () => {
@@ -34,6 +36,30 @@ const Navbar: React.FC = () => {
                 navigate('/login')
             })
     }
+
+    useEffect(() => {
+        axios.get(`${countUrl}/count/${userData?._id}`, { withCredentials: true })
+            .then((res) => {
+                console.log(res?.data);
+                if (res?.data?.status) {
+                    const { notificationCount, messageCount } = res?.data
+
+                    if (Number(notificationCount) > 0) {
+
+                        setNotificationCount(res?.data?.notificationCount)
+                    }
+                    if (Number(messageCount) > 0) {
+
+                        setMessageCount(res?.data?.messageCount)
+                    }
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+
+            })
+    }, [])
     return (
         <nav className="bg-gray-900 py-4 fixed top-0 right-0 left-0 mb-5" style={{ zIndex: 9999 }} >
             <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
@@ -60,15 +86,22 @@ const Navbar: React.FC = () => {
                 <div>
                     <div className='flex'>
 
-                    <button className="text-white ms-10 hover:text-gray-300 relative" onClick={()=>navigate("/notifications")} >
+                        <button className="text-white ms-10 hover:text-gray-300 relative" onClick={() => navigate("/notifications")} >
                             <Bell className='relative' />
-                            <span className="absolute right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full" style={{ top: '-8px', marginRight: '-8px' }}>2</span>
+                            {notificationsCount && (
+                                <span className="absolute top-0 right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full -mt-1 -mr-1">{notificationsCount}</span>
+                            )}
                         </button>
-                        <button className="text-white ms-10 hover:text-gray-300 relative" onClick={()=>navigate("/messages")} >
+                        <button className="text-white ms-10 hover:text-gray-300 relative" onClick={() => navigate("/messages")} >
                             <Mail className='relative' />
-                            <span className="absolute right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full" style={{ top: '-8px', marginRight: '-8px' }}></span>
+                            {
+                                messagesCount &&
+
+                                <span className="absolute top-0 right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full -mt-1 -mr-1">{messagesCount}</span>
+                            }
                         </button>
-                        
+
+
                         <button onClick={toggleDropdown} className="text-white ms-10 hover:text-gray-300"><UserRound /></button>
                         {isDropdownVisible && (
                             <div className="absolute right-0  w-60 bg-white rounded-md shadow-lg py-2 flex flex-col gap-2 justify-center items-start mt-8 z-10">

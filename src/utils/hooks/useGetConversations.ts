@@ -21,26 +21,16 @@ const useGetConversations = () => {
        const dispatch = useDispatch()
 useEffect(()=> {
     
-    const getConverstions = async()=> {
-        console.log('in useget conversation');
-        
+    const getConverstions = async()=> {        
         setLoading(true)
         try {
             
             await axios.get(`${messageUrl}/users/${messenger?._id}`,{withCredentials:true})
-            .then((res)=> {
+            .then((res:any)=> {
                 if(res?.data?.status){
-                    console.log('res?.data?.messagedUsers');
-                    console.log(res?.data?.messagedUsers);
-                    setConversation(res?.data?.messagedUsers)
-
-                    console.log('conversation');
-                    console.log(conversation);
+                    setConversation(res?.data?.messagedUsers.reverse())
                     
-
                 }
-                
-                
             })
             
         } catch (error:any) {

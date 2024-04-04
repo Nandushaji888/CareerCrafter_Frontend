@@ -170,4 +170,5 @@ export interface INotification {
     postStatus?:string;
     createdAt?:string
     updatedAt?:string
+    rejectedReason?:string;
   }

@@ -11,6 +11,8 @@ const AppliedJobDetails = () => {
     const [data, setData] = useState<IPost>()
     const postUrl = 'http://localhost:4001/api/post';
     const applicationUrl = 'http://localhost:4004/api/application';
+    const messageUrl = 'http://localhost:4005/api/messages';
+
     const userData = useSelector((state: any) => state.persisted.user.userData);
     console.log(userData._id);
     const navigate = useNavigate()
@@ -50,17 +52,40 @@ const AppliedJobDetails = () => {
         fetchJobDetails();
         checkApplicationStatus();
         window.scrollTo(0, 0);
-    }, [id, userData,navigate]); // Include dependencies if needed
+    }, [id, userData,navigate]); 
+
+
     
+    const handleStartConversation = async(e: React.MouseEvent<HTMLSpanElement, MouseEvent>)=> {
+        e.preventDefault()
 
+        console.log(data?.recruiterId);
+        console.log(userData?._id);
+        const ids = {
+            receiverId:data?.recruiterId,
+            senderId:userData?._id
+        }
+        await axios.post(`${messageUrl}/create-conversation`,{ids},{withCredentials:true})
+        .then((res)=> {
+            console.log(res?.data);
+            
+        })
+        .catch((err)=> {
+            console.log(err);
+            
+        })
+        
 
+    }
+
+  
 
     return (
         <>
             <Navbar />
             <div className='mx-20 mt-5'>
                 <Toaster position='top-center' reverseOrder={false}></Toaster>
-                <JobDetailsComponent data={data} buttons={<ApplicationStatus applicationStatus={applicationStatus} />} />
+                <JobDetailsComponent data={data} buttons={<ApplicationStatus applicationStatus={applicationStatus} handleStartConversation={handleStartConversation}/>} />
 
             </div>
 
@@ -73,11 +98,20 @@ export default AppliedJobDetails
 
 interface IApplicationStatus{
     applicationStatus:string
+    handleStartConversation:any
 }
 
-export const ApplicationStatus:React.FC<IApplicationStatus> = ({applicationStatus})=> {
+export const ApplicationStatus:React.FC<IApplicationStatus> = ({applicationStatus,handleStartConversation})=> {
+
+  
+
+
     return (
+        <div className='flex flex-col gap-8'>
         <h3 className='text-xl font-bold mt-5 ms-10'>Your Application status : <span className='text-blue-800'>{applicationStatus}</span></h3>
+        <h4 className='ms-8'>Haven't heard from the recruiter? <span onClick={handleStartConversation} className='bg-green-700 px-4 py-1 rounded-2xl text-white ms-1 cursor-pointer hover:bg-green-400'>Message</span></h4>
+        </div>
+
     )
 }
 

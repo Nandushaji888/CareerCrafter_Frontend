@@ -15,11 +15,10 @@ import AboutUsPage from '../components/AboutUsPage'
 import AppliedJobList from '../pages/user/AppliedJobsList'
 import AppliedJobDetails from '../pages/user/AppliedJobDetails'
 import SavedJobList from '../pages/user/SavedJobList'
-import Notification from '../components/Notification'
 import NotFound from '../components/NotFound'
 import { EmptyChatComponent } from '../components/chatComponent/EmptyChatComponent'
-import NotificationPage from '../pages/user/components/NotificationPage'
 import JistyVedioCall from '../components/jitsiVideoCallComponent'
+import UserNotificationPage from '../pages/user/components/UserNotificationPage'
 
 const UserRouter = () => {
   return (
@@ -31,7 +30,7 @@ const UserRouter = () => {
         <Route path='/applied-jobs/:id' element={<AppliedJobList />} />
         <Route path='/saved-jobs/:id' element={<SavedJobList />} />
         <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails />} />
-        <Route path='/notifications' element={<NotificationPage />} />
+        <Route path='/notifications' element={<UserNotificationPage />} />
         <Route path='/video-call' element={<JistyVedioCall />} />
 
 

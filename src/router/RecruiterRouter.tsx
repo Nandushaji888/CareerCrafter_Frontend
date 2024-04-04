@@ -11,6 +11,9 @@ import RecruiterApplicationList from '../pages/recruiter/RecruiterApplicationLis
 import RecruiterApplicationDetails from '../pages/recruiter/RecruiterApplicationDetails'
 import RecruiterProtectedRoutes from '../components/RecruiterProtectedRoutes'
 import RecruiterDashboard from '../pages/recruiter/RecruiterDashboard'
+import { EmptyChatComponent } from '../components/chatComponent/EmptyChatComponent'
+import { ChatComponent } from '../components/chatComponent/ChatComponent'
+import RecruiterNotification from '../pages/recruiter/components/RecruiterNotification'
 
 
 const RecruiterRouter = () => {
@@ -30,6 +33,9 @@ const RecruiterRouter = () => {
         <Route path='/job-details/:id' element={<RecruiterJobDetails />} />
         <Route path='/all-applications/:id' element={<RecruiterApplicationList />} />
         <Route path='/application-details/:id' element={<RecruiterApplicationDetails />} />
+        <Route path='/notifications' element={<RecruiterNotification />} />
+        <Route path='/messages' element={<EmptyChatComponent />} />
+        <Route path='/messages/:id' element={<ChatComponent />} />
       </Route>
 
     </Routes>

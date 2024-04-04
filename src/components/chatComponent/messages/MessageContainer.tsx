@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import useConversation from "../../../utils/zustand/userConversation";
-import { useSelector } from "react-redux";
-import { TiMessages } from 'react-icons/ti'
+
 import { Video } from 'lucide-react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useGetConversations from "../../../utils/hooks/useGetConversations";
-import { IUser } from "../../../utils/interface/interface";
 
 
 const MessageContainer = () => {

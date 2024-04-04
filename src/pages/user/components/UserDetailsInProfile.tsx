@@ -20,21 +20,12 @@ const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, u
     };
 
 
-    const [resumeUrl, setResumeUrl] = useState<string | null>(null);
 
-    const handleViewResume = () => {
-        if (userData?.resume) {
-            const resumeBlob = new Blob([userData.resume], { type: 'application/pdf' });
-            const url = URL.createObjectURL(resumeBlob);
-            setResumeUrl(url);
 
-            // Open the PDF in a new tab
-            window.open(url, '_blank');
-        }
-    };
-    
+
+
     return (
-        <form className="py-2" onSubmit={handleSubmit} >
+        <form className="py-2"  >
             <div className="bg-white shadow-md  px-16 pt-6 pb-8 mb-4 rounded-3xl ">
                 <div className="mb-4 flex justify-start gap-16  ">
 
@@ -170,7 +161,7 @@ const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, u
 
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Upload Resume
+                        Upload New Resume
                     </label>
                     <input
                         type="file"
@@ -180,26 +171,34 @@ const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, u
                         accept="application/pdf"
                     />
                 </div>
-                {/* {userData?.resume && (
-                <div className='flex my-3'>
-                    <p className="text-gray-500 text-sm mt-2 me-5">
-                        Current Resume: {file}
-                    </p>
-                    <button
-                        className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        onClick={handleViewResume}
-                        disabled={!userData.resume}
-                    >
-                        View resume
-                    </button>
-                </div>
-            )} */}
+                {userData?.resume && (
+                    <div className='flex my-3'>
+                        <button
+                            className="bg-slate-300 hover:bg-gray-800 hover:text-white text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            disabled={!userData.resume}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                console.log(typeof userData.resume, userData.resume);
+                                const url:any = userData?.resume
+                                window.open(url, '_blank');
+                            }}
+                        >
+                            View current resume
+                        </button>
+                    </div>
+                )}
+
+
+
+
+
 
 
                 <div className="flex items-center justify-between">
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit"
+                        onClick={handleSubmit}
                     >
                         Update
                     </button>

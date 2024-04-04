@@ -9,6 +9,7 @@ import ApplicationAnswerModal from '../../components/ApplicationAnswerModal';
 import { IApplication, IPost } from '../../utils/interface/interface';
 import JobDetailsComponent from '../../components/JobDetailsComponent';
 import RecruiterJobDetailsButtonsComponent from './components/RecruiterJobDetailsButtonsComponent';
+import RecruiterNavbar from './components/RecruiterNavbar';
 // import JobDetailsComponent from '../../components/JobDetailsComponent';
 
 const RecruiterJobDetails = () => {
@@ -48,9 +49,9 @@ const RecruiterJobDetails = () => {
 
     return (
         <>
-            {/* <Navbar /> */}
+            <RecruiterNavbar />
             <Toaster position='top-center' reverseOrder={false}></Toaster>
-            <div className='mx-20'>
+            <div className='mx-20 mt-10'>
 
                 <JobDetailsComponent data={jobDetails} buttons={<RecruiterJobDetailsButtonsComponent handleAllApplications={handleAllApplications} />
                 } />

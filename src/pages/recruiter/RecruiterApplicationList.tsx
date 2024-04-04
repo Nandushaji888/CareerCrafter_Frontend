@@ -6,6 +6,7 @@ import { ApplicationType, IApplication, IPost } from '../../utils/interface/inte
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
+import RecruiterNavbar from './components/RecruiterNavbar';
 const RecruiterApplicationList = () => {
 
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -101,7 +102,10 @@ const RecruiterApplicationList = () => {
         application.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return (
-        <div className='mx-40 mt-20 ps-8 bg-gray-100 rounded-xl p-5'>
+        <>
+              <RecruiterNavbar />
+
+        <div className='mx-40 mt-28 ps-8 bg-gray-100 rounded-xl p-5'>
             <h2 className='text-3xl py-6 font-bold'>Job Applications</h2>
             <h2 className='text-lg pb-3 font-light'>Review and Select</h2>
             <input
@@ -113,12 +117,13 @@ const RecruiterApplicationList = () => {
             <div className="flex flex-col px-3 rounded-2xl justify-center">
                 <DataTable
                     columns={columns}
-                    data={filteredJobs}
+                    data={filteredJobs.reverse()}
                     fixedHeader
                     pagination
                 />
             </div>
         </div>
+        </>
     )
 }
 

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserRound, FileText, Bookmark, Send, Settings, Bell, LogOut } from 'lucide-react';
+import { Bell, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { clearUser } from '../../../utils/redux/slices/userSlice';
+// import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
@@ -11,28 +11,53 @@ import { clearRecruiter } from '../../../utils/redux/slices/recruiterSlice';
 
 
 const RecruiterNavbar = () => {
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const userData = useSelector((state: any) => state.persisted.user.userData);
+    // const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
     const dispatch = useDispatch()
-
+    const countUrl = 'http://localhost:4005/api/notifications';
+    const [notificationsCount, setNotificationCount] = useState('')
+    const [messagesCount, setMessageCount] = useState('')
     const navigate = useNavigate();
     const baseurl = "http://localhost:4000/api/auth/recruiter";
 
+    useEffect(() => {
+        
+        axios.get(`${countUrl}/count/${recruiterData?._id}`, { withCredentials: true })
+            .then((res) => {
+                console.log(res?.data);
+                if (res?.data?.status) {
+                    const { notificationCount, messageCount } = res?.data
 
-    const toggleDropdown = () => {
-        setIsDropdownVisible(!isDropdownVisible);
-    };
+                    if (Number(notificationCount) > 0) {
+
+                        setNotificationCount(res?.data?.notificationCount)
+                    }
+                    if (Number(messageCount) > 0) {
+
+                        setMessageCount(res?.data?.messageCount)
+                    }
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+
+            })
+    }, [])
+
+
+
     const handleLogout = () => {
         axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
-          .then((res) => {
-            console.log(res.data);
-            dispatch(clearRecruiter())
-            navigate('/recruiter/login')
-          }).catch((err)=> {
-              console.log(err);
-              
-          })
-      }
+            .then((res) => {
+                console.log(res.data);
+                dispatch(clearRecruiter())
+                navigate('/recruiter/login')
+            }).catch((err) => {
+                console.log(err);
+
+            })
+    }
     return (
         <nav className="bg-gray-900 py-4 fixed top-0 right-0 left-0 mb-5" style={{ zIndex: 9999 }} >
             <Toaster position='top-center' reverseOrder={false}></Toaster>
@@ -67,13 +92,31 @@ const RecruiterNavbar = () => {
                     </Link>
                 </div>
                 <div>
-                    <div className='flex'>
-                        <button className="px-4 py-2 text-sm text-white flex gap-1" onClick={() => handleLogout()}>
-                            <LogOut  size={18} />Sign out
-                        </button>
+                    <div>
+                        <div className='flex'>
 
-                    
+                            <button className="text-white ms-10 hover:text-gray-300 relative" onClick={() => navigate("/recruiter/notifications")} >
+                                <Bell className='relative' />
+                                {notificationsCount && (
+                                    <span className="absolute top-0 right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full -mt-1 -mr-1">{notificationsCount}</span>
+                                )}
+                            </button>
+                            <button className="text-white ms-10 hover:text-gray-300 relative" onClick={() => navigate("/messages")} >
+                                <Mail className='relative' />
+                                {
+                                    messagesCount &&
+
+                                    <span className="absolute top-0 right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full -mt-1 -mr-1">{messagesCount}</span>
+                                }
+                            </button>
+                            <button className="ps-8 py-2 text-sm text-white flex gap-1" onClick={() => handleLogout()}>
+                                <LogOut size={18} />Sign out
+                            </button>
+
+
+                        </div>
                     </div>
+
                 </div>
             </div>
         </nav>

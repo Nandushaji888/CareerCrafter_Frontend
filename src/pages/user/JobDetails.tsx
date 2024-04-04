@@ -146,11 +146,13 @@ const JobDetails = () => {
         if (resume === '') {
             toast.error('Please upload your resume')
             return
-        }
+        }        
 
         const formData = {
             userId: userData?._id,
             jobPostId: data?._id,
+            postName:data?.postName,
+            company:data?.company,
             name: userData?.name,
             email: userData?.email,
             phone: userData?.phone,
