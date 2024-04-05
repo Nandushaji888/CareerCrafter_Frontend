@@ -101,7 +101,7 @@ const RecruiterNavbar = () => {
                                     <span className="absolute top-0 right-0 text-xs bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full -mt-1 -mr-1">{notificationsCount}</span>
                                 )}
                             </button>
-                            <button className="text-white ms-10 hover:text-gray-300 relative" onClick={() => navigate("/messages")} >
+                            <button className="text-white ms-10 hover:text-gray-300 relative" onClick={() => navigate("/recruiter/messages")} >
                                 <Mail className='relative' />
                                 {
                                     messagesCount &&

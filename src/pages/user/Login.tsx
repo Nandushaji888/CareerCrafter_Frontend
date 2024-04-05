@@ -123,17 +123,15 @@ const Login = () => {
                 .then((res) => {
 
                     if (res.data.status) {
-                        ;
-                        console.log('res.data');
-                        console.log(res.data);
+                        
+                        dispatch(addUser(res?.data?.user))
                         // localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
                         if (res?.data?.googleSignup) {
-                            console.log('to user-profile');
-
+                            // console.log('to user-profile');
                             navigate('/user-profile')
                         } else {
 
-                            navigate('/home');
+                            navigate('/');
                         }
 
                     }

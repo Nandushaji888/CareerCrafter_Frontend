@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { IUser } from "../../../utils/interface/interface";
 
 import useConversation from "../../../utils/zustand/userConversation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { clearRecruiter } from "../../../utils/redux/slices/recruiterSlice";
@@ -16,6 +16,8 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
   const { selectedConversation, setSelectedConversation } = useConversation()
   const isSelected = selectedConversation?._id === conversation?._id
   const [messagesCount, setMessageCount] = useState()
+  const location = useLocation();
+  const currentRoute = location.pathname;
   const countUrl = 'http://localhost:4005/api/messages';
 
 
@@ -24,7 +26,7 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // console.log(conversation);
+
 
     axios.get(`${countUrl}/conversation-message-count/${conversation?._id}`, { withCredentials: true })
       .then((res) => {
@@ -45,7 +47,14 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
 
       })
   }, [])
+const handleNavigate = ()=> {
+  console.log('handle navigate');
+  
+  setSelectedConversation(conversation)
 
+  console.log("Current Route:", currentRoute);
+  currentRoute === '/recruiter/messages' ? navigate(`/recruiter/messages/${conversation?._id}`) : navigate(`/messages/${conversation?._id}`)
+}
 
   return (
     <>
@@ -53,11 +62,7 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
         className={`flex gap-4 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
         ${isSelected ? "bg-gray-500" : ""}
         `}
-        onClick={() => {
-          setSelectedConversation(conversation)
-          navigate(`/messages/${conversation?._id}`)
-        }
-        }
+        onClick={handleNavigate}
       >
         <div className={`avatar "online" `}>
           <div className="w-12 rounded-full">

@@ -63,7 +63,7 @@ const NotificationPage: React.FC<{ messenger: any }> = ({ messenger }) => {
             {notification.applicationStatus === 'accepted' && <p>Our HR will contact you shortly...</p>}
             {notification.applicationStatus === 'rejected' && <p>Unfortunately, we have decided not to move forward with your application...</p>}
             {notification.postStatus === 'accepted' && <p>Your post has successfully posted </p>}
-            {notification.rejectedReason !== null && <p>Reason for rejection : <span className='text-lg'>{notification.rejectedReason}</span></p>}
+            {notification.rejectedReason && notification?.rejectedReason !== null && <p>Reason for rejection : <span className='text-lg'>{notification.rejectedReason}</span></p>}
             <p className="text-sm text-gray-600 mt-1">{notification.createdAt?.toString()?.slice(0, 10)}</p>
           </div>
         ))}

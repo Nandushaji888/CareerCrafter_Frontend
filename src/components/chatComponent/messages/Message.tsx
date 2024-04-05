@@ -4,6 +4,7 @@ import { extractTime } from '../../../utils/formatTime/formatTime';
 import { useSelector } from 'react-redux';
 import { useSocketContext } from '../../../utils/context/SocketContext';
 import { CheckCheck } from 'lucide-react';
+import IncomingCallNotification from '../../IncomingCallNotification ';
 
 interface MessageProps {
   message: IMessage;
@@ -12,6 +13,8 @@ interface MessageProps {
 const Message: React.FC<MessageProps> = ({ message }) => {
   const [read, setRead] = useState(message?.readStatus);
   const { socket } = useSocketContext();
+  const [videoLink, setVideoLink] = useState<string | undefined>('');
+  const [incomingCall, setIncomingCall] = useState(false);
 
   useEffect(() => {
     if (socket) {
@@ -40,17 +43,43 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     }
   }, [socket, message._id]);
   useEffect(() => {
-    console.log((`socket connected ${socket?.id} in jitsi`));
-
-    socket?.on('video:call:room:created', ({roomName}) => {
+    // console.log((`socket connected ${socket?.id} in jitsi`));
+    socket?.on('video:call:room:created', (roomName ) => {
       console.log(`Your video call link is "https://meet.jit.si/${roomName}"`);
-
+      console.log('roomName');
+      console.log(roomName);
+      
+      setVideoLink(`https://meet.jit.si/${roomName}`)
+      console.log('videoLink');
+      console.log(videoLink);
+      setIncomingCall(true);
+      
     })
 
-    return ()=> {
-      socket?.off("video:call:room:created")
-    }
+
+
+    // return ()=> {
+    //   socket?.off("video:call:room:created")
+    // }
   }, [socket])
+
+  
+  const handleAcceptCall = () => {
+    if(videoLink){
+
+      window.location.href = videoLink;
+      setIncomingCall(false); 
+    }
+
+  };
+
+  const handleRejectCall = () => {
+console.log('reject');
+
+    setIncomingCall(false); 
+    console.log(incomingCall);
+    
+  };
 
   const userData = useSelector((state: any) => state.persisted.user.userData);
   const isUser = message?.senderId === userData?._id ? false : true;
@@ -59,6 +88,14 @@ const Message: React.FC<MessageProps> = ({ message }) => {
   const readStyle = read ? 'blue' : 'white';
 
   return (
+    <>
+        {incomingCall && (
+        <IncomingCallNotification
+        videoLink={videoLink}
+          onAccept={handleAcceptCall}
+          onReject={handleRejectCall}
+        />
+      )}
     <div className={`flex items-${isUser ? 'start' : 'end'} gap-2.5 justify-${isUser ? 'start' : 'end'}`}>
       {isUser && <img src="/profile.png" alt="Profile" className="w-8 h-8 rounded-full" />}
       <div className="flex flex-col gap-1 w-full max-w-[320px]">
@@ -69,6 +106,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

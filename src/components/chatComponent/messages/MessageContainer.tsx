@@ -15,30 +15,37 @@ const MessageContainer = () => {
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
-  const { selectedConversation, setSelectedConversation,setMessages } = useConversation();
+  const { selectedConversation, setSelectedConversation, setMessages } = useConversation();
 
-  const { conversation,setConversation } = useGetConversations()
+  const { conversation, setConversation } = useGetConversations()
   const { id } = useParams()
 
   const clearMessageCount = async () => {
     // console.log('reached here');
-    
+
     axios.get(`${countUrl}/clear-message-count/${id}`, { withCredentials: true })
       .then((res) => {
         // console.log(res?.data);
-        setMessages(res?.data?.messages?.messages)
+        if (res?.data?.status) {
+
+          setMessages(res?.data?.messages?.messages)
+        } else {
+
+          navigate('/error')
+        }
 
       })
       .catch((err) => {
+        navigate('/error')
         console.log(err);
 
       })
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     clearMessageCount()
 
-  },[])
+  }, [])
 
   useEffect(() => {
 
@@ -70,7 +77,7 @@ const MessageContainer = () => {
           <span className="text-white font-bold">
             {name}
           </span>
-          <span onClick={()=>navigate(`/video-call/${id}`)} ><Video /></span>
+          <span onClick={() => navigate(`/video-call/${id}`)} ><Video /></span>
           {/* <Link to='/video-call' ></Link> */}
         </div>
       </div>

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { SiShopware } from 'react-icons/si'
 import { MdOutlineCancel } from 'react-icons/md'
+import { LogOut } from 'lucide-react';
+
 import { FaUser, FaUserTie, FaClipboardCheck, FaClipboardList } from 'react-icons/fa';
 import axios from 'axios';
 
 
 const SideBar = () => {
-
+    const baseurl = "http://localhost:4000/api/auth/admin";
+    const navigate = useNavigate()
     const postUrl = 'http://localhost:4001/api/post/admin';
     const [count, setCount] = useState('')
 
@@ -18,6 +21,14 @@ const SideBar = () => {
     //             setCount(res?.data?.count?.length)
     //         })
     // }, [count])
+    const handleLogout = () => {
+        axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
+          .then((res) => {
+            console.log(res.data);
+            localStorage.removeItem('admin-jwtToken');
+            navigate('/admin/login')
+          })
+      }
 
     return (
         <div className='bg-gray-800 w-80 h-screen fixed flex flex-col'>
@@ -51,6 +62,10 @@ const SideBar = () => {
                                 <FaClipboardList className="inline  mr-3 mb-1 " />Pending Job Posts
                             </li>
                             </NavLink>
+                            <div onClick={handleLogout} className='navbar-link' ><li className='text-white hover:bg-gray-400 hover:text-black px-3 py-3 rounded-lg'>
+                                <LogOut size={20} className="inline  mr-3 mb-1 " />Logout
+                            </li>
+                            </div>
                         </ul>
                     </div>
                 </ul>

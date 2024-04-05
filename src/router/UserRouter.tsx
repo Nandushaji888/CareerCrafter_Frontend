@@ -9,24 +9,24 @@ import JobList from '../pages/user/JobList'
 import JobDetails from '../pages/user/JobDetails'
 import UserProfile from '../pages/user/UserProfile'
 import UserPrivateRoute from '../components/UserPrivateRoute'
-import { ChatComponent } from '../components/chatComponent/ChatComponent'
 import ContactPage from '../components/ContactPage'
 import AboutUsPage from '../components/AboutUsPage'
 import AppliedJobList from '../pages/user/AppliedJobsList'
 import AppliedJobDetails from '../pages/user/AppliedJobDetails'
 import SavedJobList from '../pages/user/SavedJobList'
 import NotFound from '../components/NotFound'
-import { EmptyChatComponent } from '../components/chatComponent/EmptyChatComponent'
 import JistyVedioCall from '../components/jitsiVideoCallComponent'
 import UserNotificationPage from '../pages/user/components/UserNotificationPage'
+// import UserMessageContainer from '../pages/user/UserMessageContainer'
+// import UserEmptyMessageContainer from '../pages/user/UserEmptyMessageContainer'
 
 const UserRouter = () => {
   return (
     <Routes>
       <Route element={<UserPrivateRoute />}>
         <Route path='/user-profile' element={<UserProfile />} />
-        <Route path='/messages' element={<EmptyChatComponent />} />
-        <Route path='/messages/:id' element={<ChatComponent />} />
+        {/* <Route path='/messages' element={<UserEmptyMessageContainer />} />
+        <Route path='/messages/:id' element={<UserMessageContainer />} /> */}
         <Route path='/applied-jobs/:id' element={<AppliedJobList />} />
         <Route path='/saved-jobs/:id' element={<SavedJobList />} />
         <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails />} />

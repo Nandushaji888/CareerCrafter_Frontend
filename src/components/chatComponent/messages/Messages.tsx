@@ -6,7 +6,7 @@ import useListenMessages from "../../../utils/hooks/useListenMessages";
 import toast from "react-hot-toast";
 import axios from "axios";
 import useConversation from "../../../utils/zustand/userConversation";
-import {  useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 
 const Messages = () => {
 
@@ -15,7 +15,9 @@ const Messages = () => {
   const { messages, setMessages, selectedConversation } = useConversation();
   const messageUrl = 'http://localhost:4005/api/messages';
   const { id } = useParams()
+  const navigate = useNavigate()
   useEffect(() => {
+    
     const getMessages = async (): Promise<void> => {
 
 
@@ -29,6 +31,7 @@ const Messages = () => {
         }
         setMessages(data);
       } catch (error) {
+        navigate('/error')
         if (error instanceof Error) {
           toast.error(error.message);
         } else {

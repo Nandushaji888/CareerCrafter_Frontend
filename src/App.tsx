@@ -5,6 +5,7 @@ import RecruiterRouter from './router/RecruiterRouter'
 import { useEffect, useState } from 'react'
 import { useSocketContext } from './utils/context/SocketContext'
 import IncomingCallNotification from './components/IncomingCallNotification '
+import ChatRouter from './router/ChatRouter'
 
 
 function App() {
@@ -29,11 +30,11 @@ function App() {
         
       })
 
-      return () => {
-        socket?.off("video:call:room:created")
-      }
+      // return () => {
+      //   socket?.off("video:call:room:created")
+      // }
     }
-  }, [socket,videoLink])
+  }, [socket])
 
   const handleAcceptCall = () => {
     if(videoLink){
@@ -61,6 +62,7 @@ function App() {
 
       <Router>
         <Routes>
+          <Route path='/messages/*' element={<ChatRouter />} />
           <Route path='/admin/*' element={<AdminRouter />} />
           <Route path='/recruiter/*' element={<RecruiterRouter />} />
           <Route path='/*' element={<UserRouter />} />
