@@ -59,7 +59,7 @@ const Messages = () => {
         !loading &&
         messages.length > 0 &&
         messages.map((message, index) => (
-          <div key={message?._id || index} ref={index === messages.length - 1 ? lastMessageRef : null}>
+          <div className="mt-1" key={message?._id || index} ref={index === messages.length - 1 ? lastMessageRef : null}>
 
             <Message message={message} />
           </div>

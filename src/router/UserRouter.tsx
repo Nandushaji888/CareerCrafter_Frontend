@@ -31,7 +31,7 @@ const UserRouter = () => {
         <Route path='/saved-jobs/:id' element={<SavedJobList />} />
         <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails />} />
         <Route path='/notifications' element={<UserNotificationPage />} />
-        <Route path='/video-call' element={<JistyVedioCall />} />
+        <Route path='/video-call/:id' element={<JistyVedioCall />} />
 
 
       </Route>

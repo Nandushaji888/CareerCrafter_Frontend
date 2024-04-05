@@ -10,11 +10,13 @@ const Conversations = () => {
     <div className='py-2 flex flex-col gap-2 overflow-auto'>
       {conversation && conversation.map((conv, idx) => {
         return (
+          <div className='mb-3'>
           <Conversation
             key={conv?._id}
             conversation={conv}
             lastIdx={idx === conversation.length - 1}
           />
+          </div>
         );
       })}
       {loading && (

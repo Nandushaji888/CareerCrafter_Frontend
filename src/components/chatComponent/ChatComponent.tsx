@@ -4,6 +4,7 @@ import MessageContainer from './messages/MessageContainer'
 import Navbar from '../../pages/user/components/NavBar'
 
 export const ChatComponent = () => {
+  
   return (
     <>
       <Navbar/>

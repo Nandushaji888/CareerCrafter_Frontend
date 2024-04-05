@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const userData = useSelector((state: any) => state.persisted.user.userData);
     const dispatch = useDispatch()
-    // const { socket } = useSocketContext()
+    const { socket } = useSocketContext()
     const navigate = useNavigate();
     const baseurl = "http://localhost:4000/api/auth/user";
     const countUrl = 'http://localhost:4005/api/notifications';
@@ -38,29 +38,36 @@ const Navbar: React.FC = () => {
             })
     }
 
-    useEffect(() => {
+    const fetchNotificationCounts = async()=> {
         axios.get(`${countUrl}/count/${userData?._id}`, { withCredentials: true })
-            .then((res) => {
-                console.log(res?.data);
-                if (res?.data?.status) {
-                    const { notificationCount, messageCount } = res?.data
+        .then((res) => {
+            // console.log(res?.data);
+            if (res?.data?.status) {
+                const { notificationCount, messageCount } = res?.data
 
-                    if (Number(notificationCount) > 0) {
+                if (Number(notificationCount) > 0) {
 
-                        setNotificationCount(res?.data?.notificationCount)
-                    }
-                    if (Number(messageCount) > 0) {
-
-                        setMessageCount(res?.data?.messageCount)
-                    }
+                    setNotificationCount(res?.data?.notificationCount)
                 }
+                if (Number(messageCount) > 0) {
 
-            })
-            .catch((err) => {
-                console.log(err);
+                    setMessageCount(res?.data?.messageCount)
+                }
+            }
 
-            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+      fetchNotificationCounts()
     }, [])
+    useEffect(() => {
+      fetchNotificationCounts()
+    }, [socket])
+
     return (
         <nav className="bg-gray-900 py-4 fixed top-0 right-0 left-0 mb-5" style={{ zIndex: 9999 }} >
             <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">

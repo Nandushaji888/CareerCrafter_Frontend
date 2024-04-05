@@ -22,8 +22,8 @@ const useGetMessages = (): GetMessagesResult => {
       try {
         const response = await axios.get(`${messageUrl}/${selectedConversation?._id}`,{withCredentials:true});
         const data = response.data;
-        console.log('response');
-        console.log(response);
+        // console.log('response');
+        // console.log(response);
         
         if (data.error) {
           throw new Error(data.error);

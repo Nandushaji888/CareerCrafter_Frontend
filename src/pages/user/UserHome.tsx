@@ -23,6 +23,8 @@ const UserHome = () => {
   const dispatch = useDispatch()
 
 
+
+
   useEffect(() => {
     fetchJobs();
   }, [page]); // Fetch jobs when the page change

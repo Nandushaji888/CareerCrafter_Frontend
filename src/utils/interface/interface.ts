@@ -27,6 +27,7 @@ export interface IUser {
         type: 'Point';
         coordinates: [number, number]; // [longitude, latitude]
       };
+      
     
     
     }

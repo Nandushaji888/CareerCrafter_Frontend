@@ -33,7 +33,7 @@ const useSendMessage = () => {
         throw new Error(data.error);
       }
       setMessages([...messages, data]);
-      console.log(messages);
+      // console.log(messages);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

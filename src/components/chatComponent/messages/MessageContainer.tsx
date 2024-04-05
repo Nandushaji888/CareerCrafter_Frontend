@@ -6,18 +6,42 @@ import useConversation from "../../../utils/zustand/userConversation";
 import { Video } from 'lucide-react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useGetConversations from "../../../utils/hooks/useGetConversations";
+import axios from "axios";
 
 
 const MessageContainer = () => {
+  const countUrl = 'http://localhost:4005/api/messages';
+
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
-  const { selectedConversation,setSelectedConversation } = useConversation();
+  const { selectedConversation, setSelectedConversation,setMessages } = useConversation();
 
-  const { conversation } = useGetConversations()
+  const { conversation,setConversation } = useGetConversations()
   const { id } = useParams()
 
+  const clearMessageCount = async () => {
+    // console.log('reached here');
+    
+    axios.get(`${countUrl}/clear-message-count/${id}`, { withCredentials: true })
+      .then((res) => {
+        // console.log(res?.data);
+        setMessages(res?.data?.messages?.messages)
+
+      })
+      .catch((err) => {
+        console.log(err);
+
+      })
+  }
+
+  useEffect(()=> {
+    clearMessageCount()
+
+  },[])
+
   useEffect(() => {
+
     const filteredName = conversation?.filter((el) => {
       return (
         el?._id === id
@@ -27,10 +51,13 @@ const MessageContainer = () => {
 
       setName(filteredName[0]?.name)
       setSelectedConversation(filteredName[0])
+      clearMessageCount()
     }
 
 
-  }, [conversation,selectedConversation])
+  }, [conversation, selectedConversation])
+
+
 
 
   return (
@@ -43,7 +70,8 @@ const MessageContainer = () => {
           <span className="text-white font-bold">
             {name}
           </span>
-          <Link to='/video-call' ><Video /></Link>
+          <span onClick={()=>navigate(`/video-call/${id}`)} ><Video /></span>
+          {/* <Link to='/video-call' ></Link> */}
         </div>
       </div>
       <Messages />

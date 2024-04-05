@@ -53,9 +53,9 @@ const RecruiterList = () => {
             name: 'Status',
             cell: (row: IRecruiter) => (
                 row.status ? (
-                    <button className='px-4 bg-red-800 text-white rounded-3xl py-1 hover:bg-red-400 font-semibold' onClick={(e: React.FormEvent) => blockRecruiter(row._id, e)}>Block</button>
+                    <button className='px-4 bg-red-800 text-white rounded-lg py-1 hover:bg-red-400 font-semibold' onClick={(e: React.FormEvent) => blockRecruiter(row._id, e)}>Block</button>
                 ) : (
-                    <button className='px-4 bg-blue-800 text-white rounded-3xl py-1 hover:bg-blue-400 font-semibold' onClick={(e: React.FormEvent) => unblockRecruiter(row._id, e)}>Unblock</button>
+                    <button className='px-2 bg-blue-800 text-white rounded-lg py-1 hover:bg-blue-400 font-semibold' onClick={(e: React.FormEvent) => unblockRecruiter(row._id, e)}>Unblock</button>
                 )
             ),
             width:'150px'
