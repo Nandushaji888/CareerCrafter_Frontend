@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { io, Socket } from 'socket.io-client';
-import { IUser } from "../interface/interface";
+import { IUser, RootState } from "../interface/interface";
 
 
 
@@ -28,10 +28,12 @@ interface SocketContextProviderProps {
 export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<IUser[]>([]);
-  const userData = useSelector((state: any) => state.persisted.user.userData);
+  const userData = useSelector((state: RootState) => state.persisted.user.userData);
   // console.log(userData);
 
   useEffect(() => {
+    console.log(userData);
+    
     if (userData && !socket) {
       const newSocket = io("http://localhost:4006", {
         query: {
@@ -58,7 +60,7 @@ export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ ch
     }
 
   
-  }, [userData]);
+  }, [socket, userData]);
   
    
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IUser } from '../../../utils/interface/interface';
 interface IUserDetailsInProfile {
     handleSubmit: any;
@@ -6,11 +6,10 @@ interface IUserDetailsInProfile {
     formData: any;
     handleChange: any;
     setFile: any
-    file: any
 
 }
 
-const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, userData, formData, handleChange, setFile, file }) => {
+const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, userData, formData, handleChange, setFile }) => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
@@ -59,7 +58,8 @@ const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, u
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             type="tel"
                             placeholder="Phone Number"
-                            readOnly={!!formData?.phone}
+                            name='phone'
+                            readOnly={formData?.phone ? true : false}
                             onChange={handleChange}
                             value={formData?.phone}
                         />
@@ -179,6 +179,7 @@ const UserDetailsInProfile: React.FC<IUserDetailsInProfile> = ({ handleSubmit, u
                             onClick={(e) => {
                                 e.preventDefault();
                                 console.log(typeof userData.resume, userData.resume);
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 const url:any = userData?.resume
                                 window.open(url, '_blank');
                             }}

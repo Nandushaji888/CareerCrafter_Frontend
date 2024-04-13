@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { SiShopware } from 'react-icons/si'
-import { MdOutlineCancel } from 'react-icons/md'
 import { LogOut } from 'lucide-react';
 
 import { FaUser, FaUserTie, FaClipboardCheck, FaClipboardList } from 'react-icons/fa';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { clearAdmin } from '../../utils/redux/slices/adminSlice';
 
 
 const SideBar = () => {
     const baseurl = "http://localhost:4000/api/auth/admin";
     const navigate = useNavigate()
-    const postUrl = 'http://localhost:4001/api/post/admin';
-    const [count, setCount] = useState('')
-
-    // useEffect(() => {
-    //     axios.get(`${postUrl}/pending-post-count`, { withCredentials: true })
-    //         .then((res) => {
-    //             // console.log(res.data);
-    //             setCount(res?.data?.count?.length)
-    //         })
-    // }, [count])
+    const dispatch = useDispatch()
     const handleLogout = () => {
         axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
           .then((res) => {
             console.log(res.data);
-            localStorage.removeItem('admin-jwtToken');
+            dispatch(clearAdmin())
             navigate('/admin/login')
           })
       }

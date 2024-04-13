@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bell, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,11 +8,12 @@ import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { clearRecruiter } from '../../../utils/redux/slices/recruiterSlice';
+import { RootState } from '../../../utils/interface/interface';
 
 
 const RecruiterNavbar = () => {
     // const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+    const recruiterData = useSelector((state: RootState) => state.persisted.recruiter.recruiterData);
     const dispatch = useDispatch()
     const countUrl = 'http://localhost:4005/api/notifications';
     const [notificationsCount, setNotificationCount] = useState('')
@@ -26,7 +27,7 @@ const RecruiterNavbar = () => {
             .then((res) => {
                 console.log(res?.data);
                 if (res?.data?.status) {
-                    const { notificationCount, messageCount } = res?.data
+                    const { notificationCount, messageCount } = res.data
 
                     if (Number(notificationCount) > 0) {
 
@@ -41,7 +42,10 @@ const RecruiterNavbar = () => {
             })
             .catch((err) => {
                 console.log(err);
-
+                // if(err.response?.status === 401){
+                //     dispatch(clearRecruiter())
+                //     navigate('/recruiter/login')
+                // }
             })
     }, [])
 

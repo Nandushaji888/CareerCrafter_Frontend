@@ -4,13 +4,14 @@ import SideBar from './SideBar'
 import Header from '../../components/Header'
 import { IRecruiter } from '../../utils/interface/interface'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { confirmAlert } from 'react-confirm-alert'
 import axios from 'axios'
 
 const RecruiterList = () => {
     const [recruiters, setRecruiters] = useState<IRecruiter[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const navigate = useNavigate()
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
@@ -53,7 +54,7 @@ const RecruiterList = () => {
             name: 'Status',
             cell: (row: IRecruiter) => (
                 row.status ? (
-                    <button className='px-4 bg-red-800 text-white rounded-lg py-1 hover:bg-red-400 font-semibold' onClick={(e: React.FormEvent) => blockRecruiter(row._id, e)}>Block</button>
+                    <button className='px-4 bg-red-800 text-white rounded-lg py-1 hover:bg-red-400 font-semibold' onClick={(e) => blockRecruiter(row._id, e)}>Block</button>
                 ) : (
                     <button className='px-2 bg-blue-800 text-white rounded-lg py-1 hover:bg-blue-400 font-semibold' onClick={(e: React.FormEvent) => unblockRecruiter(row._id, e)}>Unblock</button>
                 )
@@ -75,12 +76,17 @@ const RecruiterList = () => {
                 const response = await axios.get(`${baseUrl}/recruiters-list`, { withCredentials: true });
                 setRecruiters(response?.data?.recruiters);
             } catch (error) {
+                
                 console.error('Error fetching recruiters:', error);
+                if (axios.isAxiosError(error) && error?.response?.status === 401) {
+                    console.log('Unauthorized error occurred');
+                    navigate('/admin/login')
+                }
             }
         };
 
         fetchRecruiters();
-    }, []);
+    }, [navigate]);
 
 
     const changeStatus = (id: string | undefined, status: string) => {
@@ -102,13 +108,13 @@ const RecruiterList = () => {
                 }
 
             })
-            .catch((err:any)=> {
+            .catch((err)=> {
                 toast.error(err?.respose?.data?.message)
             })
 
 
     }
-    const unblockRecruiter = (id: string | undefined, e: any) => {
+    const unblockRecruiter = (id: string | undefined, e: React.FormEvent<Element>) => {
         e.preventDefault()
         const status = "InActive"
         confirmAlert({
@@ -127,7 +133,7 @@ const RecruiterList = () => {
         });
 
     }
-    const blockRecruiter = (id: string | undefined, e: any) => {
+    const blockRecruiter = (id: string | undefined, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         const status = "Active"
         confirmAlert({

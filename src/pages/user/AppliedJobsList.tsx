@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../../components/Header';
-import { IPost, IUser } from '../../utils/interface/interface';
+import { IPost, RootState } from '../../utils/interface/interface';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link, useNavigate } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
+import  { Toaster } from 'react-hot-toast';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Navbar from './components/NavBar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ import { clearUser } from '../../utils/redux/slices/userSlice';
 const AppliedJobList: React.FC = () => {
 
     const baseUrl = 'http://localhost:4002/api/user';
-    const user = useSelector((state: any) => state.persisted.user.userData);
+    const user = useSelector((state: RootState) => state.persisted.user.userData);
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [jobList, setJobList] = useState<IPost[]>([]);

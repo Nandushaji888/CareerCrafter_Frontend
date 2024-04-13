@@ -1,14 +1,10 @@
-const AUTH_BASE_URL = "http://localhost:4000/api/auth";
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
-const USER_BASE_URL = "http://localhost:4002/api/user";
+const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
 
-const RECRUITER_BASE_URL = "http://localhost:4003/api/recruiter";
-
-const ADMIN_BASE_URL = "http://localhost:4005/api/admin";
-
-const POST_BASE_URL = "http://localhost:4001/api/post";
-
-const APPLICATION_BASE_URL = "http://localhost:4004/api/application";
+const APPLICATION_BASE_URL = import.meta.env.VITE_APPLICATION_BASE_URL
+// const CHAT_BASE_URL = import.meta.env.
 
 
 
@@ -44,7 +40,7 @@ export const ADMIN_LOGOUT_API = `${AUTH_BASE_URL}/admin/logout`
 
 //user-actions
 
-export const GET_USERDATA_API =`${USER_BASE_URL}/:id`
+export const GET_USERDATA_API =`${USER_BASE_URL}`
 export const UPDATE_USERDATA_API =`${USER_BASE_URL}/update-user`
 
 //admin-actions
@@ -59,7 +55,7 @@ export const CHANGE_USER_STATUS_API =`${USER_BASE_URL}/admin/user/change-user-st
 
 //user-actions
 
-export const GET_JOB_DETAILS_API = `${POST_BASE_URL}/job-details/:id`
+export const GET_JOB_DETAILS_API = `${POST_BASE_URL}/job-details`
 export const LIST_JOBS_API = `${POST_BASE_URL}/list-jobs`
 
 //recruiter-actions
@@ -77,6 +73,7 @@ export const POST_STATUS_CHANGE_API = `${POST_BASE_URL}/admin/job-post-status-ch
 
 //user-actions
 export const CREATE_APPLICATION_API = `${APPLICATION_BASE_URL}/create-application`
+export const CHECK_APPLICATION_STATUS= `${APPLICATION_BASE_URL}/get-application-status`
 
 //recruiter-actions
 
@@ -88,6 +85,7 @@ export const CHANGE_APPLICATION_STATUS_API = `${APPLICATION_BASE_URL}/recruiter/
 
 
 
+/**************CHAT SERVICE */
 
 
 

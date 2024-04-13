@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Avatar from '../../assets/profile.png';
 import { Toaster, toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { signinValidation } from '../../helper/Validate'
-import axios from 'axios';
 import { useEffect } from 'react';
 import { auth } from '../../utils/firebase/config'
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -12,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../../utils/redux/slices/userSlice';
 import '../../assets/css/Auth.css'
 import { IUser } from '../../utils/interface/interface';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { USER_GOOGLE_AUTH_API, USER_LOGIN_API } from '../../utils/axios/endoints/common';
 
 const Login = () => {
     const navigate = useNavigate()
@@ -25,12 +24,6 @@ const Login = () => {
         }
     }, [navigate, user]);
 
-
-
-
-    const baseurl = "http://localhost:4000/api/auth/user";
-
-
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -43,11 +36,9 @@ const Login = () => {
             console.log(values);
 
 
-            axios
-                .post(`${baseurl}/login`, { values }, { withCredentials: true })
+            axiosInstance.post(USER_LOGIN_API, { values })
                 .then((res) => {
                     if (res.data.status) {
-                        console.log('res.data');
                         console.log(res.data);
                         const data: IUser = {
                             _id: res?.data?.user?._id || "",
@@ -108,7 +99,7 @@ const Login = () => {
     };
 
 
-    const googleAuthhandler = async (e: any) => {
+    const googleAuthhandler = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         await GoogleAuth().then(async (data: any) => {
             const userData = {
@@ -118,12 +109,13 @@ const Login = () => {
             };
             dispatch(addUser(userData))
             console.log(userData);
-            axios
-                .post(`${baseurl}/google-auth`, { userData }, { withCredentials: true })
+            // axios
+            //     .post(`${baseurl}/google-auth`, { userData }, { withCredentials: true })
+            axiosInstance.post(USER_GOOGLE_AUTH_API, { userData })
                 .then((res) => {
 
                     if (res.data.status) {
-                        
+
                         dispatch(addUser(res?.data?.user))
                         // localStorage.setItem('user-jwtToken', res.data.user_accessToekn);
                         if (res?.data?.googleSignup) {

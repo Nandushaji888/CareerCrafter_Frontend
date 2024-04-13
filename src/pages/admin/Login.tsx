@@ -1,10 +1,11 @@
-import React,{useEffect} from 'react';
-import { Link ,useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Avatar from '../../assets/profile.png';
 import { Toaster,toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import {signinValidation} from '../../helper/Validate'
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addAdmin } from '../../utils/redux/slices/adminSlice';
 
 
 const Login = () => {
@@ -12,15 +13,7 @@ const Login = () => {
     const baseurl = "http://localhost:4000/api/auth/admin";
 
     const navigate = useNavigate()
-
-    useEffect(() => {
-        const jwtToken = localStorage.getItem('admin-jwtToken');
-        if (jwtToken) {
-            // console.log('find token',jwtToken);
-            
-            navigate('/admin/home');
-        }
-    }, [navigate]);
+    const dispatch = useDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -31,7 +24,7 @@ const Login = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: async values => {
-            console.log(values);
+        
             
             
                 axios
@@ -39,10 +32,8 @@ const Login = () => {
                     .then((res) => {
                         if (res.data.status) {
                             console.log(res.data);
-                            localStorage.setItem('admin-jwtToken', res.data.accessToken);
-                            // console.log('created token');
-                            
-                            navigate('/admin/home');
+                            dispatch(addAdmin(res.data?.admin))                        
+                            navigate('/admin/users-list');
                         } else {
                             toast.error(res?.data?.message);
                         }

@@ -1,4 +1,3 @@
-import React from 'react'
 import JobListComponent from './components/JobListComponent'
 
 const PendingJobLists = () => {

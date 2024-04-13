@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUser } from '../../utils/redux/slices/userSlice';
 import Navbar from './components/NavBar';
-import { IPost } from '../../utils/interface/interface';
+import { IPost, RootState } from '../../utils/interface/interface';
 import Footer from '../../components/Footer';
+import axiosInstance from '../../utils/axios/axiosInstance'
 
 
 const UserHome = () => {
   const baseurl = "http://localhost:4000/api/auth/user";
   const navigate = useNavigate()
-  const userData = useSelector((state: any) => state.persisted.user.userData);
+  const userData = useSelector((state: RootState) => state.persisted.user.userData);
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [jobList, setJobList] = useState<IPost[]>([]);
@@ -43,6 +44,8 @@ const UserHome = () => {
         withCredentials: true
     });
 
+    
+
       setJobList(response.data.postDatas);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -55,7 +58,8 @@ const UserHome = () => {
   const handleJobDetails = (id: string | undefined, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     if (id) {
-      axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+      // axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+      axiosInstance.get(`${postUrl}/job-details/${id}`)
         .then((res) => {
           if (res?.data?.status) {
             const dataToSend = { data: res?.data?.jobData };

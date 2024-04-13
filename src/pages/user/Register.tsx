@@ -4,16 +4,16 @@ import Loading from '../../assets/ZKZg.gif';
 import toast, { Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { registerValidation } from '../../helper/Validate'
-import axios from 'axios'
 import '../../assets/css/Auth.css'
 import { useSelector } from 'react-redux';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { USER_SIGNUP_API } from '../../utils/axios/endoints/common';
 
 
 
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
-    const baseurl = "http://localhost:4000/api/auth/user";
     const navigate = useNavigate()
 
     const user = useSelector((state: any) => state.persisted.user.userData);
@@ -43,8 +43,7 @@ const Register = () => {
             console.log(formik.isValid);
             
             if (formik.isValid) {
-                axios
-                    .post(`${baseurl}/signup`, { values }, { withCredentials: true })
+               axiosInstance.post(USER_SIGNUP_API,{values})
                     .then((res) => {
                         if (res.data.status) {
                             console.log(res.data);

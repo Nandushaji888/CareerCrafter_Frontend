@@ -85,7 +85,15 @@ interface Question {
     createdOn?: Date;
     isPremium?:boolean;
   }
-  
+  export interface IAdmin {
+    _id?: string;
+    name: string;
+    email: string;
+    password?: string;
+    phone?:string;
+    status?:boolean;
+    type: AuthType;
+}
 
 
 
@@ -114,6 +122,20 @@ interface Question {
       requiredAnswer: string;
       givenAnswer:string;
   }
+
+ export interface RootState {
+    persisted: {
+       recruiter: {
+         recruiterData: IRecruiter;
+       };
+       user: {
+        userData: IUser;
+      };
+      admin:{
+        adminData:IAdmin
+      }
+    };
+   }
   
 
 

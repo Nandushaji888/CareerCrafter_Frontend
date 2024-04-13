@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './components/NavBar'
 import toast, { Toaster } from 'react-hot-toast'
-import { IPost, IUser } from '../../utils/interface/interface'
+import { IPost, IUser, RootState } from '../../utils/interface/interface'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import JobDetailsComponent from '../../components/JobDetailsComponent'
 import { useSelector } from 'react-redux'
 import useConversation from '../../utils/zustand/userConversation'
+import axiosInstance from '../../utils/axios/axiosInstance'
+import { CHECK_APPLICATION_STATUS, GET_JOB_DETAILS_API } from '../../utils/axios/endoints/common'
 
 const AppliedJobDetails = () => {
     const [data, setData] = useState<IPost>()
-    const postUrl = 'http://localhost:4001/api/post';
     const applicationUrl = 'http://localhost:4004/api/application';
     const messageUrl = 'http://localhost:4005/api/messages';
     const { setSelectedConversation } = useConversation()
 
-    const userData = useSelector((state: any) => state.persisted.user.userData);
+    const userData = useSelector((state: RootState) => state.persisted.user.userData);
     console.log(userData._id);
     const navigate = useNavigate()
 
@@ -26,7 +27,8 @@ const AppliedJobDetails = () => {
     useEffect(() => {
         const fetchJobDetails = async () => {
             try {
-                const res = await axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true });
+                // const res = await axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true });
+                const res = await axiosInstance.get(`${GET_JOB_DETAILS_API}/${id}`)
                 if (res?.data?.status) {
                     setData(res?.data?.jobData);
                 } else {
@@ -41,7 +43,8 @@ const AppliedJobDetails = () => {
         const checkApplicationStatus = async () => {
             if (userData?._id) {
                 try {
-                    const res = await axios.post(`${applicationUrl}/get-application-status`, { userData, id }, { withCredentials: true });
+                    // const res = await axios.post(`${applicationUrl}/get-application-status`, { userData, id }, { withCredentials: true });
+                    const res = await axiosInstance.post(`${CHECK_APPLICATION_STATUS}`,{userData,id})
                     console.log(res.data);
                     setApplicationStatus(res?.data?.application?.status)
                 } catch (error) {

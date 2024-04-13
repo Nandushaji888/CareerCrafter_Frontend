@@ -4,7 +4,7 @@ import SideBar from './SideBar';
 import Header from '../../components/Header';
 import { IUser } from '../../utils/interface/interface';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -15,6 +15,7 @@ const UserList: React.FC = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     // const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const navigate = useNavigate()
 
 
 
@@ -71,6 +72,10 @@ const UserList: React.FC = () => {
                 setUsers(response?.data?.users);
             } catch (error) {
                 console.error('Error fetching users:', error);
+                if (axios.isAxiosError(error) && error?.response?.status === 401) {
+                    console.log('Unauthorized error occurred');
+                    navigate('/admin/login')
+                }
             }
         };
 
@@ -96,13 +101,15 @@ const UserList: React.FC = () => {
                 }
 
             })
-            .catch((err:any)=> {
+            .catch((err)=> {
+                console.log(err);
+                
                 toast.error(err?.respose?.data?.message)
             })
 
 
     }
-    const unblockUser = (id: string | undefined, e: any) => {
+    const unblockUser = (id: string | undefined, e: React.FormEvent<Element>) => {
         e.preventDefault()
         const status = "InActive"
         confirmAlert({
@@ -121,7 +128,7 @@ const UserList: React.FC = () => {
         });
 
     }
-    const blockUser = (id: string | undefined, e: any) => {
+    const blockUser = (id: string | undefined, e: React.FormEvent<Element>) => {
         e.preventDefault()
         const status = "Active"
         confirmAlert({

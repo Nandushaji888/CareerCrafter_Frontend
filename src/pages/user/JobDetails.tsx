@@ -6,14 +6,14 @@ import axios from 'axios';
 import { addUser, clearUser } from '../../utils/redux/slices/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import ApplicationAnswerModal from '../../components/ApplicationAnswerModal';
-import { ApplicationType, IApplication, IUser } from '../../utils/interface/interface';
+import { ApplicationType, IApplication, RootState } from '../../utils/interface/interface';
 import JobDetailsComponent from '../../components/JobDetailsComponent';
 import UserJobDetailsButtons from './components/UserJobDetailsButtons';
 import Footer from '../../components/Footer';
 // import JobDetailsComponent from '../../components/JobDetailsComponent';
 
 const JobDetails = () => {
-    const userData = useSelector((state: any) => state.persisted.user.userData);
+    const userData = useSelector((state: RootState) => state.persisted.user.userData);
     const location = useLocation();
     const receivedData = location.state?.data;
     const [data, setData] = useState(receivedData?.data)
@@ -25,7 +25,7 @@ const JobDetails = () => {
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
     const [applicationData, setApplicationData] = useState<IApplication>()
-    const [user, setUser] = useState<IUser>()
+    // const [user, setUser] = useState<IUser>()
     const [applied, setApplied] = useState(false)
     const [saved, setSaved] = useState(false)
     const navigate = useNavigate()
@@ -35,19 +35,19 @@ const JobDetails = () => {
 
 
     const isApplied = () => {
-        
-        if (userData._id) {            
+
+        if (userData._id) {
             axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
-                .then((res: any) => {
+                .then((res) => {
 
 
                     if (res?.data?.status) {
-                        setUser(res?.data?.user)
+                        // setUser(res?.data?.user)
                         dispatch(clearUser())
                         dispatch(addUser(res?.data?.user))
                         if (res?.data?.user?.appliedJobs.includes(id)) {
                             console.log('before ture');
-                            
+
                             setApplied(true)
                         }
                         if (res?.data?.user?.savedJobs.includes(id)) {
@@ -69,42 +69,43 @@ const JobDetails = () => {
                 })
         }
     }
-    useEffect(()=> {
-        
-        if(userData?._id){
+    useEffect(() => {
+
+        if (userData?._id) {
             isApplied()
         }
-    },[])
+    }, [])
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                // isApplied();
-                const response = await axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true });
-                if (response?.data?.status) {
-                    setData(response?.data?.jobData);
-                }
-            } catch (error: any) {
-                console.log('error');
-                console.log(error);
 
-                if (error && error?.response?.status === 401) {
-                    navigate("/login");
-                    return
+            // isApplied();
+            axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+                .then((response) => {
 
-                }
-                if (error && error?.response?.status === 404) {
+                    if (response?.data?.status) {
+                        setData(response?.data?.jobData);
+                    }
+                })
+                .catch((error) => {
+                    if (error && error.response.status === 401) {
+                        navigate("/login");
+                        return
+
+                    }
+                    if (error && error?.response?.status === 404) {
+                        navigate("/error");
+                        return
+                    }
+                    console.error("Error fetching data:", error);
                     navigate("/error");
-                    return
-                }
-                console.error("Error fetching data:", error);
-                navigate("/error");
-            }
-        };
+                })
 
+        }
         fetchData();
         window.scrollTo(0, 0);
-    }, []);
+    }
+        , []);
 
 
 
@@ -113,7 +114,7 @@ const JobDetails = () => {
 
             fetchResume();
         } else {
-            setResume(userData?.resume);
+            setResume(userData.resume);
         }
     }, [userData.resume]);
 
@@ -121,7 +122,7 @@ const JobDetails = () => {
         try {
 
             await axios.get(`${baseUrl}/${userData?._id}`, { withCredentials: true })
-                .then((res: any) => {
+                .then((res) => {
                     if (res?.data?.status) {
                         const resume = res?.data?.user?.resume
                         setResume(resume)
@@ -146,13 +147,13 @@ const JobDetails = () => {
         if (resume === '') {
             toast.error('Please upload your resume')
             return
-        }        
+        }
 
         const formData = {
             userId: userData?._id,
             jobPostId: data?._id,
-            postName:data?.postName,
-            company:data?.company,
+            postName: data?.postName,
+            company: data?.company,
             name: userData?.name,
             email: userData?.email,
             phone: userData?.phone,
@@ -174,7 +175,7 @@ const JobDetails = () => {
                                     setApplied(true)
                                     console.log('set applied true');
                                     toast.success(res?.data?.message)
-                                    
+
                                     // isApplied()
                                 }).catch((err) => {
                                     toast.error(err?.response?.data?.message)
@@ -213,7 +214,7 @@ const JobDetails = () => {
                 />} />
                 {
                     showModal && applicationData &&
-                    <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} setApplied={setApplied}/>
+                    <ApplicationAnswerModal onClose={() => setShowModal(false)} questions={data?.questions || []} applicationData={applicationData} setApplied={setApplied} />
                 }
             </div>
             <Footer />

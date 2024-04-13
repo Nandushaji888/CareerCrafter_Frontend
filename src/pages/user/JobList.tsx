@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './components/NavBar';
-import { IPost, WorkArrangementType, employmentType } from '../../utils/interface/interface';
+import { IPost, RootState, WorkArrangementType, employmentType } from '../../utils/interface/interface';
 import JobListSearchComponent from './components/JobListSearchComponent';
 const LazyJobListingComponent = lazy(() => import('./components/JobListingComponent'));
 import JobListFilterComponent from './components/JobListFilterComponent';
@@ -23,7 +23,7 @@ const JobList: React.FC = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [noData, setNoData] = useState(false)
     const postUrl = 'http://localhost:4001/api/post';
-    const userData = useSelector((state: any) => state.persisted.user.userData);
+    const userData = useSelector((state: RootState) => state.persisted.user.userData);
 
 
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ const JobList: React.FC = () => {
 
             setNoData(false)
 
-            
+
             const response = await axios.get(`${postUrl}/list-jobs`, {
                 params: {
                     search: searchQuery,
@@ -51,13 +51,13 @@ const JobList: React.FC = () => {
                     employmentType: emplType,
                     location,
                     workArrangementType,
-                    userId:userData?._id?userData?._id:undefined
+                    userId: userData?._id ? userData?._id : undefined
 
                 },
                 withCredentials: true
             });
 
-            if (response?.data?.postDatas.length===0) {
+            if (response?.data?.postDatas.length === 0) {
                 setNoData(true)
             }
             console.log(response.data);
@@ -91,7 +91,11 @@ const JobList: React.FC = () => {
                         const dataToSend = { data: res?.data?.jobData };
                         navigate(`/job-details/${id}`, { state: { data: dataToSend } });
                     }
-                });
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                })
         }
     };
     const handleNextPage = () => {
@@ -116,7 +120,7 @@ const JobList: React.FC = () => {
                 <div className='mx-auto justify-between mt-10 w-10/12 items-start bg-white h-[700px] px-14 rounded-2xl shadow-lg pt-6 relative'>
                     <div className='flex flex-row px-14 gap-14'>
 
-                    <Suspense fallback={<div className='flex w-7/12 justify-center items-center text-2xl '>Loading...</div>}>
+                        <Suspense fallback={<div className='flex w-7/12 justify-center items-center text-2xl '>Loading...</div>}>
                             <LazyJobListingComponent noData={noData} jobList={jobList} handleJobDetails={handleJobDetails} />
                         </Suspense>
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import Avatar from '../../assets/profile.png';
 import { Toaster, toast } from 'react-hot-toast'
 import { useFormik } from 'formik'

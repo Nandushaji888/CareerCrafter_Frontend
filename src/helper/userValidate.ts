@@ -1,4 +1,3 @@
-import { IUser } from "../utils/interface/interface";
 interface FormData {
   name: string;
   email: string;

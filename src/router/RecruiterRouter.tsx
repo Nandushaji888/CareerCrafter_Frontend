@@ -11,8 +11,6 @@ import RecruiterApplicationList from '../pages/recruiter/RecruiterApplicationLis
 import RecruiterApplicationDetails from '../pages/recruiter/RecruiterApplicationDetails'
 import RecruiterProtectedRoutes from '../components/RecruiterProtectedRoutes'
 import RecruiterDashboard from '../pages/recruiter/RecruiterDashboard'
-import { EmptyChatComponent } from '../components/chatComponent/EmptyChatComponent'
-import { ChatComponent } from '../components/chatComponent/ChatComponent'
 import RecruiterNotification from '../pages/recruiter/components/RecruiterNotification'
 import RecruiterMessageContainer from '../pages/recruiter/RecruiterMessageContainer'
 import RecruiterEmptyMessageContainer from '../pages/recruiter/RecruiterEmptyMessageContainer'
@@ -21,11 +19,11 @@ import RecruiterEmptyMessageContainer from '../pages/recruiter/RecruiterEmptyMes
 const RecruiterRouter = () => {
   return (
     <Routes>
-      <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/verify-otp' element={<OtpVerification />} />
 
 
+      <Route path='/login' element={<Login />} />
       <Route element={<RecruiterProtectedRoutes />}>
         <Route path='/' element={<RecruiterHome />} />
         <Route path='/dashboard' element={<RecruiterDashboard />} />

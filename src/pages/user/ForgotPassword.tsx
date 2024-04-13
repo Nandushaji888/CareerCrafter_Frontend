@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '../../assets/profile.png';
 import { Toaster, toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
@@ -100,7 +100,7 @@ const Login = () => {
     })
 
 
-    const resetOTPhandler = (e: any) => {
+    const resetOTPhandler = (e: { preventDefault: () => void; } ) => {
         console.log('reached here');
         e.preventDefault()
         setTime(10)
@@ -123,7 +123,7 @@ const Login = () => {
     }
 
 
-    const otpValidation = (e:any) => {
+    const otpValidation = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         axios.post(`${baseurl}/otp-verify`,{otp},{withCredentials:true})
         .then((res)=>{

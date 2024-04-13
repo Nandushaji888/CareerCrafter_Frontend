@@ -3,30 +3,32 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearRecruiter } from '../../utils/redux/slices/recruiterSlice';
-import toast from 'react-hot-toast';
-import { IPost } from '../../utils/interface/interface';
+import { IPost, RootState } from '../../utils/interface/interface';
 import RecruiterNavbar from './components/RecruiterNavbar';
 import Footer from '../../components/Footer';
 
 const RecruiterHome = () => {
-  const baseurl = "http://localhost:4000/api/auth/recruiter";
   const postUrl = "http://localhost:4001/api/post/recruiter"
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+  const recruiterData = useSelector((state: RootState) => state.persisted.recruiter.recruiterData);
   const [jobList, setJobList] = useState<IPost[]>([])
 
   useEffect(() => {
-    try {
-      axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
-        .then((res) => {
-          setJobList(res?.data?.jobList)
+    console.log('1sttt');
 
+    axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
+      .then((res) => {
+        setJobList(res?.data?.jobList)
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response?.status === 401) {
+          dispatch(clearRecruiter())
+          navigate('/recruiter/login')
+        }
+      })
 
-        })
-    } catch (error: any) {
-      toast.error(error)
-    }
   }, [])
 
   const handleJobDetails = (id: string | undefined, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -38,20 +40,22 @@ const RecruiterHome = () => {
             const dataToSend = { data: res?.data?.jobData };
             navigate(`/job-details/${id}`, { state: { data: dataToSend } });
           }
-        });
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response?.status === 401) {
+            dispatch(clearRecruiter())
+            navigate('/recruiter/login')
+
+          }
+
+        })
     }
   };
 
 
 
-  const handleLogout = () => {
-    axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
-      .then((res) => {
-        console.log(res.data);
-        dispatch(clearRecruiter())
-        navigate('/recruiter/login')
-      })
-  }
+
   return (
 
     <>
@@ -129,7 +133,7 @@ const RecruiterHome = () => {
 
       </div>
 
-      <Footer/>
+      <Footer />
 
 
     </>

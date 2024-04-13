@@ -1,12 +1,13 @@
-import axios from 'axios';
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { validate } from '../../helper/userValidate';
 import toast, { Toaster } from 'react-hot-toast';
 import { addUser, clearUser } from '../../utils/redux/slices/userSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './components/NavBar';
-import { IUser } from '../../utils/interface/interface';
+import { IUser, RootState } from '../../utils/interface/interface';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { GET_USERDATA_API, UPDATE_USERDATA_API } from '../../utils/axios/endoints/common';
 
 // Define interface for user data
 
@@ -32,15 +33,16 @@ const LazyUserDetailsInProfile = lazy(() => import('./components/UserDetailsInPr
 
 const UserProfile: React.FC = () => {
     const dispatch = useDispatch();
-    const user = useSelector((state: any) => state.persisted.user.userData);
+    const user = useSelector((state: RootState) => state.persisted.user.userData);
     const [userData, setUserData] = useState<IUser | null>(user);
     const [file, setFile] = useState<File | null>(null);
     const navigate = useNavigate();
-    const baseUrl = 'http://localhost:4002/api/user';
 
     useEffect(() => {
-        axios.get(`${baseUrl}/${user._id}`, { withCredentials: true })
-            .then((res: any) => {
+        
+        // axios.get(`${baseUrl}/${user._id}`, { withCredentials: true })
+        axiosInstance.get(`${GET_USERDATA_API}/${user?._id}`)
+            .then((res) => {
                 if (!res?.data?.status) {
                     navigate('/login');
                 }
@@ -52,7 +54,7 @@ const UserProfile: React.FC = () => {
                 dispatch(clearUser());
                 navigate('/login');
             });
-    }, []);
+    }, [dispatch, navigate, user._id]);
 
     const [formData, setFormData] = useState<FormData>({
         name: userData?.name || '',
@@ -67,7 +69,7 @@ const UserProfile: React.FC = () => {
         location: userData?.location?.locationName || '',
         secondarySkills: userData?.secondarySkills || '',
         experience: userData?.experience || '',
-        status: userData?.status ,
+        status: userData?.status,
     });
 
     useEffect(() => {
@@ -85,7 +87,7 @@ const UserProfile: React.FC = () => {
                 location: userData.location?.locationName || '',
                 secondarySkills: userData.secondarySkills || '',
                 experience: userData.experience || '',
-                status: userData.status ,
+                status: userData.status,
             });
         }
     }, [userData]);
@@ -101,10 +103,10 @@ const UserProfile: React.FC = () => {
     useEffect(() => {
         setFormData(prevFormData => ({
             ...prevFormData,
-            resume:  file? file:  null
+            resume: file ? file : null
         }));
     }, [file]);
-    
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -123,21 +125,21 @@ const UserProfile: React.FC = () => {
                 formDataToSend.append(key, value);
             }
         });
-        
-        axios.post(`${baseUrl}/update-user`, formDataToSend, {
+
+        axiosInstance.post(UPDATE_USERDATA_API, formDataToSend, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
             withCredentials: true
         })
-        .then((res) => {
-            dispatch(addUser(res.data?.user));
-            toast.success(res.data.message);
-            navigate('/user-profile');
-        })
-        .catch((error) => {
-            console.error('Error updating user:', error);
-        });
+            .then((res) => {
+                dispatch(addUser(res.data?.user));
+                toast.success(res.data.message);
+                navigate('/user-profile');
+            })
+            .catch((error) => {
+                console.error('Error updating user:', error);
+            });
     };
 
     useEffect(() => {
@@ -152,7 +154,7 @@ const UserProfile: React.FC = () => {
                 {
                     userData &&
                     <Suspense fallback={<div className='flex w-7/12 justify-center items-center text-2xl '>Loading...</div>} >
-                        <LazyUserDetailsInProfile handleSubmit={handleSubmit} userData={userData} formData={formData} handleChange={handleChange} setFile={setFile} file={file} />
+                        <LazyUserDetailsInProfile handleSubmit={handleSubmit} userData={userData} formData={formData} handleChange={handleChange} setFile={setFile} />
                     </Suspense>
                 }
             </div>
