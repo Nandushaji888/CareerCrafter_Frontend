@@ -1,14 +1,14 @@
-import React, { useState,useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
-import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { addRecruiter } from '../../utils/redux/slices/recruiterSlice'
+import axiosInstance from '../../utils/axios/axiosInstance'
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 const OtpVerification = () => {
     const [otp, setOtp] = useState('')
-    const baseurl = "http://localhost:4000/api/auth/recruiter";
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -17,8 +17,8 @@ const OtpVerification = () => {
         if (recruiterData?._id) {
             navigate('/recruiter');
         }
-    }, [navigate,recruiterData]);
-    
+    }, [navigate, recruiterData]);
+
 
 
     const submitHandler = async (e: any) => {
@@ -29,19 +29,19 @@ const OtpVerification = () => {
             toast.error('OTP Should have 6 characters')
 
         } else {
-            axios
-                .post(`${baseurl}/verify-otp`, { otp }, { withCredentials: true })
-                .then((res)=> {
+            axiosInstance
+                .post(`${AUTH_BASE_URL}/recruiter/verify-otp`, { otp })
+                .then((res) => {
                     console.log(res.data);
-                    if(res.status){
+                    if (res.status) {
 
                         console.log('res?.data?.recruiter?.response');
                         console.log(res?.data?.recruiter?.response);
-                        
+
                         dispatch(addRecruiter(res?.data?.recruiter?.response))
 
                         navigate('/recruiter')
-                        
+
                     }
                 })
         }

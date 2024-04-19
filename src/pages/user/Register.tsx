@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../assets/ZKZg.gif';
 import toast, { Toaster } from 'react-hot-toast'
@@ -7,7 +7,8 @@ import { registerValidation } from '../../helper/Validate'
 import '../../assets/css/Auth.css'
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios/axiosInstance';
-import { USER_SIGNUP_API } from '../../utils/axios/endoints/common';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+
 
 
 
@@ -43,7 +44,7 @@ const Register = () => {
             console.log(formik.isValid);
             
             if (formik.isValid) {
-               axiosInstance.post(USER_SIGNUP_API,{values})
+               axiosInstance.post(`${AUTH_BASE_URL}/user/signup`,{values})
                     .then((res) => {
                         if (res.data.status) {
                             console.log(res.data);

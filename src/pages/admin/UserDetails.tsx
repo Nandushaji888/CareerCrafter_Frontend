@@ -1,28 +1,30 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
-
 import { useParams } from 'react-router-dom'
 import { IUser } from '../../utils/interface/interface';
 import SideBar from './SideBar';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
+
 
 
 const UserDetails: React.FC = () => {
     const [user, setUser] = useState<IUser | undefined>();
     const navigate = useNavigate();
 
-    const baseUrl = 'http://localhost:4002/api/admin';
 
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`${baseUrl}/user/${id}`, { withCredentials: true })
+        console.log('reached user details');
+        
+        axiosInstance.get(`${USER_BASE_URL}/admin/user/${id}`)
             .then((res: any) => {
                 setUser(res?.data?.user);
-            }).catch((err) => {
+            }).catch(() => {
                 navigate("/admin/error");
             });
-    }, [id]); 
+    }, [id, navigate]); 
 
     if (!user) {
         return <div>Loading...</div>;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import RecruiterNavbar from './RecruiterNavbar'
 import NotificationPage from '../../../components/NotificationPage'
 import { useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ const RecruiterNotification = () => {
             
             navigate('/recruiter/login')
         }
-    },[])
+    },[messenger?._id, navigate])
   return (
 
   <>

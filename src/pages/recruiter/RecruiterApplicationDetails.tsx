@@ -1,17 +1,20 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ApplicationType, IApplication } from '../../utils/interface/interface';
+import { IApplication } from '../../utils/interface/interface';
 import toast, { Toaster } from 'react-hot-toast';
 import RecruiterNavbar from './components/RecruiterNavbar';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { ApplicationType } from '../../utils/interface/enums';
+const APPLICATION_BASE_URL = import.meta.env.VITE_APPLICATION_BASE_URL
+
+
 
 const RecruiterApplicationDetails = () => {
   const [appDetails, setAppDetails] = useState<IApplication>();
   const [status, setStatus] = useState<ApplicationType>(ApplicationType.Pending);
-  const baseUrl = 'http://localhost:4004/api/application/recruiter';
 
   const fetchApplication = (appId: string | undefined) => {
-    axios.get(`${baseUrl}/application-details/${appId}`, { withCredentials: true })
+    axiosInstance.get(`${APPLICATION_BASE_URL}/recruiter/application-details/${appId}`,)
       .then((res: any) => {
         // console.log(res.data);
         setAppDetails(res?.data?.application);
@@ -43,7 +46,7 @@ const RecruiterApplicationDetails = () => {
 
 
 
-    axios.post(`${baseUrl}/change-application-status`, data, { withCredentials: true })
+    axiosInstance.post(`${APPLICATION_BASE_URL}/recruiter/change-application-status`, data,)
       .then((res) => {
         console.log(res.data);
         if (res?.data?.status) {

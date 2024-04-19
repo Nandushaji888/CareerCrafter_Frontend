@@ -8,6 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
+
 
 
 
@@ -63,12 +66,11 @@ const UserList: React.FC = () => {
 
 
 
-    const baseUrl = 'http://localhost:4002/api/admin';
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/get-all-users`, { withCredentials: true });
+                const response = await axiosInstance.get(`${USER_BASE_URL}/admin/get-all-users`, );
                 setUsers(response?.data?.users);
             } catch (error) {
                 console.error('Error fetching users:', error);
@@ -80,7 +82,7 @@ const UserList: React.FC = () => {
         };
 
         fetchUsers();
-    }, []);
+    }, [navigate]);
 
 
     const changeStatus = (id: string | undefined, status: string) => {
@@ -91,7 +93,7 @@ const UserList: React.FC = () => {
         console.log('change status');
         console.log(formData);
 
-        axios.post(`${baseUrl}/user/change-user-status`, { formData }, { withCredentials: true })
+        axiosInstance.post(`${USER_BASE_URL}/admin/user/change-user-status`, { formData },)
             .then((res) => {
                 console.log(res.data);
                 if(res?.data?.status){

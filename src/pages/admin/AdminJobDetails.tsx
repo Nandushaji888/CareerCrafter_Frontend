@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -8,7 +8,8 @@ import SideBar from './SideBar';
 import PostQuestionsModal from '../../components/PostQuestionsModal';
 import JobDetailsComponent from '../../components/JobDetailsComponent';
 import AdminJobDetailsButtonComponent from './components/AdminJobDetailsButtonComponent';
-import RejectReasonModal from '../../components/RejectReasonModal';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
 
 const AdminJobDetails: React.FC = () => {
     const [jobDetails, setJobDetails] = useState<IPost>();
@@ -23,8 +24,7 @@ const AdminJobDetails: React.FC = () => {
     }, [id]);
 
     const fetchPostDetails = (id: string | undefined) => {
-        const baseUrl = 'http://localhost:4001/api/post/admin';
-        axios.get(`${baseUrl}/job-details/${id}`, { withCredentials: true })
+        axiosInstance.get(`${POST_BASE_URL}/admin/job-details/${id}`)
             .then((res: any) => {
                 setJobDetails(res?.data?.jobData);
             })
@@ -37,12 +37,9 @@ const AdminJobDetails: React.FC = () => {
     const jobStatusHandler = (id: string, status: string) => {
 
         
-        const baseUrl = 'http://localhost:4001/api/post/admin';
         const formData = { id, status,rejectedReason };
-        console.log('formDataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        console.log(formData);
-        
-        axios.post(`${baseUrl}/job-post-status-change`, { formData }, { withCredentials: true })
+
+        axiosInstance.post(`${POST_BASE_URL}/admin/job-post-status-change`, { formData })
             .then((res) => {
                 if (res.data.status) {
                     if (res.data.message) {

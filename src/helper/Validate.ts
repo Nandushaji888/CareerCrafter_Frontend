@@ -113,27 +113,39 @@ const locationVerify = (error: Errors = {}, values: Values) => {
 
 const passwordVerify = (error: Errors = {}, values: Values) => {
   const specialChars = /[`!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?~]/;
-
-  if (!values.password) {
-    error.password = toast.error("Password Required...!");
-  } else if (values.password.includes(" ")) {
-    error.password = toast.error("Invalid Password...!");
-  } else if (values.password.length < 4) {
-    error.password = toast.error("Password must be more than 4 character long");
-  } else if (values.password.length > 15) {
-    error.password = toast.error(
-      "Password cannot be more than 15 character long"
-    );
-  } else if (!specialChars.test(values.password)) {
-    error.password = toast.error("Password must have special character");
+  // const hasCapitalLetter = /[A-Z]/;
+  const hasNumber = /\d/;
+  const password = values.password ?? ''; 
+  
+  switch (true) {
+    case !password:
+      error.password = toast.error("Password Required...!");
+      break;
+    case password.includes(" "):
+      error.password = toast.error("Invalid Password...!");
+      break;
+    case password.length < 4:
+      error.password = toast.error("Password must be more than 4 characters long");
+      break;
+    case password.length > 15:
+      error.password = toast.error("Password cannot be more than 15 characters long");
+      break;
+    case !specialChars.test(password):
+      error.password = toast.error("Password must have special character");
+      break;
+    // case !hasCapitalLetter.test(password):
+      // error.password = toast.error("Password must have at least one capital letter");
+      // break;
+    case !hasNumber.test(password):
+      error.password = toast.error("Password must have at least one number");
+      break;
+    default:
+      break;
   }
+  
   return error;
-  //   else if (values.password !== values.confirm_pwd) {
-  //     error.password = toast.error(
-  //       "Password and Confirm password should be same...!"
-  //     );
-  //   }
 };
+
 
 const emailVerify = (error: Errors = {}, values: Values) => {
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;

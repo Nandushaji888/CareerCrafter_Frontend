@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { Suspense, lazy, useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './components/NavBar';
-import { IPost, RootState, WorkArrangementType, employmentType } from '../../utils/interface/interface';
+import { IPost, RootState } from '../../utils/interface/interface';
 import JobListSearchComponent from './components/JobListSearchComponent';
 const LazyJobListingComponent = lazy(() => import('./components/JobListingComponent'));
 import JobListFilterComponent from './components/JobListFilterComponent';
 import JobListPagination from './components/JobListPagination';
 import { useSelector } from 'react-redux';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { WorkArrangementType, employmentType } from '../../utils/interface/enums';
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
 
 const JobList: React.FC = () => {
 
@@ -22,26 +25,19 @@ const JobList: React.FC = () => {
     const [limit, setLimit] = useState(3); // Adjust limit as needed
     const [totalPages, setTotalPages] = useState(0);
     const [noData, setNoData] = useState(false)
-    const postUrl = 'http://localhost:4001/api/post';
+
     const userData = useSelector((state: RootState) => state.persisted.user.userData);
 
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchJobs();
-    }, [page]);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
     const fetchJobs = async () => {
         try {
 
             setNoData(false)
 
 
-            const response = await axios.get(`${postUrl}/list-jobs`, {
+            const response = await axiosInstance.get(`${POST_BASE_URL}/list-jobs`, {
                 params: {
                     search: searchQuery,
                     page: page,
@@ -54,7 +50,6 @@ const JobList: React.FC = () => {
                     userId: userData?._id ? userData?._id : undefined
 
                 },
-                withCredentials: true
             });
 
             if (response?.data?.postDatas.length === 0) {
@@ -68,6 +63,15 @@ const JobList: React.FC = () => {
             console.error("Error fetching jobs:", error);
         }
     };
+
+    useEffect(() => {
+        fetchJobs();
+    }, [page]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
 
 
     const handleSearch = (e: React.FormEvent) => {
@@ -85,7 +89,7 @@ const JobList: React.FC = () => {
     const handleJobDetails = (id: string | undefined, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         if (id) {
-            axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+            axiosInstance.get(`${POST_BASE_URL}/job-details/${id}`)
                 .then((res) => {
                     if (res?.data?.status) {
                         const dataToSend = { data: res?.data?.jobData };

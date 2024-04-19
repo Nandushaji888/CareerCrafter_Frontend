@@ -3,17 +3,17 @@ import { SiShopware } from 'react-icons/si'
 import { LogOut } from 'lucide-react';
 
 import { FaUser, FaUserTie, FaClipboardCheck, FaClipboardList } from 'react-icons/fa';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { clearAdmin } from '../../utils/redux/slices/adminSlice';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 const SideBar = () => {
-    const baseurl = "http://localhost:4000/api/auth/admin";
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleLogout = () => {
-        axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
+        axiosInstance.post(`${AUTH_BASE_URL}/admin/logout`, {})
           .then((res) => {
             console.log(res.data);
             dispatch(clearAdmin())

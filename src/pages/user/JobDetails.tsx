@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from './components/NavBar';
-import axios from 'axios';
 import { addUser, clearUser } from '../../utils/redux/slices/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import ApplicationAnswerModal from '../../components/ApplicationAnswerModal';
-import { ApplicationType, IApplication, RootState } from '../../utils/interface/interface';
+import { IApplication, RootState } from '../../utils/interface/interface';
 import JobDetailsComponent from '../../components/JobDetailsComponent';
 import UserJobDetailsButtons from './components/UserJobDetailsButtons';
 import Footer from '../../components/Footer';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { ApplicationType } from '../../utils/interface/enums';
+const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
+const APPLICATION_BASE_URL = import.meta.env.VITE_APPLICATION_BASE_URL
 // import JobDetailsComponent from '../../components/JobDetailsComponent';
 
 const JobDetails = () => {
@@ -17,10 +21,9 @@ const JobDetails = () => {
     const location = useLocation();
     const receivedData = location.state?.data;
     const [data, setData] = useState(receivedData?.data)
-    const [resume, setResume] = useState('');
-    const baseUrl = 'http://localhost:4002/api/user';
-    const applicationUrl = 'http://localhost:4004/api/application';
-    const postUrl = 'http://localhost:4001/api/post';
+    const [resume, setResume] = useState<File>()
+
+
 
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
@@ -37,7 +40,7 @@ const JobDetails = () => {
     const isApplied = () => {
 
         if (userData._id) {
-            axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
+            axiosInstance.get(`${USER_BASE_URL}/${userData._id}`)
                 .then((res) => {
 
 
@@ -74,13 +77,13 @@ const JobDetails = () => {
         if (userData?._id) {
             isApplied()
         }
-    }, [])
+    }, [userData?._id])
 
     useEffect(() => {
         const fetchData = async () => {
 
             // isApplied();
-            axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+            axiosInstance.get(`${POST_BASE_URL}/job-details/${id}`)
                 .then((response) => {
 
                     if (response?.data?.status) {
@@ -105,36 +108,37 @@ const JobDetails = () => {
         fetchData();
         window.scrollTo(0, 0);
     }
-        , []);
+        , [POST_BASE_URL, id, navigate]);
 
 
 
     useEffect(() => {
+        const fetchResume = async () => {
+            try {
+
+                await axiosInstance.get(`${USER_BASE_URL}/${userData?._id}`)
+                    .then((res) => {
+                        if (res?.data?.status) {
+                            const resume = res?.data?.user?.resume
+                            setResume(resume)
+                            dispatch(addUser(res?.data?.user))
+
+                        }
+                    })
+            } catch (error) {
+                console.error('Error fetching resume:', error);
+                // toast.error("Error in fetching")
+            }
+        };
         if (!userData.resume) {
 
             fetchResume();
         } else {
             setResume(userData.resume);
         }
-    }, [userData.resume]);
+    }, [USER_BASE_URL, dispatch, userData?._id, userData.resume]);
 
-    const fetchResume = async () => {
-        try {
 
-            await axios.get(`${baseUrl}/${userData?._id}`, { withCredentials: true })
-                .then((res) => {
-                    if (res?.data?.status) {
-                        const resume = res?.data?.user?.resume
-                        setResume(resume)
-                        dispatch(addUser(res?.data?.user))
-
-                    }
-                })
-        } catch (error) {
-            console.error('Error fetching resume:', error);
-            // toast.error("Error in fetching")
-        }
-    };
 
     const handleAppliation = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
@@ -144,12 +148,12 @@ const JobDetails = () => {
             navigate('/login')
             return
         }
-        if (resume === '') {
+        if (!resume) {
             toast.error('Please upload your resume')
             return
         }
 
-        const formData = {
+        const formData: IApplication = {
             userId: userData?._id,
             jobPostId: data?._id,
             postName: data?.postName,
@@ -165,12 +169,12 @@ const JobDetails = () => {
         if (!data?.questions?.length) {
             try {
 
-                axios.get(`${baseUrl}/${userData._id}`, { withCredentials: true })
+                axiosInstance.get(`${USER_BASE_URL}/${userData._id}`)
                     .then((res: any) => {
                         if (!res.data?.status) {
                             navigate('/login')
                         } else {
-                            axios.post(`${applicationUrl}/create-application`, formData, { withCredentials: true })
+                            axiosInstance.post(`${APPLICATION_BASE_URL}/create-application`, formData)
                                 .then((res) => {
                                     setApplied(true)
                                     console.log('set applied true');
@@ -208,7 +212,7 @@ const JobDetails = () => {
 
             <div className='mx-20 mt-5'>
                 <Toaster position='top-center' reverseOrder={false}></Toaster>
-                <JobDetailsComponent data={data} buttons={<UserJobDetailsButtons handleAppliation={handleAppliation} applied={applied} isApplied={isApplied} userId={userData?._id} jobPostId={data?._id}
+                <JobDetailsComponent data={data} buttons={<UserJobDetailsButtons handleAppliation={handleAppliation} applied={applied} isApplied={isApplied} userId={userData?._id || ''} jobPostId={data?._id}
                     saved={saved} setSaved={setSaved}
 
                 />} />

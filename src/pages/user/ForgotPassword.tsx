@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '../../assets/profile.png';
 import { Toaster, toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { emailValidation } from '../../helper/Validate'
-import axios from 'axios';
 import { useEffect } from 'react';
 import '../../assets/css/Auth.css'
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 // import Loading from '../../assets/ZKZg.gif';
 
@@ -57,7 +58,7 @@ const Login = () => {
 
 
 
-    const baseurl = "http://localhost:4000/api/auth/user";
+
 
 
     const formik = useFormik({
@@ -75,8 +76,8 @@ const Login = () => {
 
 
 
-            axios
-                .post(`${baseurl}/forgot-password`, { email }, { withCredentials: true })
+            axiosInstance
+                .post(`${AUTH_BASE_URL}/forgot-password`, { email },)
                 .then((res) => {
                     if (res.data.status) {
                         console.log(res.data);
@@ -105,8 +106,8 @@ const Login = () => {
         e.preventDefault()
         setTime(10)
 
-        axios
-            .get(`${baseurl}/resend-otp`, { withCredentials: true })
+        axiosInstance
+            .get(`${AUTH_BASE_URL}/resend-otp`,)
             .then((res) => {
                 console.log(res.data);
                 if (res.data.status) {
@@ -125,7 +126,7 @@ const Login = () => {
 
     const otpValidation = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        axios.post(`${baseurl}/otp-verify`,{otp},{withCredentials:true})
+        axiosInstance.post(`${AUTH_BASE_URL}/otp-verify`,{otp})
         .then((res)=>{
             console.log(res.data);
             if(res.data.status){

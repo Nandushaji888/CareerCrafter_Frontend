@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongoose';
+import { ApplicationType, AuthType, WorkArrangementType, employmentType } from './enums';
 
 
 export interface IUser {
@@ -102,20 +103,18 @@ interface Question {
       name:string,
       email:string,
       phone:string,
-      resume?:string,
+      resume?:File,
       jobPostId?:string,
       createdOn:string,
       userId?:string,
+      postName?:string,
+      company?:string,
       status:ApplicationType,
       questionAnswer?:IQuestion
   
   }
   
-  export enum ApplicationType{
-      Pending="pending",
-      Accepted="accepted",
-      Rejected="rejected",
-  }
+ 
   
   export interface IQuestion {
       question: string;
@@ -144,23 +143,6 @@ interface Question {
 
 
 
-export enum WorkArrangementType{
-    Remote='remote',
-    Hybrid='hybrid',
-    Office='office'
-}
-
-export enum employmentType{
-    Fulltime='fulltime',
-    PartTime='parttime',
-    Internship='internship'
-}
-
-export enum AuthType {
-    User = 'user',
-    Admin = 'admin',
-    Recruiter = 'recruiter'
-}
 
 
 

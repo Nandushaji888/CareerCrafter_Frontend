@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Navbar from './NavBar'
 import NotificationPage from '../../../components/NotificationPage'
 import { useSelector } from 'react-redux';

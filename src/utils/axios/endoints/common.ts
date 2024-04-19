@@ -4,7 +4,9 @@ const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
 const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
 
 const APPLICATION_BASE_URL = import.meta.env.VITE_APPLICATION_BASE_URL
-// const CHAT_BASE_URL = import.meta.env.
+// const CHAT_BASE_URL = import.meta.env.VITE_CHAT_BASE_URL
+// const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATION_BASE_URL
+
 
 
 

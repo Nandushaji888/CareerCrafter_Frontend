@@ -1,10 +1,10 @@
 import React from 'react';
 
 const formatDate = (date: string) => {
-  const d = new Date(date);
-  const day = d.getDate().toString().padStart(2, '0');
-  const month = (d.getMonth() + 1).toString().padStart(2, '0');
-  const year = d.getFullYear().toString();
+  const newDate = new Date(date);
+  const day = newDate.getDate().toString().padStart(2, '0');
+  const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = newDate.getFullYear().toString();
   return `${day}-${month}-${year}`;
 };
 

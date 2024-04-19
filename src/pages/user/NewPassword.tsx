@@ -1,16 +1,17 @@
 import Avatar from '../../assets/profile.png';
 import { Toaster, toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { passwordVerification } from '../../helper/Validate'
 import '../../assets/css/Auth.css'
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+
 
 
 
 
 const NewPassword = () => {
-    const baseurl = "http://localhost:4000/api/auth/user";
 
     const navigate = useNavigate()
 
@@ -26,7 +27,7 @@ const NewPassword = () => {
             const { password } = values
             console.log('values');
             console.log(password);
-            axios.post(`${baseurl}/new-password`, { password }, { withCredentials: true })
+            axiosInstance.post(`${AUTH_BASE_URL}/user/new-password`, { password })
                 .then((res) => {
                     console.log(res.data);
                     if (res.data.status) {

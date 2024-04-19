@@ -12,9 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={Store}>
 
       <PersistGate loading={null} persistor={persistor}>
-      <SocketContextProvider>
-        <App />
-      </SocketContextProvider>
+        <SocketContextProvider>
+          <App />
+        </SocketContextProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>,

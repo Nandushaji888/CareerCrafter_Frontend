@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './components/NavBar';
 import { IUser, RootState } from '../../utils/interface/interface';
 import axiosInstance from '../../utils/axios/axiosInstance';
-import { GET_USERDATA_API, UPDATE_USERDATA_API } from '../../utils/axios/endoints/common';
+const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
 
-// Define interface for user data
+
 
 
 // Define interface for form data
@@ -41,15 +41,23 @@ const UserProfile: React.FC = () => {
     useEffect(() => {
         
         // axios.get(`${baseUrl}/${user._id}`, { withCredentials: true })
-        axiosInstance.get(`${GET_USERDATA_API}/${user?._id}`)
+        axiosInstance.get(`${USER_BASE_URL}/${user?._id}`)
             .then((res) => {
+                console.log('response in userprofile');
+                console.log(res.data);
+                
+                
                 if (!res?.data?.status) {
+                    console.log('nothing is there');
+                    
                     navigate('/login');
                 }
                 setUserData(res?.data?.user);
                 setFile(res?.data?.user?.resume);
             })
             .catch((error) => {
+                console.log('in catch of first');
+                
                 console.error('Error fetching user data:', error);
                 dispatch(clearUser());
                 navigate('/login');
@@ -126,11 +134,10 @@ const UserProfile: React.FC = () => {
             }
         });
 
-        axiosInstance.post(UPDATE_USERDATA_API, formDataToSend, {
+        axiosInstance.post(`${USER_BASE_URL}/update-user`, formDataToSend, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
-            withCredentials: true
         })
             .then((res) => {
                 dispatch(addUser(res.data?.user));

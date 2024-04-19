@@ -1,76 +1,74 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import AdminRouter from './router/AdminRouter'
-import UserRouter from './router/UserRouter'
-import RecruiterRouter from './router/RecruiterRouter'
-import { useEffect, useState } from 'react'
-import { useSocketContext } from './utils/context/SocketContext'
-import IncomingCallNotification from './components/IncomingCallNotification '
-import ChatRouter from './router/ChatRouter'
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AdminRouter from './router/AdminRouter';
+import UserRouter from './router/UserRouter';
+import RecruiterRouter from './router/RecruiterRouter';
+import { useEffect, useState } from 'react';
+import { useSocketContext } from './utils/context/SocketContext';
+import IncomingCallNotification from './components/IncomingCallNotification ';
+import ChatRouter from './router/ChatRouter';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [videoLink, setVideoLink] = useState<string | undefined>('');
   const [incomingCall, setIncomingCall] = useState(false);
 
-  const { socket } = useSocketContext()
+  const { socket } = useSocketContext();
+
   useEffect(() => {
     if (socket) {
       console.log('socket connected', socket?.id);
-      console.log((`socket connected ${socket?.id} in jitsi111111111`));
+      console.log(`socket connected ${socket?.id} in jitsi111111111`);
 
-      socket?.on('video:call:room:created', (roomName ) => {
+      socket?.on('video:call:room:created', (roomName) => {
         console.log(`Your video call link is "https://meet.jit.si/${roomName}"`);
         console.log('roomName');
         console.log(roomName);
-        
-        setVideoLink(`https://meet.jit.si/${roomName}`)
+
+        setVideoLink(`https://meet.jit.si/${roomName}`);
         console.log('videoLink');
         console.log(videoLink);
         setIncomingCall(true);
-        
-      })
+      });
 
       // return () => {
       //   socket?.off("video:call:room:created")
       // }
     }
-  }, [socket])
+  }, [socket, videoLink]);
 
   const handleAcceptCall = () => {
-    if(videoLink){
-
+    if (videoLink) {
       window.location.href = videoLink;
-      setIncomingCall(false); 
+      setIncomingCall(false);
     }
-
   };
 
   const handleRejectCall = () => {
-
-    setIncomingCall(false); 
+    setIncomingCall(false);
   };
-  
+
   return (
     <>
-     {incomingCall && (
-        <IncomingCallNotification
-        videoLink={videoLink}
-          onAccept={handleAcceptCall}
-          onReject={handleRejectCall}
-        />
-      )}
+      <ErrorBoundary>
+        {incomingCall && (
+          <IncomingCallNotification
+            videoLink={videoLink}
+            onAccept={handleAcceptCall}
+            onReject={handleRejectCall}
+          />
+        )}
 
-      <Router>
-        <Routes>
-          <Route path='/messages/*' element={<ChatRouter />} />
-          <Route path='/admin/*' element={<AdminRouter />} />
-          <Route path='/recruiter/*' element={<RecruiterRouter />} />
-          <Route path='/*' element={<UserRouter />} />
-        </Routes>
-      </Router>
-
+        <Router>
+          <Routes>
+            <Route path="/messages/*" element={<ErrorBoundary><ChatRouter /></ErrorBoundary>} />
+            <Route path="/admin/*" element={<ErrorBoundary><AdminRouter /></ErrorBoundary>} />
+            <Route path="/recruiter/*" element={<ErrorBoundary><RecruiterRouter /></ErrorBoundary>} />
+            <Route path="/*" element={<ErrorBoundary><UserRouter /></ErrorBoundary>} />
+          </Routes>
+        </Router>
+      </ErrorBoundary>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

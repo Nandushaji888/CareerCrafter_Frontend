@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import {useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
-import axios from 'axios'
 import Loading from '../../assets/ZKZg.gif';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../../utils/redux/slices/userSlice';
 import '../../assets/css/Auth.css'
 import { IUser } from '../../utils/interface/interface';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 
@@ -18,7 +19,6 @@ const OtpVerification = () => {
     const [loading, setLoading] = useState(false)
 
     const [time, setTime] = useState(10)
-    const baseurl = "http://localhost:4000/api/auth/user";
 
     const navigate = useNavigate()
 
@@ -56,7 +56,7 @@ const OtpVerification = () => {
             toast.error('OTP Should have 6 characters')
 
         } else {
-            axios.post(`${baseurl}/verify-otp`, { otp }, { withCredentials: true })
+            axiosInstance.post(`${AUTH_BASE_URL}/user/verify-otp`, { otp })
                 .then((res) => {
                     console.log('res.status',res.data);
                     
@@ -109,8 +109,8 @@ const OtpVerification = () => {
         e.preventDefault();
         setLoading(true);
 
-        axios
-            .get(`${baseurl}/resend-otp`, { withCredentials: true })
+        axiosInstance
+            .get(`${AUTH_BASE_URL}/user/resend-otp`,)
             .then((res) => {
                 setLoading(false)
                 console.log(res.data);

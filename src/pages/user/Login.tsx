@@ -10,7 +10,7 @@ import { addUser } from '../../utils/redux/slices/userSlice';
 import '../../assets/css/Auth.css'
 import { IUser } from '../../utils/interface/interface';
 import axiosInstance from '../../utils/axios/axiosInstance';
-import { USER_GOOGLE_AUTH_API, USER_LOGIN_API } from '../../utils/axios/endoints/common';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 const Login = () => {
     const navigate = useNavigate()
@@ -36,7 +36,7 @@ const Login = () => {
             console.log(values);
 
 
-            axiosInstance.post(USER_LOGIN_API, { values })
+            axiosInstance.post(`${AUTH_BASE_URL}/user/login`, { values })
                 .then((res) => {
                     if (res.data.status) {
                         console.log(res.data);
@@ -60,6 +60,10 @@ const Login = () => {
                             profilePic: res?.data?.user?.profilePic || "User-Profile-PNG-Download-Image.png"
                         }
                         dispatch(addUser(data))
+                        console.log('dispatched user');
+                        console.log(data);
+                        
+                        
                         // localStorage.setItem('accessToken', res.data.accessToken);
 
                         navigate('/');
@@ -111,7 +115,7 @@ const Login = () => {
             console.log(userData);
             // axios
             //     .post(`${baseurl}/google-auth`, { userData }, { withCredentials: true })
-            axiosInstance.post(USER_GOOGLE_AUTH_API, { userData })
+            axiosInstance.post(`${AUTH_BASE_URL}/user/google-auth`, { userData })
                 .then((res) => {
 
                     if (res.data.status) {

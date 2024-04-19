@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +6,8 @@ import Navbar from './components/NavBar';
 import { IPost, RootState } from '../../utils/interface/interface';
 import Footer from '../../components/Footer';
 import axiosInstance from '../../utils/axios/axiosInstance'
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
+
 
 
 const UserHome = () => {
@@ -18,10 +19,9 @@ const UserHome = () => {
   const [jobList, setJobList] = useState<IPost[]>([]);
   const [page, setPage] = useState();
   const [limit, setLimit] = useState(4); // Adjust limit as needed
-  const [totalPages, setTotalPages] = useState(0);
-  const postUrl = 'http://localhost:4001/api/post';
+  // const [totalPages, setTotalPages] = useState(0);
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
 
 
@@ -32,7 +32,7 @@ const UserHome = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get(`${postUrl}/list-jobs`, {
+      const response = await axiosInstance.get(`${POST_BASE_URL}/list-jobs`, {
         params: {
             search: searchQuery,
             page: page,
@@ -41,13 +41,12 @@ const UserHome = () => {
             userId:userData?._id?userData?._id:undefined
 
         },
-        withCredentials: true
     });
 
     
 
       setJobList(response.data.postDatas);
-      setTotalPages(response.data.totalPages);
+      // setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching jobs:", error);
     }
@@ -59,7 +58,7 @@ const UserHome = () => {
     e.preventDefault();
     if (id) {
       // axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
-      axiosInstance.get(`${postUrl}/job-details/${id}`)
+      axiosInstance.get(`${POST_BASE_URL}/job-details/${id}`)
         .then((res) => {
           if (res?.data?.status) {
             const dataToSend = { data: res?.data?.jobData };

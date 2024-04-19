@@ -1,17 +1,16 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
 import { validate } from '../../helper/jobPostValidation'
-import { WorkArrangementType, employmentType } from '../../utils/interface/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { jobPost } from '../../utils/redux/slices/jobPostSlice';
 import RecruiterNavbar from './components/RecruiterNavbar';
-import {RecruitingPlace} from '../../utils/interface/interface'
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { WorkArrangementType, employmentType } from '../../utils/interface/enums';
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
 
 
 const JobPostForm = () => {
-  const baseurl = "http://localhost:4001/api/post/recruiter";
   const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
 
   const navigate = useNavigate()
@@ -68,7 +67,7 @@ const JobPostForm = () => {
 
     // setFormData(data)
 
-    axios.post(`${baseurl}/create-job-post`, { formData }, { withCredentials: true })
+    axiosInstance.post(`${POST_BASE_URL}/recruiter/create-job-post`, { formData })
       .then((res) => {
         if (res.data.status) {
           toast.success(res?.data?.message);

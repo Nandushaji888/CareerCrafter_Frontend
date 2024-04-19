@@ -1,7 +1,10 @@
-import axios, { AxiosError } from 'axios';
-import React, { useEffect, useState } from 'react'
+import { AxiosError } from 'axios';
+import React from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+
 
 
 interface UserJobDetailsButtonsComponent {
@@ -20,14 +23,13 @@ interface ErrorResponse{
 
 const UserJobDetailsButtons: React.FC<UserJobDetailsButtonsComponent> = ({ handleAppliation, applied,userId,jobPostId,isApplied,saved,setSaved }) => {
     const navigate = useNavigate()
-    const baseUrl = 'http://localhost:4002/api/user';
 
     const handleSave = async (e: any) => {
         e.preventDefault()
         isApplied()
         const data = {userId,jobPostId}
 
-        axios.post(`${baseUrl}/save-post`,data, { withCredentials: true })
+        axiosInstance.post(`${AUTH_BASE_URL}/save-post`,data,)
         .then((res)=> {
             if(res?.data?.status){
                 setSaved(true)

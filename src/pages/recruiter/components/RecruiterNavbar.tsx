@@ -2,28 +2,28 @@ import  { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bell, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 // import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { clearRecruiter } from '../../../utils/redux/slices/recruiterSlice';
 import { RootState } from '../../../utils/interface/interface';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATION_BASE_URL
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 const RecruiterNavbar = () => {
     // const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const recruiterData = useSelector((state: RootState) => state.persisted.recruiter.recruiterData);
     const dispatch = useDispatch()
-    const countUrl = 'http://localhost:4005/api/notifications';
     const [notificationsCount, setNotificationCount] = useState('')
     const [messagesCount, setMessageCount] = useState('')
     const navigate = useNavigate();
-    const baseurl = "http://localhost:4000/api/auth/recruiter";
 
     useEffect(() => {
         
-        axios.get(`${countUrl}/count/${recruiterData?._id}`, { withCredentials: true })
+        axiosInstance.get(`${NOTIFICATION_BASE_URL}/count/${recruiterData?._id}`,)
             .then((res) => {
                 console.log(res?.data);
                 if (res?.data?.status) {
@@ -47,12 +47,12 @@ const RecruiterNavbar = () => {
                 //     navigate('/recruiter/login')
                 // }
             })
-    }, [])
+    }, [recruiterData?._id])
 
 
 
     const handleLogout = () => {
-        axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
+        axiosInstance.post(`${AUTH_BASE_URL}/recruiter/logout`, {},)
             .then((res) => {
                 console.log(res.data);
                 dispatch(clearRecruiter())

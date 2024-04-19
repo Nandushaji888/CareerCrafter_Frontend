@@ -1,26 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import DataTable from 'react-data-table-component';
-import { useSelector } from 'react-redux';
 interface IRecruiterJobListing {
     setJobList: any;
     columns: any;
     filteredJobs: any;
     handleSearch: any;
-    jobList:any
+    jobList: any
 }
 
-const RecruiterJobListing: React.FC<IRecruiterJobListing> = ({ setJobList, columns, filteredJobs, handleSearch,jobList }) => {
+const RecruiterJobListing: React.FC<IRecruiterJobListing> = ({ columns, filteredJobs, handleSearch }) => {
 
-    const postUrl = 'http://localhost:4001/api/post/recruiter';
+    // const postUrl = 'http://localhost:4001/api/post/recruiter';
 
-    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
-    
+    // const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+
 
     // useEffect(() => {
     //     console.log('hereeeeeeeeeeeeeeee');
-        
-        
+
+
     //     axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
     //         .then((res) => {
     //             console.log(res.data);
@@ -44,7 +42,7 @@ const RecruiterJobListing: React.FC<IRecruiterJobListing> = ({ setJobList, colum
 
             <div className="flex flex-col px-3 rounded-2xl justify-center">
 
-                
+
                 <DataTable
                     columns={columns}
                     data={filteredJobs}

@@ -1,4 +1,3 @@
-import React from 'react';
 import RecruiterNavbar from '../pages/recruiter/components/RecruiterNavbar';
 
 const AboutUsPage = () => {

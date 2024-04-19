@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addQuestion, clearJobPost } from '../../utils/redux/slices/jobPostSlice';
 import toast, { Toaster } from 'react-hot-toast';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
+
 
 const AddQuestionForm = () => {
     const dispatch = useDispatch();
@@ -17,10 +19,9 @@ const AddQuestionForm = () => {
         if (!postData.postName) {
             navigate('/recruiter/post-job');
         }
-    }, []);
+    }, [navigate, postData.postName]);
 
 
-    const baseurl = "http://localhost:4001/api/post/recruiter";
 
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
@@ -55,7 +56,7 @@ const AddQuestionForm = () => {
 
 
 
-            axios.post(`${baseurl}/create-job-post`, { formData }, { withCredentials: true })
+            axiosInstance.post(`${POST_BASE_URL}/recruiter/create-job-post`, { formData })
             .then((response) => {
                 if (response.data.status) {
                     if (response?.data?.status) {

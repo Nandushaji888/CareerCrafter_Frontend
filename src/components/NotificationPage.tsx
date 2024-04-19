@@ -1,43 +1,44 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearUser } from '../utils/redux/slices/userSlice';
 import { clearRecruiter } from '../utils/redux/slices/recruiterSlice';
 import { INotification } from '../utils/interface/interface';
+import axiosInstance from '../utils/axios/axiosInstance';
+const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATION_BASE_URL
 
 const NotificationPage: React.FC<{ messenger: any }> = ({ messenger }) => {
   const [latestNotifications, setLatestNotifications] = useState<INotification[]>([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const baseUrl = 'http://localhost:4005/api/notifications';
 
-  const fetchNotificationCount = async () => {
-    try {
-      const res = await axios.get(`${baseUrl}/${messenger?._id}`, { withCredentials: true });
-      const { notifications } = res.data;
-      setLatestNotifications(notifications.slice(0, 10));
 
-      const unreadNotifications = notifications.filter((notification: INotification) => !notification.readStatus);
-      if (unreadNotifications.length > 0) {
-        markNotificationsAsRead(unreadNotifications.map((notification: INotification) => notification._id));
-      }
-    } catch (err:any) {
-      console.error(err);
-      if (err?.response?.status === 401) {
-        dispatch(messenger?.worksAt ? clearRecruiter() : clearUser());
-        navigate(messenger?.worksAt ? '/recruiter/login' : '/login');
-      }
-    }
-  };
 
   useEffect(() => {
+    const fetchNotificationCount = async () => {
+      try {
+        const res = await axiosInstance.get(`${NOTIFICATION_BASE_URL}/${messenger?._id}`,);
+        const { notifications } = res.data;
+        setLatestNotifications(notifications.slice(0, 10));
+  
+        const unreadNotifications = notifications.filter((notification: INotification) => !notification.readStatus);
+        if (unreadNotifications.length > 0) {
+          markNotificationsAsRead(unreadNotifications.map((notification: INotification) => notification._id));
+        }
+      } catch (err:any) {
+        console.error(err);
+        if (err?.response?.status === 401) {
+          dispatch(messenger?.worksAt ? clearRecruiter() : clearUser());
+          navigate(messenger?.worksAt ? '/recruiter/login' : '/login');
+        }
+      }
+    };
     fetchNotificationCount();
-  }, [messenger?._id]);
+  }, [dispatch, messenger?._id, messenger?.worksAt, navigate]);
 
   const markNotificationsAsRead = async (notificationIds: string[]) => {
     try {
-      const res = await axios.put(`${baseUrl}/mark-read`, { notificationIds }, { withCredentials: true });
+      const res = await axiosInstance.put(`${NOTIFICATION_BASE_URL}/mark-read`, { notificationIds }, );
       console.log("Notifications marked as read:", res.data);
     } catch (err) {
       console.error("Error marking notifications as read:", err);

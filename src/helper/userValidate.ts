@@ -15,14 +15,17 @@ interface FormData {
 }
 
 export const validate = (formData: FormData) => {
-  if (!formData?.aboutYou) {
-    return { isValid: false, errorMessage: "About You required...!!!" };
-  } else if (!formData?.dateOfBirth) {
-    return { isValid: false, errorMessage: "Date of Birth is required...!!!" };
-  } else if (!formData?.qualification) {
-    return { isValid: false, errorMessage: "Qualification required...!!!" };
-  } else if (!formData?.skills) {
-    return { isValid: false, errorMessage: "Skills required...!!!" };
-  } 
-  return { isValid: true, errorMessage: "" };
+  switch (true) {
+    case !formData?.aboutYou:
+      return { isValid: false, errorMessage: "About You required...!!!" };
+    case !formData?.dateOfBirth:
+      return { isValid: false, errorMessage: "Date of Birth is required...!!!" };
+    case !formData?.qualification:
+      return { isValid: false, errorMessage: "Qualification required...!!!" };
+    case !formData?.skills:
+      return { isValid: false, errorMessage: "Skills required...!!!" };
+    default:
+      return { isValid: true, errorMessage: "" };
+  }
 };
+

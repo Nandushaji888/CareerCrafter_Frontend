@@ -1,34 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../assets/ZKZg.gif';
 import toast, { Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import { recruiterRegisterValidation } from '../../helper/Validate'
-import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux';
-import { addRecruiter } from '../../utils/redux/slices/recruiterSlice';
+import { useSelector } from 'react-redux';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
-    const baseurl = "http://localhost:4000/api/auth/recruiter";
     const navigate = useNavigate()
-    const dispatch = useDispatch()
 
     const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
     useEffect(() => {
         if (recruiterData?._id) {
             navigate('/recruiter');
         }
-    }, [navigate,recruiterData]);
+    }, [navigate, recruiterData]);
 
     const formik = useFormik({
         initialValues: {
             name: '',
             email: '',
-            phone: '',  
-            worksAt:'',
+            phone: '',
+            worksAt: '',
             password: '',
             // confirm_pwd: ''
         },
@@ -36,15 +34,15 @@ const Register = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: async values => {
-            setLoading(true);        
+            setLoading(true);
             if (formik.isValid) {
-                axios
-                    .post(`${baseurl}/signup`, { values }, { withCredentials: true })
+                axiosInstance
+                    .post(`${AUTH_BASE_URL}/recruiter/signup`, { values },)
                     .then((res) => {
                         if (res.data.status) {
-                            console.log('valuesssssssssssssssssssssss');
+                            console.log('valuesssssssssssssssssssssss in recruiter register');
                             console.log(values);
-                            
+
                             // dispatch(addRecruiter(values))
                             navigate('/recruiter/verify-otp');
                         } else {
@@ -67,11 +65,11 @@ const Register = () => {
     )
     return (
         <div className="container mx-auto">
-        <Toaster position='top-center' reverseOrder={false}></Toaster>
+            <Toaster position='top-center' reverseOrder={false}></Toaster>
 
-        <div className="flex justify-center items-center h-screen">
-            <div className=" bg-slate-100 pt-10 pb-10  px-10 rounded-3xl h-[700px]">
-                <div className="title flex flex-col items-center">
+            <div className="flex justify-center items-center h-screen">
+                <div className=" bg-slate-100 pt-10 pb-10  px-10 rounded-3xl h-[700px]">
+                    <div className="title flex flex-col items-center">
                         <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
                         <h6 className="text-2xl pb-3 font-bold  text-gray-600">Recruiter Signup</h6>
 
@@ -80,7 +78,7 @@ const Register = () => {
                         </span>
                     </div>
                     <form className="py-2" onSubmit={formik.handleSubmit}>
-                        
+
                         <div className="textbox flex flex-col items-center gap-6">
                             <input
                                 {...formik.getFieldProps('name')}

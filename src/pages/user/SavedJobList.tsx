@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Header from '../../components/Header';
 import { IPost, RootState} from '../../utils/interface/interface';
 import DataTable, { TableColumn } from 'react-data-table-component';
@@ -8,12 +7,14 @@ import { Toaster } from 'react-hot-toast';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Navbar from './components/NavBar';
 import { useSelector } from 'react-redux';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+
 
 
 
 
 const SavedJobList: React.FC = () => {
-    const baseUrl = 'http://localhost:4002/api/user';
     const user = useSelector((state: RootState) => state.persisted.user.userData);
     const navigate = useNavigate()
     const [jobList, setJobList] = useState<IPost[]>([]);
@@ -27,7 +28,7 @@ useEffect(()=> {
     }
     console.log(user);
     
-axios.get(`${baseUrl}/saved-jobs/${user?._id}`,{withCredentials:true})
+axiosInstance.get(`${AUTH_BASE_URL}/user/saved-jobs/${user?._id}`)
 .then((res)=> {
     console.log('res?.data');
     console.log(res?.data);
@@ -40,7 +41,7 @@ axios.get(`${baseUrl}/saved-jobs/${user?._id}`,{withCredentials:true})
     console.log(err);
     
 })
-},[])
+},[navigate, user])
 
 
     const columns: TableColumn<IPost>[] = [

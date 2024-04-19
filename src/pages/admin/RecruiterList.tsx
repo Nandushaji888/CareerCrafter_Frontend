@@ -7,6 +7,9 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { Link, useNavigate } from 'react-router-dom'
 import { confirmAlert } from 'react-confirm-alert'
 import axios from 'axios'
+import axiosInstance from '../../utils/axios/axiosInstance'
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+
 
 const RecruiterList = () => {
     const [recruiters, setRecruiters] = useState<IRecruiter[]>([]);
@@ -15,7 +18,6 @@ const RecruiterList = () => {
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
-    const baseUrl = "http://localhost:4000/api/auth/admin";
 
 
     const filteredRecruiters = recruiters.filter(recruiter =>
@@ -73,7 +75,7 @@ const RecruiterList = () => {
     useEffect(() => {
         const fetchRecruiters = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/recruiters-list`, { withCredentials: true });
+                const response = await axiosInstance.get(`${AUTH_BASE_URL}/admin/recruiters-list`);
                 setRecruiters(response?.data?.recruiters);
             } catch (error) {
                 
@@ -97,7 +99,7 @@ const RecruiterList = () => {
         console.log('change status');
         console.log(formData);
 
-        axios.post(`${baseUrl}/change-recruiter-status`, { formData }, { withCredentials: true })
+        axiosInstance.post(`${AUTH_BASE_URL}/admin/change-recruiter-status`, { formData }, { withCredentials: true })
             .then((res) => {
                 console.log('res.data');
                 console.log(res.data);

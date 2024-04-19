@@ -3,14 +3,14 @@ import Avatar from '../../assets/profile.png';
 import { Toaster,toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import {signinValidation} from '../../helper/Validate'
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addAdmin } from '../../utils/redux/slices/adminSlice';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 const Login = () => {
 
-    const baseurl = "http://localhost:4000/api/auth/admin";
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -27,8 +27,8 @@ const Login = () => {
         
             
             
-                axios
-                    .post(`${baseurl}/login`, { values }, { withCredentials: true })
+                axiosInstance
+                    .post(`${AUTH_BASE_URL}/admin/login`, { values })
                     .then((res) => {
                         if (res.data.status) {
                             console.log(res.data);

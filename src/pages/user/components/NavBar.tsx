@@ -7,6 +7,7 @@ import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
 import { useSocketContext } from '../../../utils/context/SocketContext';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 
@@ -16,7 +17,6 @@ const Navbar: React.FC = () => {
     const dispatch = useDispatch()
     const { socket } = useSocketContext()
     const navigate = useNavigate();
-    const baseurl = "http://localhost:4000/api/auth/user";
     const countUrl = 'http://localhost:4005/api/notifications';
     const [notificationsCount, setNotificationCount] = useState('')
     const [messagesCount, setMessageCount] = useState('')
@@ -29,8 +29,8 @@ const Navbar: React.FC = () => {
     const handleLogout = () => {
         // console.log('hereeeeee');
 
-        axios.post(`${baseurl}/logout`, {}, { withCredentials: true })
-            .then((res) => {
+        axios.post(`${AUTH_BASE_URL}/user/logout`, {})
+            .then(() => {
                 // localStorage.removeItem('user-jwtToken');
                 dispatch(clearUser())
                 setIsDropdownVisible(false);
@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
         .then((res) => {
             // console.log(res?.data);
             if (res?.data?.status) {
-                const { notificationCount, messageCount } = res?.data
+                const { notificationCount, messageCount } = res.data
 
                 if (Number(notificationCount) > 0) {
 

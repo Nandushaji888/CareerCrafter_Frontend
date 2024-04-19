@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { XCircle } from 'lucide-react';
 import { IApplication } from '../utils/interface/interface';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import axiosInstance from '../utils/axios/axiosInstance';
+const APPLICATION_BASE_URL = import.meta.env.VITE_APPLICATION_BASE_URL
 
 interface Question {
   question: string;
   requiredAnswer: string;
-  givenAnswer?: string; // Added givenAnswer field
+  givenAnswer?: string; 
 }
 
 interface ApplicationAnswerModalProps {
@@ -20,7 +21,6 @@ interface ApplicationAnswerModalProps {
 
 const ApplicationAnswerModal: React.FC<ApplicationAnswerModalProps> = ({ questions, onClose, applicationData, setApplied}) => {
   const [questionAnswer, setquestionAnswer] = useState<Question[]>(questions.map(q => ({ ...q })));
-  const applicationUrl = 'http://localhost:4004/api/application';
 
   const handleAnswerChange = (index: number, answer: string) => {
     const updatedQuestion = { ...questionAnswer[index], givenAnswer: answer };
@@ -35,7 +35,7 @@ const ApplicationAnswerModal: React.FC<ApplicationAnswerModalProps> = ({ questio
     // Access questionAnswer here, each question object will have a givenAnswer field
     // console.log('Updated Questions:', questionAnswer);
 
-    await axios.post(`${applicationUrl}/create-application`, { ...applicationData, questionAnswer }, { withCredentials: true })
+    await axiosInstance.post(`${APPLICATION_BASE_URL}/create-application`, { ...applicationData, questionAnswer }, { withCredentials: true })
       .then((res) => {
         toast.success(res?.data?.message)
         setApplied(true)

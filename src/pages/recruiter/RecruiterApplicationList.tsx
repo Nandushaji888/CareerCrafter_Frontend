@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react'
 // import SideBar from './SideBar'
-import Header from '../../components/Header'
-import axios from 'axios'
-import { ApplicationType, IApplication, IPost } from '../../utils/interface/interface'
+import {  IApplication } from '../../utils/interface/interface'
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { Link, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux';
 import RecruiterNavbar from './components/RecruiterNavbar';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { ApplicationType } from '../../utils/interface/enums';
+const APPLICATION_BASE_URL = import.meta.env.VITE_APPLICATION_BASE_URL
+
 const RecruiterApplicationList = () => {
 
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+    // const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
     const [applications, setApplications] = useState<IApplication[]>([])
 
-    const baseUrl = 'http://localhost:4004/api/application/recruiter';
 
     
 
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`${baseUrl}/get-all-applications/${id}`, { withCredentials: true })
+        axiosInstance.get(`${APPLICATION_BASE_URL}/recruiter/get-all-applications/${id}`)
             .then((res) => {
                 // console.log(res?.data);
                 // console.log(res?.data?.applicationList);
                 setApplications(res?.data?.applicationList)
 
             })
-    }, [])
+    }, [id])
 
     const columns: TableColumn<IApplication>[] = [
         {

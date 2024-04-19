@@ -1,7 +1,5 @@
-import React from 'react'
 import {Route,Routes} from 'react-router-dom'
 import Login from '../pages/admin/Login'
-// import AdminHome from '../pages/admin/AdminHome'
 import UserList from '../pages/admin/UserList'
 import UserDetails from '../pages/admin/UserDetails'
 import PendingJobLists from '../pages/admin/PendingJobLists'

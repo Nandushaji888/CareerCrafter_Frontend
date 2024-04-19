@@ -1,18 +1,18 @@
-import React,{useEffect} from 'react';
+import {useEffect} from 'react';
 import { Link ,useNavigate} from 'react-router-dom';
 import Avatar from '../../assets/profile.png';
 import { Toaster,toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import {signinValidation} from '../../helper/Validate'
-import axios from 'axios';
 import { IRecruiter } from '../../utils/interface/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRecruiter } from '../../utils/redux/slices/recruiterSlice';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
 
 
 const Login = () => {
 
-    const baseurl = "http://localhost:4000/api/auth/recruiter";
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -37,8 +37,8 @@ const Login = () => {
             console.log(values);
             
             
-                axios
-                    .post(`${baseurl}/login`, { values }, { withCredentials: true })
+                axiosInstance
+                    .post(`${AUTH_BASE_URL}/recruiter/login`, { values })
                     .then((res) => {
                         if (res.data.status) {
                             console.log('res.data');

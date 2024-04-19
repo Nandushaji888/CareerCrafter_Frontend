@@ -2,14 +2,15 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 // import SideBar from './SideBar'
 import Header from '../../components/Header'
-import axios from 'axios'
 import { IPost, RootState } from '../../utils/interface/interface'
 import { TableColumn } from 'react-data-table-component';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import RecruiterNavbar from './components/RecruiterNavbar';
 import { clearRecruiter } from '../../utils/redux/slices/recruiterSlice';
+import axiosInstance from '../../utils/axios/axiosInstance';
 const LazyJobListingComponent = lazy(() => import('./components/RecruiterJobListing'))
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
 
 
 
@@ -18,11 +19,10 @@ const RecruiterListJobs = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const postUrl = 'http://localhost:4001/api/post/recruiter';
 
     const recruiterData = useSelector((state: RootState) => state.persisted.recruiter.recruiterData);
     useEffect(() => {
-        axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
+        axiosInstance.get(`${POST_BASE_URL}/recruiter/list-jobs/${recruiterData._id}`,)
             .then((res) => {
                 console.log(res.data);
                 setJobList(res?.data?.jobList)

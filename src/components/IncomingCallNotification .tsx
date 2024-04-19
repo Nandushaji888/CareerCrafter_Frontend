@@ -7,7 +7,7 @@ interface IncomingCallNotification {
 
 }
 
-const IncomingCallNotification: React.FC<IncomingCallNotification> = ({ videoLink, onAccept, onReject }) => {
+const IncomingCallNotification: React.FC<IncomingCallNotification> = ({  onAccept, onReject }) => {
     useEffect(() => {
         console.log('reached otification');
     }, [])

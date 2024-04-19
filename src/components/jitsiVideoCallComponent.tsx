@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import toast from 'react-hot-toast';

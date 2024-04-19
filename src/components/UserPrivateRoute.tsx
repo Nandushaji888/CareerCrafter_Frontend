@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
 import { Outlet, Navigate } from 'react-router-dom'
+import { RootState } from '../utils/interface/interface';
 
 const UserPrivateRoute = () => {
-    const user = useSelector((state: any) => state.persisted.user.userData);
+    const user = useSelector((state: RootState) => state.persisted.user.userData);
 
-    // console.log('user');
-    // console.log(user);
+    console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+    console.log(user);
     
 
     return(

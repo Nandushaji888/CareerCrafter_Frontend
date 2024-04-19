@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,9 +5,11 @@ import { clearRecruiter } from '../../utils/redux/slices/recruiterSlice';
 import { IPost, RootState } from '../../utils/interface/interface';
 import RecruiterNavbar from './components/RecruiterNavbar';
 import Footer from '../../components/Footer';
+import axiosInstance from '../../utils/axios/axiosInstance';
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
+
 
 const RecruiterHome = () => {
-  const postUrl = "http://localhost:4001/api/post/recruiter"
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const recruiterData = useSelector((state: RootState) => state.persisted.recruiter.recruiterData);
@@ -17,7 +18,7 @@ const RecruiterHome = () => {
   useEffect(() => {
     console.log('1sttt');
 
-    axios.get(`${postUrl}/list-jobs/${recruiterData._id}`, { withCredentials: true })
+    axiosInstance.get(`${POST_BASE_URL}/recruiter/list-jobs/${recruiterData._id}`,)
       .then((res) => {
         setJobList(res?.data?.jobList)
       })
@@ -34,7 +35,7 @@ const RecruiterHome = () => {
   const handleJobDetails = (id: string | undefined, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     if (id) {
-      axios.get(`${postUrl}/job-details/${id}`, { withCredentials: true })
+      axiosInstance.get(`${POST_BASE_URL}/recruiter/job-details/${id}`)
         .then((res) => {
           if (res?.data?.status) {
             const dataToSend = { data: res?.data?.jobData };

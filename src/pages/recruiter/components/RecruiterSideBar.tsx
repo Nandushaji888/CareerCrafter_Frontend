@@ -1,16 +1,13 @@
 
-import React, { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { SiShopware } from 'react-icons/si'
-import { MdOutlineCancel } from 'react-icons/md'
 import { FaUser, FaUserTie, FaClipboardCheck, FaClipboardList } from 'react-icons/fa';
-import axios from 'axios';
 
 
 
 const RecruiterSideBar = () => {
-    const postUrl = 'http://localhost:4001/api/post/admin';
-    const [count, setCount] = useState('')
+    // const postUrl = 'http://localhost:4001/api/post/admin';
+    // const [count, setCount] = useState('')
 
     // useEffect(() => {
     //     axios.get(`${postUrl}/pending-post-count`, { withCredentials: true })
