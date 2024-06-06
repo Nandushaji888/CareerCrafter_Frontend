@@ -15,7 +15,7 @@ export interface IUser {
     appliedJobs?:ObjectId;
     savedJobs?:ObjectId;
     aboutYou?:string;
-    resume: File | null;
+    resume?: File | null;
     qualification?:string;
     skills?:string;
     secondarySkills?:string;
@@ -85,6 +85,9 @@ interface Question {
     profilePic?: string;
     createdOn?: Date;
     isPremium?:boolean;
+    type?: AuthType;
+
+    
   }
   export interface IAdmin {
     _id?: string;
@@ -177,3 +180,10 @@ export interface INotification {
     updatedAt?:string
     rejectedReason?:string;
   }
+
+  export interface LocationSuggestion {
+    id: string;
+    place_name: string;
+}
+
+export { employmentType, WorkArrangementType };

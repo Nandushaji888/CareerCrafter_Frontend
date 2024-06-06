@@ -108,7 +108,7 @@ const JobDetails = () => {
         fetchData();
         window.scrollTo(0, 0);
     }
-        , [POST_BASE_URL, id, navigate]);
+        , [id, navigate]);
 
 
 
@@ -136,7 +136,7 @@ const JobDetails = () => {
         } else {
             setResume(userData.resume);
         }
-    }, [USER_BASE_URL, dispatch, userData?._id, userData.resume]);
+    }, [dispatch, userData?._id, userData.resume]);
 
 
 
@@ -168,7 +168,9 @@ const JobDetails = () => {
         setApplicationData(formData)
         if (!data?.questions?.length) {
             try {
-
+                console.log("`${APPLICATION_BASE_URL}/create-application`");
+                console.log(`${APPLICATION_BASE_URL}/create-application`);
+                
                 axiosInstance.get(`${USER_BASE_URL}/${userData._id}`)
                     .then((res: any) => {
                         if (!res.data?.status) {

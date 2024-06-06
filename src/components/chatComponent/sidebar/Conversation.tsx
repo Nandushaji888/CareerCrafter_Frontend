@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { IUser } from "../../../utils/interface/interface";
+import React, {  useEffect, useState } from "react";
+import { IRecruiter, IUser } from "../../../utils/interface/interface";
 
 import useConversation from "../../../utils/zustand/userConversation";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { clearRecruiter } from "../../../utils/redux/slices/recruiterSlice";
 import { clearUser } from "../../../utils/redux/slices/userSlice";
 interface ConversationProps {
-  conversation: IUser;
+  conversation: IUser|IRecruiter
   lastIdx: boolean;
 }
 
@@ -31,7 +31,7 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
     axios.get(`${countUrl}/conversation-message-count/${conversation?._id}`, { withCredentials: true })
       .then((res) => {
         if (res.status) {
-          const { messageCount } = res?.data
+          const { messageCount } = res.data
 
           setMessageCount(messageCount)
         }
@@ -46,12 +46,14 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, lastIdx }) =>
         console.log(err);
 
       })
-  }, [])
+  }, [conversation?._id, conversation?.type, dispatch, navigate])
 const handleNavigate = ()=> {
   console.log('handle navigate');
   
   setSelectedConversation(conversation)
-
+  console.log('conversation');
+  console.log(conversation._id);
+  
   console.log("Current Route:", currentRoute);
   currentRoute === '/recruiter/messages' ? navigate(`/recruiter/messages/${conversation?._id}`) : navigate(`/messages/${conversation?._id}`)
 }

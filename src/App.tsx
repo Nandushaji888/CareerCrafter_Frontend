@@ -5,7 +5,7 @@ import RecruiterRouter from './router/RecruiterRouter';
 import { useEffect, useState } from 'react';
 import { useSocketContext } from './utils/context/SocketContext';
 import IncomingCallNotification from './components/IncomingCallNotification ';
-import ChatRouter from './router/ChatRouter';
+// import ChatRouter from './router/ChatRouter';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
@@ -60,10 +60,10 @@ function App() {
 
         <Router>
           <Routes>
-            <Route path="/messages/*" element={<ErrorBoundary><ChatRouter /></ErrorBoundary>} />
             <Route path="/admin/*" element={<ErrorBoundary><AdminRouter /></ErrorBoundary>} />
             <Route path="/recruiter/*" element={<ErrorBoundary><RecruiterRouter /></ErrorBoundary>} />
             <Route path="/*" element={<ErrorBoundary><UserRouter /></ErrorBoundary>} />
+            {/* <Route path="/messages/*" element={<ErrorBoundary><ChatRouter /></ErrorBoundary>} /> */}
           </Routes>
         </Router>
       </ErrorBoundary>

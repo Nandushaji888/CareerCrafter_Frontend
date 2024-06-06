@@ -3,7 +3,7 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../utils/axios/axiosInstance';
-const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+const USER_BASE_URL = import.meta.env.VITE_USER_BASE_URL
 
 
 
@@ -28,8 +28,9 @@ const UserJobDetailsButtons: React.FC<UserJobDetailsButtonsComponent> = ({ handl
         e.preventDefault()
         isApplied()
         const data = {userId,jobPostId}
-
-        axiosInstance.post(`${AUTH_BASE_URL}/save-post`,data,)
+        console.log(`${USER_BASE_URL}/save-post`);
+        
+        axiosInstance.post(`${USER_BASE_URL}/save-post`,data,)
         .then((res)=> {
             if(res?.data?.status){
                 setSaved(true)

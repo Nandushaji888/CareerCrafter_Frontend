@@ -17,16 +17,16 @@ import SavedJobList from '../pages/user/SavedJobList'
 import NotFound from '../components/NotFound'
 import JistyVedioCall from '../components/jitsiVideoCallComponent'
 import UserNotificationPage from '../pages/user/components/UserNotificationPage'
-// import UserMessageContainer from '../pages/user/UserMessageContainer'
-// import UserEmptyMessageContainer from '../pages/user/UserEmptyMessageContainer'
+import UserMessageContainer from '../pages/user/UserMessageContainer'
+import UserEmptyMessageContainer from '../pages/user/UserEmptyMessageContainer'
 
 const UserRouter = () => {
   return (
     <Routes>
       <Route element={<UserPrivateRoute />}>
         <Route path='/user-profile' element={<UserProfile />} />
-        {/* <Route path='/messages' element={<UserEmptyMessageContainer />} />
-        <Route path='/messages/:id' element={<UserMessageContainer />} /> */}
+        <Route path='/messages' element={<UserEmptyMessageContainer />} />
+        <Route path='/messages/:id' element={<UserMessageContainer />} />
         <Route path='/applied-jobs/:id' element={<AppliedJobList />} />
         <Route path='/saved-jobs/:id' element={<SavedJobList />} />
         <Route path='/applied-jobs/details/:id' element={<AppliedJobDetails />} />

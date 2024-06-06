@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { IMessage, IUser } from "../interface/interface";
+import { IMessage, IRecruiter, IUser } from "../interface/interface";
 
 interface ConversationState {
-  selectedConversation: IUser | null;
+  selectedConversation: IUser | null|IRecruiter
   messages: IMessage[];
-  setSelectedConversation: (selectedConversation: IUser | null) => void;
+  setSelectedConversation: (selectedConversation: IUser|IRecruiter | null) => void;
   setMessages: (messages: IMessage[]) => void;
 }
 

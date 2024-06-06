@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserRound, FileText, Bookmark, Send, Settings, Bell, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { clearUser } from '../../../utils/redux/slices/userSlice';
 import { SiShopware } from 'react-icons/si'
 import { Mail } from 'lucide-react';
 import { useSocketContext } from '../../../utils/context/SocketContext';
+import axiosInstance from '../../../utils/axios/axiosInstance';
 const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
+const NOTIFICATION_BASE_URL = import.meta.env.VITE_NOTIFICATION_BASE_URL
+
 
 
 
@@ -17,7 +19,6 @@ const Navbar: React.FC = () => {
     const dispatch = useDispatch()
     const { socket } = useSocketContext()
     const navigate = useNavigate();
-    const countUrl = 'http://localhost:4005/api/notifications';
     const [notificationsCount, setNotificationCount] = useState('')
     const [messagesCount, setMessageCount] = useState('')
 
@@ -29,7 +30,7 @@ const Navbar: React.FC = () => {
     const handleLogout = () => {
         // console.log('hereeeeee');
 
-        axios.post(`${AUTH_BASE_URL}/user/logout`, {})
+        axiosInstance.post(`${AUTH_BASE_URL}/user/logout`, {})
             .then(() => {
                 // localStorage.removeItem('user-jwtToken');
                 dispatch(clearUser())
@@ -39,7 +40,7 @@ const Navbar: React.FC = () => {
     }
 
     const fetchNotificationCounts = async()=> {
-        axios.get(`${countUrl}/count/${userData?._id}`, { withCredentials: true })
+        axiosInstance.get(`${NOTIFICATION_BASE_URL}/count/${userData?._id}`, )
         .then((res) => {
             // console.log(res?.data);
             if (res?.data?.status) {

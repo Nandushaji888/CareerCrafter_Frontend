@@ -35,7 +35,10 @@ const Login = () => {
         onSubmit: async values => {
             console.log(values);
 
-
+            console.log('route');
+            console.log(`${AUTH_BASE_URL}/user/login`);
+            
+            
             axiosInstance.post(`${AUTH_BASE_URL}/user/login`, { values })
                 .then((res) => {
                     if (res.data.status) {
@@ -155,10 +158,10 @@ const Login = () => {
             <Toaster position='top-center' reverseOrder={false}></Toaster>
 
             <div className="flex justify-center items-center h-screen">
-                <div className=" bg-slate-100 py-10   px-10 rounded-3xl h-[750px]">
+                <div className="bg-slate-100 py-10 px-10 rounded-3xl h-[750px] md:h-auto md:max-w-xs lg:max-w-sm xl:max-w-md">
                     <div className="title flex flex-col items-center">
                         <h3 className="text-4xl pb-3 font-bold text-blue-800">CareerCrafter</h3>
-                        <h6 className="text-2xl pb-3 font-bold  text-gray-600">User Login</h6>
+                        <h6 className="text-2xl pb-3 font-bold text-gray-600">User Login</h6>
 
                         <span className="pt-4 pb-4 text-xl w-full text-center text-gray-500">
                             Explore more by connecting with us
@@ -169,7 +172,7 @@ const Login = () => {
                             <img
                                 src='profile.png'
                                 alt="avatar"
-                                className="profile_img border-4 border-gray-100 w-32 rounded-full shadow-lg  hover:border-gray-200"
+                                className="profile_img border-4 border-gray-100 w-32 rounded-full shadow-lg hover:border-gray-200"
                             />
                         </div>
                         <div className="textbox flex flex-col items-center gap-6">
@@ -177,31 +180,29 @@ const Login = () => {
                                 {...formik.getFieldProps('email')}
                                 type="text"
                                 placeholder="Email"
-                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white"
                             />
                             <input
                                 {...formik.getFieldProps('password')}
                                 type="password"
                                 placeholder="Password"
-                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white "
+                                className="border-0 px-5 py-3 rounded-xl w-full max-w-md shadow-sm text-lg focus:outline-none bg-white"
                             />
-                            <div className="text-center ">
+                            <div className="text-center">
                                 <span>
                                     Forgot Password?{' '}
-                                    <Link to="/forgot-password" className="text-blue-600 hover:text-blue-400 ">
+                                    <Link to="/forgot-password" className="text-blue-600 hover:text-blue-400">
                                         Click here
                                     </Link>{' '}
                                 </span>
                             </div>
 
-
-                            <button type="submit" className="btn bg-blue-600 hover:bg-blue-800   py-3 px-5 rounded-2xl w-full max-w-md text-white">
+                            <button type="submit" className="btn bg-blue-600 hover:bg-blue-800 py-3 px-5 rounded-2xl w-full max-w-md text-white">
                                 Let's Go
                             </button>
-
                         </div>
                     </form>
-                    <button onClick={googleAuthhandler} className="btn bg-blue-600 hover:bg-blue-800 py-2 px-5 mt-1  rounded-2xl w-full max-w-md text-white flex items-center justify-center">
+                    <button onClick={googleAuthhandler} className="btn bg-blue-600 hover:bg-blue-800 py-2 px-5 mt-1 rounded-2xl w-full max-w-md text-white flex items-center justify-center">
                         <img className='rounded-3xl mr-2' src='google image.png' alt="Google Logo" width={30} />
                         Sign in With Google
                     </button>
@@ -209,16 +210,16 @@ const Login = () => {
                     <div className="text-center py-2 mt-3">
                         <span>
                             Not a Member{' '}
-                            <Link to="/register" className="text-blue-600 hover:text-blue-400 ">
+                            <Link to="/register" className="text-blue-600 hover:text-blue-400">
                                 Register now
                             </Link>{' '}
                         </span>
                     </div>
-
                 </div>
             </div>
         </div>
     );
+
 };
 
 export default Login;

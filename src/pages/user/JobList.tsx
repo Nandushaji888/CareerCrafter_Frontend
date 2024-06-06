@@ -10,33 +10,28 @@ import JobListPagination from './components/JobListPagination';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios/axiosInstance';
 import { WorkArrangementType, employmentType } from '../../utils/interface/enums';
-const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
+const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL;
 
 const JobList: React.FC = () => {
-
     const [searchQuery, setSearchQuery] = useState('');
     const [location, setLocation] = useState('');
     const [jobList, setJobList] = useState<IPost[]>([]);
-    const [workArrangementType, setWorkArrangementType] = useState<WorkArrangementType>(WorkArrangementType.Office)
-    const [emplType, setEmplType] = useState<employmentType>(employmentType.Fulltime)
-    const [skills, setSkills] = useState('')
-    const [qualification, setQualification] = useState('')
+    const [workArrangementType, setWorkArrangementType] = useState<WorkArrangementType>(WorkArrangementType.Office);
+    const [emplType, setEmplType] = useState<employmentType>(employmentType.Fulltime);
+    const [skills, setSkills] = useState('');
+    const [qualification, setQualification] = useState('');
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(3); // Adjust limit as needed
     const [totalPages, setTotalPages] = useState(0);
-    const [noData, setNoData] = useState(false)
+    const [noData, setNoData] = useState(false);
 
     const userData = useSelector((state: RootState) => state.persisted.user.userData);
-
 
     const navigate = useNavigate();
 
     const fetchJobs = async () => {
         try {
-
-            setNoData(false)
-
-
+            setNoData(false);
             const response = await axiosInstance.get(`${POST_BASE_URL}/list-jobs`, {
                 params: {
                     search: searchQuery,
@@ -47,16 +42,12 @@ const JobList: React.FC = () => {
                     employmentType: emplType,
                     location,
                     workArrangementType,
-                    userId: userData?._id ? userData?._id : undefined
-
+                    userId: userData?._id? userData._id : undefined,
                 },
             });
-
             if (response?.data?.postDatas.length === 0) {
-                setNoData(true)
+                setNoData(true);
             }
-            console.log(response.data);
-
             setJobList(response.data.postDatas);
             setTotalPages(response.data.totalPages);
         } catch (error) {
@@ -64,25 +55,21 @@ const JobList: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        fetchJobs();
-    }, [page]);
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-
-
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setPage(1); // Reset to the first page on new search
+        setPage(1);
         fetchJobs();
     };
 
     const handleFilterSort = (e: React.FormEvent) => {
         e.preventDefault();
-        setPage(1); // Reset to the first page on new filter/sort
+        setPage(1);
         fetchJobs();
     };
 
@@ -90,22 +77,20 @@ const JobList: React.FC = () => {
         e.preventDefault();
         if (id) {
             axiosInstance.get(`${POST_BASE_URL}/job-details/${id}`)
-                .then((res) => {
+               .then((res) => {
                     if (res?.data?.status) {
                         const dataToSend = { data: res?.data?.jobData };
                         navigate(`/job-details/${id}`, { state: { data: dataToSend } });
                     }
                 })
-                .catch((err) => {
+               .catch((err) => {
                     console.log(err);
-
-                })
+                });
         }
     };
+
     const handleNextPage = () => {
         if (page < totalPages) {
-            console.log(page);
-
             setPage(prevPage => prevPage + 1);
         }
     };
@@ -119,31 +104,27 @@ const JobList: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="container mx-auto p-10 mt-14 ">
+            <div className="container mx-auto p-10 mt-14">
                 <JobListSearchComponent setSearchQuery={setSearchQuery} searchQuery={searchQuery} location={location} setLocation={setLocation} handleSearch={handleSearch} />
                 <div className='mx-auto justify-between mt-10 w-10/12 items-start bg-white h-[700px] px-14 rounded-2xl shadow-lg pt-6 relative'>
                     <div className='flex flex-row px-14 gap-14'>
-
-                        <Suspense fallback={<div className='flex w-7/12 justify-center items-center text-2xl '>Loading...</div>}>
+                        <Suspense fallback={<div>Loading...</div>}>
                             <LazyJobListingComponent noData={noData} jobList={jobList} handleJobDetails={handleJobDetails} />
                         </Suspense>
-
                         <JobListFilterComponent
                             workArrangementType={workArrangementType}
                             setWorkArrangementType={setWorkArrangementType}
                             emplType={emplType}
                             setEmplType={setEmplType}
+                            skills={skills}
+                            setSkills={setSkills}
                             qualification={qualification}
                             setQualification={setQualification}
                             handleFilterSort={handleFilterSort}
-                            skills={skills}
-                            setSkills={setSkills}
-
                         />
                     </div>
-                    <JobListPagination handlePrevPage={handlePrevPage} page={page} totalPages={totalPages} setPage={setPage} handleNextPage={handleNextPage} />
+                    <JobListPagination handlePrevPage={handlePrevPage} page={page} totalPages={totalPages} setPage={setPage} fetchJobs={fetchJobs} handleNextPage={handleNextPage} />
                 </div>
-
             </div>
         </>
     );

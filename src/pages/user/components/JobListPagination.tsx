@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface IJobListPagination{
     handlePrevPage:any; 
@@ -6,9 +6,14 @@ interface IJobListPagination{
     totalPages:number;
     setPage:any;
     handleNextPage:any;
+    fetchJobs:any
 }
 
-const JobListPagination: React.FC<IJobListPagination> = ({handlePrevPage,page,totalPages,setPage,handleNextPage}) => {
+const JobListPagination: React.FC<IJobListPagination> = ({handlePrevPage,page,totalPages,setPage,handleNextPage,fetchJobs}) => {
+
+  useEffect(() => {
+    fetchJobs();
+}, [page]);
   return (
     <div className="flex justify-center mt-4 absolute bottom-5 left-80">
     <button onClick={handlePrevPage} disabled={page === 1}>Previous</button>

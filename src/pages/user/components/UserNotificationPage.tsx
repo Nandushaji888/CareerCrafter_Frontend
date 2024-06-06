@@ -12,7 +12,7 @@ const navigate = useNavigate()
         if(!messenger?._id){
             navigate('/login')
         }
-    },[])
+    },[messenger?._id, navigate])
 
   return (
     <>

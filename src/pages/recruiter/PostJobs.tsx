@@ -7,19 +7,24 @@ import { jobPost } from '../../utils/redux/slices/jobPostSlice';
 import RecruiterNavbar from './components/RecruiterNavbar';
 import axiosInstance from '../../utils/axios/axiosInstance';
 import { WorkArrangementType, employmentType } from '../../utils/interface/enums';
+import { LocationSuggestion } from '../../utils/interface/interface';
+import axios from 'axios';
 const POST_BASE_URL = import.meta.env.VITE_POST_BASE_URL
+const MAPBOX_API_KEY = import.meta.env.VITE_MAP_BOX_ACCESS_KEY as string;
 
 
 const JobPostForm = () => {
   const recruiterData = useSelector((state: any) => state.persisted.recruiter.recruiterData);
+  const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
 
+  const [locationSelected,setLocationSelected] = useState(false)
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
-  useEffect(()=> {
+  useEffect(() => {
     window.scrollTo(0, 0);
-  },[])
+  }, [])
 
   const [formData, setFormData] = useState({
     postName: '',
@@ -32,8 +37,8 @@ const JobPostForm = () => {
     // category: '',
     questions: [],
     recruiterEmail: recruiterData?.email,
-    recruitingPlace: {locationName:'',type:'',coordinates:[]},
-    location:'',
+    recruitingPlace: { locationName: '', type: '', coordinates: [] },
+    location: '',
     closingDate: '',
     workArrangementType: WorkArrangementType.Office,
     employmentType: employmentType.Fulltime,
@@ -45,14 +50,14 @@ const JobPostForm = () => {
   });
 
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
+  // const handleChange = (e: any) => {
+  //   const { name, value } = e.target;
 
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value
-    }));
-  };
+  //   setFormData(prevFormData => ({
+  //     ...prevFormData,
+  //     [name]: value
+  //   }));
+  // };
 
   const handleSubmit = (e: any) => {
 
@@ -93,8 +98,48 @@ const JobPostForm = () => {
 
     dispatch(jobPost(formData))
     console.log('reached here');
-    
+
     navigate('/recruiter/post-job-ask-questions')
+  };
+
+
+  const fetchLocationSuggestions = async (searchText: string) => {
+    try {
+      const response = await axios.get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(searchText)}.json?access_token=${MAPBOX_API_KEY}&country=IN`
+      );
+      setLocationSuggestions(response.data.features);
+      if (!response.data.features.length && searchText) {
+        setLocationSuggestions([{ id: '1111', place_name: 'No result found' }]);
+
+      }
+    } catch (error) {
+      console.error('Failed to fetch location suggestions:', error);
+    }
+  };
+
+  useEffect(() => {
+    // if (formData.location) {
+
+    if(locationSelected){
+      setLocationSuggestions([])
+      return
+    }
+    fetchLocationSuggestions(formData.location);
+    // }
+  }, [formData.location, locationSelected]);
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+    if (name === 'location' && value.length > 2) {
+      fetchLocationSuggestions(value);
+      console.log('11111');
+
+    }
   };
 
   return (
@@ -139,7 +184,7 @@ const JobPostForm = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className='mt-2'>
+            <div className='mt-2'>
               <label className="block text-gray-700 mb-2">Salary</label>
               <input type="text" name="salary" value={formData.salary} onChange={handleChange} className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" />
             </div>
@@ -150,10 +195,41 @@ const JobPostForm = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className='mt-2'>
+            {/* <div className='mt-2'>
               <label className="block text-gray-700 mb-2">Recruiting Place<span className="text-red-500">*</span></label>
               <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required />
+            </div> */}
+            <div className='mt-2'>
+
+
+
+              <label className="block text-gray-700 mb-2">Recruiting Place<span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400"
+                required
+              />
+              <div className="absolute z-10 mt-2 w-[350px] px-6 bg-white shadow-md rounded-md overflow-hidden border-r-black border-r-6 ">
+                {locationSuggestions.slice(0, 6).map((suggestion) => (
+                  <div
+                    key={suggestion.id}
+                    className="cursor-pointer p-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setFormData({ ...formData, location: suggestion.place_name });
+                      setLocationSelected(true)
+                      setLocationSuggestions([]);
+                    }}
+                  >
+                    {suggestion.place_name}
+                  </div>
+                ))}
+              </div>
+
             </div>
+
             <div className='mt-2'>
               <label className="block text-gray-700 mb-2">Job Closing Date</label>
               <input type="date" name="closingDate" value={formData.closingDate} onChange={handleChange} className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" />
@@ -161,7 +237,7 @@ const JobPostForm = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className='mt-2'>
+            <div className='mt-2'>
               <label className="block text-gray-700 mb-2">Work Arrangement Type<span className="text-red-500">*</span></label>
               <select name="workArrangementType" value={formData.workArrangementType} onChange={handleChange} className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-400" required>
                 <option value="remote">Remote</option>
